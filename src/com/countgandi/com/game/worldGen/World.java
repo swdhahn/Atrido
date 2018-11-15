@@ -5,9 +5,6 @@ import java.util.Random;
 
 import org.lwjgl.util.vector.Vector3f;
 
-import com.countgandi.com.game.biomes.BiomeDesert;
-import com.countgandi.com.game.biomes.BiomeHills;
-import com.countgandi.com.game.biomes.BiomeMountains;
 import com.countgandi.com.game.biomes.BiomePlains;
 import com.countgandi.com.renderEngine.MasterRenderer;
 import com.countgandi.com.renderEngine.terrain.Terrain;
@@ -20,9 +17,9 @@ public class World {
 	public static ArrayList<Class<? extends Terrain>> existantTerrains = new ArrayList<Class<? extends Terrain>>();
 	static {
 		existantTerrains.add(BiomePlains.class);
-		existantTerrains.add(BiomeDesert.class);
-		existantTerrains.add(BiomeHills.class);
-		existantTerrains.add(BiomeMountains.class);
+		//existantTerrains.add(BiomeDesert.class);
+		//existantTerrains.add(BiomeHills.class);
+		//existantTerrains.add(BiomeMountains.class);
 	}
 	public ArrayList<Terrain> terrains = new ArrayList<Terrain>();
 	public ArrayList<Terrain> loadedTerrains = new ArrayList<Terrain>();

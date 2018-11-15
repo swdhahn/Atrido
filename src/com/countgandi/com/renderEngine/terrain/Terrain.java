@@ -162,8 +162,8 @@ public abstract class Terrain {
 		for(int x = 0; x < img.getWidth(); x++) {
 			for(int y = 0; y < img.getHeight(); y++) {
 				int color = 0xFF000000;
-				if(heights[x][y] < 3) {
-					color = 0xFFFF0000;
+				if(x == 0) {
+					//color = 0xFFFF0000;
 				}
 				img.setRGB(x, y, color);
 			}

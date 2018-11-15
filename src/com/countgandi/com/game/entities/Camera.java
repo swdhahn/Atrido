@@ -38,24 +38,24 @@ public class Camera {
 	}
 
 	public void move() {
-		
-		Game.HEADER.setText("x:" + (int)position.getX() + " y:" + (int)position.getY() + " z:" + (int)position.z);
-		if(position.getY() <= -0.9f && !isInWater) {
-			//handler.guis.add(waterGui);
+
+		Game.HEADER.setText("x:" + (int) position.getX() + " y:" + (int) position.getY() + " z:" + (int) position.z);
+		if (position.getY() <= handler.waters.get(0).getHeight() + 0.1f && !isInWater) {
+			handler.guis.add(waterGui);
 			isInWater = true;
-		} else if(position.getY() > -0.9f && isInWater){
+		} else if (position.getY() > handler.waters.get(0).getHeight() + 0.1f && isInWater) {
 			handler.guis.remove(waterGui);
 			isInWater = false;
 		}
 
 		collision();
 		checkInputs();
-		
-		if(Mouse.getX() >= Game.WIDTH - 20) {
+
+		if (Mouse.getX() >= Game.WIDTH - 20) {
 			Mouse.setCursorPosition(30, Mouse.getY());
 			preX = Mouse.getX();
 		}
-		if(Mouse.getX() <= 20) {
+		if (Mouse.getX() <= 20) {
 			Mouse.setCursorPosition(Game.WIDTH - 30, Mouse.getY());
 			preX = Mouse.getX();
 		}
