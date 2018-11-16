@@ -14,6 +14,8 @@ import com.countgandi.com.renderEngine.textures.TerrainTexturePack;
 import com.countgandi.com.toolbox.Maths;
 
 public abstract class Terrain {
+	
+	// use a single terrain, but determine colors of map with heights and determine biomes with heights
 
 	public static final float SIZE = 1000;
 	public static final int VERTEX_COUNT = 100;
