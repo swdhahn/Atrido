@@ -21,7 +21,7 @@ public class Game {
 
 	public static final int WIDTH = 1600, HEIGHT = 900;
 	public static final String TITLE = "-- OpenGL --";
-	public static GUIText HEADER;
+	public static GUIText HEADER, HEADER2;
 
 	public static Menu menu;
 
@@ -33,6 +33,7 @@ public class Game {
 
 		handler = new Handler();
 		HEADER = new GUIText("Pos", 1, Assets.Fonts.arial, new Vector2f(0, 0), 1);
+		HEADER2 = new GUIText("Pos", 1, Assets.Fonts.arial, new Vector2f(0, 0.1f), 1);
 		menu = new GameMenu(handler);
 
 		GameRegistry.register();

@@ -40,6 +40,7 @@ public class Camera {
 	public void move() {
 
 		Game.HEADER.setText("x:" + (int) position.getX() + " y:" + (int) position.getY() + " z:" + (int) position.z);
+		Game.HEADER2.setText(World.getTerrainStandingOn(position, handler.getWorld()).getClass().getName().replaceAll("Biome", "Biome ").substring("com.countgandi.com.game.biomes.".length()));
 		if (position.getY() <= handler.waters.get(0).getHeight() + 0.1f && !isInWater) {
 			handler.guis.add(waterGui);
 			isInWater = true;

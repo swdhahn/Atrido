@@ -2,10 +2,10 @@ package com.countgandi.com.renderEngine.terrain;
 
 import java.util.Random;
 
-public class HeightsGenerator {
+public class PerlinNoise {
 
-	private float AMPLITUDE = 70F;
-	private int OCTAVES = 4;
+	private float AMPLITUDE = 100F;
+	private int OCTAVES = 5;
 	private float ROUGHNESS = 0.3f;
 
 	private Random random = new Random();
@@ -13,17 +13,13 @@ public class HeightsGenerator {
 	private int xOffset = 0;
 	private int zOffset = 0;
 
-	public HeightsGenerator() {
-		this.seed = random.nextInt(1000000000);
-	}
-
-	public HeightsGenerator(int gridX, int gridZ, int vertexCount, int seed) {
+	public PerlinNoise(int gridX, int gridZ, int vertexCount, float amplitude, float octaves, float roughness, int seed) {
 		this.seed = seed;
 		xOffset = gridX * (vertexCount - 1);
 		zOffset = gridZ * (vertexCount - 1);
 	}
 
-	public float generateHeight(int x, int z) {
+	public float[] generateHeights(int x, int z, float multiple) {
 		float total = 0;
 		float d = (float) Math.pow(2, OCTAVES - 1);
 		for (int i = 0; i < OCTAVES; i++) {
@@ -31,12 +27,7 @@ public class HeightsGenerator {
 			float amp = (float) Math.pow(ROUGHNESS, i) * AMPLITUDE;
 			total += getInterpolatedNoise((x + xOffset) * freq, (z + zOffset) * freq) * amp;
 		}
-		/*
-		 * float total = getInterpolatedNoise(x / 8f, z / 8f) * AMPLITUDE; total
-		 * += getInterpolatedNoise(x / 4f, x / 4f) * AMPLITUDE / 3f; total +=
-		 * getInterpolatedNoise(x / 2f, x / 2f) * AMPLITUDE / 9f; total +=
-		 * getInterpolatedNoise(x, x) * AMPLITUDE / 27f;
-		 */
+
 		return total;
 	}
 

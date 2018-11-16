@@ -23,9 +23,8 @@ public class Assets {
 	private static final TerrainTexture SAND = new TerrainTexture(loader.loadTexture("sand"));
 	private static final TerrainTexture MUD = new TerrainTexture(loader.loadTexture("mud"));
 	public static final TerrainTexturePack PLAINS = new TerrainTexturePack(GRASS, SAND, ROCK, MUD);
-	public static final TerrainTexturePack DESERT = new TerrainTexturePack(SAND, SAND, ROCK, MUD);
-	public static final TerrainTexturePack HILLS = new TerrainTexturePack(GRASS, SAND, ROCK, MUD);
-	public static final TerrainTexturePack MOUNTAINS = new TerrainTexturePack(GRASS, SAND, ROCK, MUD);
+	public static final TerrainTexturePack HILLS = new TerrainTexturePack(GRASS, GRASS, ROCK, MUD);
+	public static final TerrainTexturePack MOUNTAINS = new TerrainTexturePack(GRASS, GRASS, ROCK, MUD);
 
 	// Textures
 	public static final int Underwater = loader.loadTexture("underwater");

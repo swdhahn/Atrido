@@ -15,23 +15,24 @@ import com.countgandi.com.toolbox.Maths;
 
 public abstract class Terrain {
 
-	public static final float SIZE = 400;
-	public static final int VERTEX_COUNT = 44;
+	public static final float SIZE = 1000;
+	public static final int VERTEX_COUNT = 100;
 
-	private float x, z;
+	private float x, z, multiple;
 	private RawModel model;
 	private TerrainTexturePack texturePack;
 	private TerrainTexture blendMap;
 	private String heightmap;
-	private HeightsGenerator generator;
+	private PerlinNoise generator;
 
 	private float[][] heights;
 
-	public Terrain(int gridX, int gridZ, TerrainTexturePack texturePack) {
+	public Terrain(int gridX, int gridZ, TerrainTexturePack texturePack, float multiple) {
+		this.multiple = multiple;
 		this.texturePack = texturePack;
 		this.x = gridX * SIZE;
 		this.z = gridZ * SIZE;
-		generator = new HeightsGenerator(gridX, gridZ, VERTEX_COUNT, World.SEED);
+		generator = new PerlinNoise(gridX, gridZ, VERTEX_COUNT, 100f, 5f, 0.3f,  World.SEED);
 		this.model = generateTerrain(Assets.loader);
 		this.blendMap = this.generateBlendMap();
 	}
@@ -150,22 +151,22 @@ public abstract class Terrain {
 	 * @return
 	 */
 	private final float getHeight(int x, int z, HeightsGenerator generator) {
-		return generator.generateHeight(x, z);
+		return generator.generateHeight(x, z, multiple);
 	}
 
 	public String getHeightMap() {
 		return heightmap;
 	}
-	
+
 	private TerrainTexture generateBlendMap() {
-		BufferedImage img = new BufferedImage(VERTEX_COUNT, VERTEX_COUNT, BufferedImage.TYPE_INT_RGB);
-		for(int x = 0; x < img.getWidth(); x++) {
-			for(int y = 0; y < img.getHeight(); y++) {
+		BufferedImage img = new BufferedImage(VERTEX_COUNT, VERTEX_COUNT, BufferedImage.TYPE_4BYTE_ABGR);
+		for (int z = 0; z < img.getHeight(); z++) {
+			for (int x = 0; x < img.getWidth(); x++) {
 				int color = 0xFF000000;
-				if(x == 0) {
-					//color = 0xFFFF0000;
+				if (heights[x][z] <= 10) {
+					color = 0xFFFF0000;
 				}
-				img.setRGB(x, y, color);
+				img.setRGB(x, z, color);
 			}
 		}
 		return new TerrainTexture(Assets.loader.loadTexture(img));

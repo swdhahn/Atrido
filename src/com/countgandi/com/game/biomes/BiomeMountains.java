@@ -6,7 +6,7 @@ import com.countgandi.com.renderEngine.terrain.Terrain;
 public class BiomeMountains extends Terrain {
 
 	public BiomeMountains(int gridX, int gridZ) {
-		super(gridX, gridZ, Assets.MOUNTAINS);
+		super(gridX, gridZ, Assets.MOUNTAINS, 10f);
 	}
 
 }
