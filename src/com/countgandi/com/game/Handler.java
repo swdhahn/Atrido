@@ -8,24 +8,26 @@ import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
+import com.countgandi.com.engine.guis.GuiRenderer;
+import com.countgandi.com.engine.guis.GuiTexture;
+import com.countgandi.com.engine.renderEngine.MasterRenderer;
+import com.countgandi.com.engine.renderEngine.font.TextMaster;
+import com.countgandi.com.engine.renderEngine.particles.ParticleMaster;
+import com.countgandi.com.engine.renderEngine.water.WaterFrameBuffers;
+import com.countgandi.com.engine.renderEngine.water.WaterRenderer;
+import com.countgandi.com.engine.renderEngine.water.WaterTile;
 import com.countgandi.com.game.entities.Camera;
 import com.countgandi.com.game.entities.Entity;
 import com.countgandi.com.game.entities.Light;
 import com.countgandi.com.game.entities.Player;
+import com.countgandi.com.game.structures.Structure;
+import com.countgandi.com.game.structures.StructureHut;
 import com.countgandi.com.game.worldGen.World;
-import com.countgandi.com.guis.GuiRenderer;
-import com.countgandi.com.guis.GuiTexture;
-import com.countgandi.com.renderEngine.MasterRenderer;
-import com.countgandi.com.renderEngine.font.TextMaster;
-import com.countgandi.com.renderEngine.particles.Particle;
-import com.countgandi.com.renderEngine.particles.ParticleMaster;
-import com.countgandi.com.renderEngine.water.WaterFrameBuffers;
-import com.countgandi.com.renderEngine.water.WaterRenderer;
-import com.countgandi.com.renderEngine.water.WaterTile;
 
 public class Handler {
 	
 	public ArrayList<Entity> entities = new ArrayList<Entity> ();
+	public ArrayList<Structure> structures = new ArrayList<Structure>();
 	public ArrayList<GuiTexture> guis = new ArrayList<GuiTexture>();
 	public ArrayList<Light> lights = new ArrayList<Light>();
 	public ArrayList<WaterTile> waters = new ArrayList<WaterTile>();
@@ -57,10 +59,13 @@ public class Handler {
 		for(int i = 0; i < entities.size(); i++) {
 			entities.get(i).tick();
 		}
-		new Particle(new Vector3f(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z - 10), new Vector3f(0, 30, 0), 0.1F, 100, 0, 10);
+		if(Keyboard.isKeyDown(Keyboard.KEY_C)) {
+			structures.add(new StructureHut(new Vector3f(camera.getPosition().x, camera.getPosition().y - 2, camera.getPosition().z), new Vector3f(0, camera.getYaw(), 0), this));
+		}
+		//new Particle(new Vector3f(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z - 10), new Vector3f(0, 30, 0), 0.1F, 100, 0, 10);
 		ParticleMaster.tick();
 	}
-	
+
 	public void render() {
 		if (Keyboard.isKeyDown(Keyboard.KEY_G)) {
 			GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
@@ -96,6 +101,9 @@ public class Handler {
 		for(int i = 0; i < entities.size(); i++) {
 			renderer.processEntity(entities.get(i));
 		}
+		for(int i = 0; i < structures.size(); i++) {
+			renderer.processStructure(structures.get(i));
+		}
 		world.renderWorld(renderer);
 		renderer.render(lights, camera, clipPlane);
 
@@ -105,7 +113,7 @@ public class Handler {
 		entities.clear();
 		
 		world.generateWorld();
-		entities.add(new Player(new Vector3f(5000, 0, 5000), this));
+		entities.add(new Player(new Vector3f(World.terrainSideAmount / 2, 0, World.terrainSideAmount / 2), this));
 	}
 	
 	public void addEntity(Entity entity) {
@@ -117,6 +125,14 @@ public class Handler {
 	
 	public void removeEntity(Entity entity) {
 		entities.remove(entity);
+	}
+	
+	public void addStructure(Structure structure) {
+		structures.add(structure);
+	}
+	
+	public void removeStructure(Structure structure) {
+		structures.remove(structure);
 	}
 
 	public Player getPlayer() {

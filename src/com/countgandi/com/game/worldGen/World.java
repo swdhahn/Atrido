@@ -5,25 +5,18 @@ import java.util.Random;
 
 import org.lwjgl.util.vector.Vector3f;
 
-import com.countgandi.com.game.biomes.BiomeHills;
-import com.countgandi.com.game.biomes.BiomeMountains;
-import com.countgandi.com.game.biomes.BiomePlains;
-import com.countgandi.com.renderEngine.MasterRenderer;
-import com.countgandi.com.renderEngine.terrain.Terrain;
-import com.countgandi.com.renderEngine.water.WaterTile;
+import com.countgandi.com.Assets;
+import com.countgandi.com.engine.renderEngine.MasterRenderer;
+import com.countgandi.com.engine.renderEngine.terrain.Terrain;
+import com.countgandi.com.game.biomes.Biome;
 
 public class World {
 
 	public static int SEED = 0;
 	private static Random random = new Random();
-	public static ArrayList<Class<? extends Terrain>> existantTerrains = new ArrayList<Class<? extends Terrain>>();
-	static {
-		existantTerrains.add(BiomePlains.class);
-		existantTerrains.add(BiomeHills.class);
-		existantTerrains.add(BiomeMountains.class);
-	}
+	public static final int terrainSideAmount = 1000;
+
 	public ArrayList<Terrain> terrains = new ArrayList<Terrain>();
-	public ArrayList<Terrain> loadedTerrains = new ArrayList<Terrain>();
 
 	public World() {
 
@@ -32,12 +25,11 @@ public class World {
 	public void generateWorld() {
 		SEED = new Random().nextInt(1000000000);
 		random.setSeed(SEED);
-		int terrainSize = (int) (WaterTile.TILE_SIZE / Terrain.SIZE);
 		try {
-			for (int x = 0; x < terrainSize; x++) {
-				for (int z = 0; z < terrainSize; z++) {
-					System.out.println("Creating terrain: x:" + x + " z:" + z);
-					terrains.add((Terrain) existantTerrains.get(random.nextInt(existantTerrains.size())).getConstructors()[0].newInstance(x, z));
+			int terrainWidth = (int) (terrainSideAmount / Terrain.SIZE);
+			for (int x = 0; x < terrainWidth; x++) {
+				for (int z = 0; z < terrainWidth; z++) {
+					terrains.add(new Terrain(0, 0, Assets.TERRAIN));
 				}
 			}
 		} catch (Exception e) {
@@ -46,18 +38,23 @@ public class World {
 	}
 
 	public void renderWorld(MasterRenderer renderer) {
-		for (int i = 0; i < terrains.size(); i++) {
-			renderer.processTerrain(terrains.get(i));
+		for(Terrain t: terrains) {
+			renderer.processTerrain(t);
 		}
 	}
 
-	public static Terrain getTerrainStandingOn(Vector3f position, World world) {
-		for (int i = 0; i < world.terrains.size(); i++) {
-			Terrain t = world.terrains.get(i);
-			if (position.x >= t.getX() && position.x <= t.getX() + Terrain.SIZE) {
-				if (position.z >= t.getZ() && position.z <= t.getZ() + Terrain.SIZE) {
+	public float getHeight(Vector3f position) {
+		if (position.x < 0 || position.z < 0 || position.x >= Terrain.SIZE || position.z >= Terrain.SIZE) {
+			return 0;
+		}
+		return getTerrainStandingOn(position).getHeightOfTerrain(position.x, position.z);
+	}
+
+	public Terrain getTerrainStandingOn(Vector3f position) {
+		for (int i = 0; i < terrains.size(); i++) {
+			Terrain t = terrains.get(i);
+			if(position.x > t.getX() && position.x < t.getX() + Terrain.SIZE && position.z > t.getZ() && position.z < t.getZ() + Terrain.SIZE) {
 					return t;
-				}
 			}
 		}
 		return null;

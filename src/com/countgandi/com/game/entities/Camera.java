@@ -7,11 +7,10 @@ import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.countgandi.com.Game;
+import com.countgandi.com.engine.guis.WaterGui;
+import com.countgandi.com.engine.renderEngine.DisplayManager;
 import com.countgandi.com.game.Constants;
 import com.countgandi.com.game.Handler;
-import com.countgandi.com.game.worldGen.World;
-import com.countgandi.com.guis.WaterGui;
-import com.countgandi.com.renderEngine.DisplayManager;
 
 public class Camera {
 
@@ -40,7 +39,6 @@ public class Camera {
 	public void move() {
 
 		Game.HEADER.setText("x:" + (int) position.getX() + " y:" + (int) position.getY() + " z:" + (int) position.z);
-		Game.HEADER2.setText(World.getTerrainStandingOn(position, handler.getWorld()).getClass().getName().replaceAll("Biome", "Biome ").substring("com.countgandi.com.game.biomes.".length()));
 		if (position.getY() <= handler.waters.get(0).getHeight() + 0.1f && !isInWater) {
 			handler.guis.add(waterGui);
 			isInWater = true;
@@ -91,7 +89,7 @@ public class Camera {
 	}
 
 	private void collision() {
-		TerrainHeight = World.getTerrainStandingOn(getPosition(), handler.getWorld()).getHeightOfTerrain(position.x, position.z);
+		TerrainHeight = handler.getWorld().getHeight(position);
 	}
 
 	private void checkInputs() {
@@ -154,6 +152,10 @@ public class Camera {
 
 	public void invertPitch() {
 		this.pitch = -pitch;
+	}
+
+	public Vector3f getRot() {
+		return new Vector3f(pitch, roll, yaw);
 	}
 
 }

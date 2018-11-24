@@ -3,10 +3,10 @@ package com.countgandi.com.game.entities;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.countgandi.com.Assets;
+import com.countgandi.com.engine.renderEngine.OBJLoader;
+import com.countgandi.com.engine.renderEngine.models.TexturedModel;
+import com.countgandi.com.engine.renderEngine.textures.ModelTexture;
 import com.countgandi.com.game.Handler;
-import com.countgandi.com.renderEngine.OBJLoader;
-import com.countgandi.com.renderEngine.models.TexturedModel;
-import com.countgandi.com.renderEngine.textures.ModelTexture;
 
 public class Player extends Entity {
 
