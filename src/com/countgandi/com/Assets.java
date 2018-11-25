@@ -29,12 +29,22 @@ public class Assets {
 
 	// Textured Models
 	public static final class TexturedModels {
-		public static final TexturedModel tree = loadTexturedModel("NewTree78", "treeTextured");
-		public static final TexturedModel hut = loadTexturedModel("house12", "thatch");
+		public static final TexturedModel tree = loadTexturedModel("tree2", "smallTree", false);
+		public static final TexturedModel treeleaves = loadTexturedModel("tree2leaves", "smallTree", true);
+		public static final TexturedModel hut = loadTexturedModel("hut", "thatch", true);
 	}
 
-	public static TexturedModel loadTexturedModel(String modelName, String textureName) {
-		return new TexturedModel(OBJLoader.loadObjModel(modelName, loader), new ModelTexture(loader.loadTexture(textureName))) {
+	public static TexturedModel loadTexturedModel(String modelName, String textureName, boolean trans) {
+		return new TexturedModel(OBJLoader.loadObjModel(modelName), new ModelTexture(loader.loadTexture(textureName), trans)) {
+			@Override
+			public ModelTexture getTexture() {
+				return super.getTexture();
+			}
+		};
+	}
+	
+	public static TexturedModel loadTexturedModel(String modelName, int texture, boolean trans) {
+		return new TexturedModel(OBJLoader.loadObjModel(modelName), new ModelTexture(texture, trans)) {
 			@Override
 			public ModelTexture getTexture() {
 				return super.getTexture();

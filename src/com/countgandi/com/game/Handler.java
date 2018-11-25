@@ -20,6 +20,8 @@ import com.countgandi.com.game.entities.Camera;
 import com.countgandi.com.game.entities.Entity;
 import com.countgandi.com.game.entities.Light;
 import com.countgandi.com.game.entities.Player;
+import com.countgandi.com.game.plants.Plant;
+import com.countgandi.com.game.plants.PlantTree;
 import com.countgandi.com.game.structures.Structure;
 import com.countgandi.com.game.structures.StructureHut;
 import com.countgandi.com.game.worldGen.World;
@@ -28,6 +30,7 @@ public class Handler {
 	
 	public ArrayList<Entity> entities = new ArrayList<Entity> ();
 	public ArrayList<Structure> structures = new ArrayList<Structure>();
+	public ArrayList<Plant> plants = new ArrayList<Plant>();
 	public ArrayList<GuiTexture> guis = new ArrayList<GuiTexture>();
 	public ArrayList<Light> lights = new ArrayList<Light>();
 	public ArrayList<WaterTile> waters = new ArrayList<WaterTile>();
@@ -61,6 +64,9 @@ public class Handler {
 		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_C)) {
 			structures.add(new StructureHut(new Vector3f(camera.getPosition().x, camera.getPosition().y - 2, camera.getPosition().z), new Vector3f(0, camera.getYaw(), 0), this));
+		}
+		if(Keyboard.isKeyDown(Keyboard.KEY_V)) {
+			plants.add(new PlantTree(new Vector3f(camera.getPosition().x, camera.getPosition().y - 2, camera.getPosition().z), new Vector3f(0, camera.getYaw(), 0), this));
 		}
 		//new Particle(new Vector3f(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z - 10), new Vector3f(0, 30, 0), 0.1F, 100, 0, 10);
 		ParticleMaster.tick();
@@ -103,6 +109,9 @@ public class Handler {
 		}
 		for(int i = 0; i < structures.size(); i++) {
 			renderer.processStructure(structures.get(i));
+		}
+		for(int i = 0; i < plants.size(); i++) {
+			renderer.processPlant(plants.get(i));
 		}
 		world.renderWorld(renderer);
 		renderer.render(lights, camera, clipPlane);

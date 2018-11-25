@@ -7,7 +7,6 @@ public class TerrainTexturePack {
 	private TerrainTexture gTexture;
 	private TerrainTexture bTexture;
 	public TerrainTexturePack(TerrainTexture backgroundTexture, TerrainTexture rTexture, TerrainTexture gTexture, TerrainTexture bTexture) {
-		super();
 		this.backgroundTexture = backgroundTexture;
 		this.rTexture = rTexture;
 		this.gTexture = gTexture;

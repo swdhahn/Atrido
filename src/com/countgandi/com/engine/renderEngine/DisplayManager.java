@@ -49,14 +49,23 @@ public class DisplayManager {
 
 	}
 
+	private static int frameRate = 0; 
+	private static float prev = 0;
+	
 	public static void updateDisplay() {
+		frameRate ++;
 		Mouse.updateCursor();
 		Display.sync(FPSCAP);
 		Display.update();
 		long currentFrameTime = getCurrentTime();
+		
 		delta = (currentFrameTime - lastFrameTime) / 1000f;
 		lastFrameTime = currentFrameTime;
-
+		if(delta - prev > 1) {
+			prev = delta;
+			System.out.println("FPS: " + frameRate);
+			frameRate = 0;
+		}
 	}
 
 	public static float getFrameTimeSeconds() {

@@ -12,8 +12,9 @@ public class ModelTexture {
 
 	private int numberOfRows = 1;
 
-	public ModelTexture(int id) {
+	public ModelTexture(int id, boolean hasTransparency) {
 		this.textureID = id;
+		this.hasTransparency = hasTransparency;
 	}
 
 	public int getNumberOfRows() {

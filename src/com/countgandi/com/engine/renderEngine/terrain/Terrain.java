@@ -1,6 +1,7 @@
 package com.countgandi.com.engine.renderEngine.terrain;
 
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
@@ -18,7 +19,7 @@ public class Terrain {
 	// use a single terrain, but determine colors of map with heights and determine
 	// biomes with heights
 
-	public static final float SIZE = 1000;
+	public static final int SIZE = 1000;
 	public static final int VERTEX_COUNT = 100;
 
 	private float x, z;
@@ -37,7 +38,7 @@ public class Terrain {
 		this.z = gridZ * SIZE;
 		generator = new PerlinNoise(gridX, gridZ, VERTEX_COUNT, 100f, 5f, 0.3f, World.SEED);
 		this.model = generateTerrain(Assets.loader);
-		this.blendMap = this.generateBlendMap();
+		blendMap = this.generateTextureMap();
 	}
 
 	public float getX() {
@@ -54,10 +55,6 @@ public class Terrain {
 
 	public TerrainTexturePack getTexturePack() {
 		return texturePack;
-	}
-
-	public TerrainTexture getBlendMap() {
-		return blendMap;
 	}
 
 	public float getHeightOfTerrain(float worldX, float worldZ) {
@@ -165,19 +162,24 @@ public class Terrain {
 		return heightmap;
 	}
 
-	private TerrainTexture generateBlendMap() {
-		BufferedImage img = new BufferedImage(VERTEX_COUNT, VERTEX_COUNT, BufferedImage.TYPE_4BYTE_ABGR);
+	private TerrainTexture generateTextureMap() {
+		int width = SIZE, height = SIZE;
+		BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
-		for (int x = 0; x < img.getWidth(); x++) {
-			for (int z = 0; z < img.getHeight(); z++) { 
+		for (int z = 0; z < height; z++) {
+			for (int x = 0; x < width; x++) {
 				int color = 0xFF000000;
-				if (heights[x][z] <= 3) {
+				if (getHeightOfTerrain(x, z) <= 3 + new Random(World.SEED).nextInt(2)) {
 					color = 0xFFFF0000;
 				}
 				img.setRGB(x, z, color);
 			}
 		}
 		return new TerrainTexture(Assets.loader.loadTexture(img));
+	}
+
+	public TerrainTexture getBlendMap() {
+		return blendMap;
 	}
 
 }
