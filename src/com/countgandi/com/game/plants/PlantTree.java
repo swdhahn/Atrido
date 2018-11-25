@@ -9,7 +9,7 @@ import com.countgandi.com.game.Handler;
 public class PlantTree extends Plant {
 
 	public PlantTree(Vector3f position, Vector3f rotation, Handler handler) {
-		super(new TexturedModel[] {Assets.TexturedModels.tree, Assets.TexturedModels.treeleaves}, position, rotation, 1.0f, handler);
+		super(new TexturedModel[] {Assets.TexturedModels.tree1, Assets.TexturedModels.tree1leaves}, position, rotation, 4.0f, handler);
 	}
 
 }

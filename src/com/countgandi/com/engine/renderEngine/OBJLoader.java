@@ -1,10 +1,8 @@
 package com.countgandi.com.engine.renderEngine;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,14 +17,8 @@ import com.countgandi.com.engine.renderEngine.models.RawModel;
 public class OBJLoader {
 
 	public static RawModel loadObjModel(String objFileName) {
-        FileReader isr = null;
-        File objFile = new File("res/obj/" + objFileName + ".obj");
-        try {
-            isr = new FileReader(objFile);
-        } catch (FileNotFoundException e) {
-            System.err.println("File not found in res; don't use any extention; cant find: res/obj/" + objFileName + ".obj");
-        }
-        BufferedReader reader = new BufferedReader(isr);
+       
+        BufferedReader reader = new BufferedReader(new InputStreamReader(OBJLoader.class.getResourceAsStream("/obj/" + objFileName + ".obj")));
         String line;
         List<Vertex> vertices = new ArrayList<Vertex>();
         List<Vector2f> textures = new ArrayList<Vector2f>();

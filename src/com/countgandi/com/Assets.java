@@ -30,8 +30,8 @@ public class Assets {
 
 	// Textured Models
 	public static final class TexturedModels {
-		public static final TexturedModel tree = loadTexturedModel("tree2", "smallTree", false);
-		public static final TexturedModel treeleaves = loadTexturedModel("tree2leaves", "smallTree", true);
+		public static final TexturedModel tree1 = loadTexturedModel("tree2", "mapleTree", false);
+		public static final TexturedModel tree1leaves = loadTexturedModel("tree2leaves", "mapleTree", true);
 		public static final TexturedModel hut = loadTexturedModel("hut", "thatch", true);
 	}
 	

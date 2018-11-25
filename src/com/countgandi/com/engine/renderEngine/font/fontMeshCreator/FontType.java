@@ -1,7 +1,5 @@
 package com.countgandi.com.engine.renderEngine.font.fontMeshCreator;
 
-import java.io.File;
-
 import com.countgandi.com.engine.renderEngine.Loader;
 
 /**
@@ -28,7 +26,7 @@ public class FontType {
 	 */
 	public FontType(String fontName, Loader loader) {
 		this.textureAtlas = loader.loadFontTexture(fontName);
-		this.loader = new TextMeshCreator(new File("res/fnt/arial.fnt"));
+		this.loader = new TextMeshCreator("/fnt/arial.fnt");
 	}
 
 	/**

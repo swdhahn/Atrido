@@ -11,7 +11,7 @@ public class TreeEntity extends Entity {
 	
 
 	public TreeEntity(Vector3f position, Vector3f rot, Handler handler) {
-		super(Assets.TexturedModels.tree, position, rot, handler);
+		super(Assets.TexturedModels.tree1, position, rot, handler);
 	}
 
 	@Override
