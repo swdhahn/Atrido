@@ -1,10 +1,12 @@
 package com.countgandi.com;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.openal.AL10;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
+import com.countgandi.com.engine.audio.AudioMaster;
 import com.countgandi.com.engine.renderEngine.DisplayManager;
 import com.countgandi.com.engine.renderEngine.font.TextMaster;
 import com.countgandi.com.engine.renderEngine.font.fontMeshCreator.GUIText;
@@ -30,6 +32,9 @@ public class Game {
 	public Game() {
 		// INIT
 		DisplayManager.createDisplay();
+		AudioMaster.init();
+		AudioMaster.setListenerData(0, 0, 0);
+		AL10.alDistanceModel(AL10.AL_INVERSE_DISTANCE);
 
 		handler = new Handler();
 		HEADER = new GUIText("Pos", 1, Assets.Fonts.arial, new Vector2f(0, 0), 1);
@@ -78,6 +83,7 @@ public class Game {
 		handler.cleanUp();
 		Assets.loader.cleanUp();
 		TextMaster.cleanUp();
+		AudioMaster.cleanUp();
 		ParticleMaster.cleanUp();
 		DisplayManager.closeDisplay();
 		System.exit(0);

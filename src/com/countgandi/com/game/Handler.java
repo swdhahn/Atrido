@@ -8,6 +8,7 @@ import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
+import com.countgandi.com.Assets;
 import com.countgandi.com.engine.guis.GuiRenderer;
 import com.countgandi.com.engine.guis.GuiTexture;
 import com.countgandi.com.engine.renderEngine.MasterRenderer;
@@ -67,6 +68,10 @@ public class Handler {
 		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_V)) {
 			plants.add(new PlantTree(new Vector3f(camera.getPosition().x, camera.getPosition().y - 2, camera.getPosition().z), new Vector3f(0, camera.getYaw(), 0), this));
+		}
+		if(Keyboard.isKeyDown(Keyboard.KEY_B)) {
+			entities.add(new Entity(Assets.TexturedModels.hut, new Vector3f(camera.getPosition().x, camera.getPosition().y - 2, camera.getPosition().z), new Vector3f(0, camera.getYaw(), 0), this) {});
+
 		}
 		//new Particle(new Vector3f(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z - 10), new Vector3f(0, 30, 0), 0.1F, 100, 0, 10);
 		ParticleMaster.tick();

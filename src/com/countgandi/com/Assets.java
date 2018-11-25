@@ -1,5 +1,6 @@
 package com.countgandi.com;
 
+import com.countgandi.com.engine.audio.AudioMaster;
 import com.countgandi.com.engine.renderEngine.Loader;
 import com.countgandi.com.engine.renderEngine.OBJLoader;
 import com.countgandi.com.engine.renderEngine.font.fontMeshCreator.FontType;
@@ -32,6 +33,10 @@ public class Assets {
 		public static final TexturedModel tree = loadTexturedModel("tree2", "smallTree", false);
 		public static final TexturedModel treeleaves = loadTexturedModel("tree2leaves", "smallTree", true);
 		public static final TexturedModel hut = loadTexturedModel("hut", "thatch", true);
+	}
+	
+	public static final class Sounds {
+		public static final int Bounce = AudioMaster.loadSound("bounce");
 	}
 
 	public static TexturedModel loadTexturedModel(String modelName, String textureName, boolean trans) {

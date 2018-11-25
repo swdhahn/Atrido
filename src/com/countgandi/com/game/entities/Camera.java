@@ -7,6 +7,7 @@ import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.countgandi.com.Game;
+import com.countgandi.com.engine.audio.AudioMaster;
 import com.countgandi.com.engine.guis.WaterGui;
 import com.countgandi.com.engine.renderEngine.DisplayManager;
 import com.countgandi.com.game.Constants;
@@ -46,6 +47,8 @@ public class Camera {
 			handler.guis.remove(waterGui);
 			isInWater = false;
 		}
+		
+		AudioMaster.setListenerData(position.x, position.y, position.z);
 
 		collision();
 		checkInputs();
