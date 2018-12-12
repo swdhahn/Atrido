@@ -33,6 +33,7 @@ public class Assets {
 		public static final TexturedModel tree1 = loadTexturedModel("tree", "mapleTree", false);
 		//public static final TexturedModel tree1leaves = loadTexturedModel("tree2leaves", "mapleTree", true);
 		public static final TexturedModel hut = loadTexturedModel("hut", "thatch", true);
+		public static final TexturedModel grass = loadTexturedModel("grass", "grassTexture", true);
 	}
 	
 	public static final class Sounds {

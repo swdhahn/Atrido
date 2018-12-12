@@ -26,6 +26,11 @@ public abstract class Entity {
 		this.handler = handler;
 		source = new Source();
 	}
+	
+	public Entity(TexturedModel model, Vector3f position, Vector3f rot, float scale, Handler handler) {
+		this(model, position, rot, handler);
+		this.scale = scale;
+	}
 
 	public float getTextureXOffset() {
 		int column = textureIndex % model.getTexture().getNumberOfRows();

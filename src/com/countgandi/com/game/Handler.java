@@ -70,8 +70,7 @@ public class Handler {
 			plants.add(new PlantTree(new Vector3f(camera.getPosition().x, camera.getPosition().y - 2, camera.getPosition().z), new Vector3f(0, camera.getYaw(), 0), this));
 		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_B)) {
-			entities.add(new Entity(Assets.TexturedModels.hut, new Vector3f(camera.getPosition().x, camera.getPosition().y - 2, camera.getPosition().z), new Vector3f(0, camera.getYaw(), 0), this) {});
-
+			entities.add(new Entity(Assets.TexturedModels.grass, new Vector3f(camera.getPosition().x, camera.getPosition().y - 5, camera.getPosition().z), new Vector3f(0, camera.getYaw(), 0), 10f, this) {});
 		}
 		//new Particle(new Vector3f(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z - 10), new Vector3f(0, 30, 0), 0.1F, 100, 0, 10);
 		ParticleMaster.tick();
