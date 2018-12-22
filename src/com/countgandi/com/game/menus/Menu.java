@@ -1,4 +1,4 @@
-package com.countgandi.com.menus;
+package com.countgandi.com.game.menus;
 
 import com.countgandi.com.game.Handler;
 

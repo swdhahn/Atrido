@@ -1,8 +1,8 @@
 package com.countgandi.com.engine.renderEngine;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -86,10 +86,9 @@ public class Loader {
 	public int loadTexture(BufferedImage img) {
 		Texture texture = null;
 		try {
-			File file = new File("img.png");
-			ImageIO.write(img, "PNG", file);
-			texture = TextureLoader.getTexture("PNG", new FileInputStream(file));
-			file.delete();
+			ByteArrayOutputStream os = new ByteArrayOutputStream();
+			ImageIO.write(img, "PNG", os);
+			texture = TextureLoader.getTexture("PNG", new ByteArrayInputStream(os.toByteArray()));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

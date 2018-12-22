@@ -11,9 +11,7 @@ import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
-import com.countgandi.com.Assets;
 import com.countgandi.com.engine.renderEngine.models.TexturedModel;
-import com.countgandi.com.engine.renderEngine.plants.PlantRenderer;
 import com.countgandi.com.engine.renderEngine.shaders.StaticShader;
 import com.countgandi.com.engine.renderEngine.skybox.SkyboxRenderer;
 import com.countgandi.com.engine.renderEngine.terrain.Terrain;
@@ -21,7 +19,6 @@ import com.countgandi.com.engine.renderEngine.terrain.TerrainShader;
 import com.countgandi.com.game.entities.Camera;
 import com.countgandi.com.game.entities.Entity;
 import com.countgandi.com.game.entities.Light;
-import com.countgandi.com.game.plants.Plant;
 import com.countgandi.com.game.structures.Structure;
 
 public class MasterRenderer {
@@ -40,24 +37,21 @@ public class MasterRenderer {
 	private EntityRenderer renderer;
 	private StructureRenderer structureRenderer;
 	private TerrainRenderer terrainRenderer;
-	private PlantRenderer plantRenderer;
 
 	private Map<TexturedModel, List<Entity>> entities = new HashMap<TexturedModel, List<Entity>>();
 	private Map<TexturedModel, List<Structure>> structures = new HashMap<TexturedModel, List<Structure>>();
 	private List<Terrain> terrains = new ArrayList<Terrain>();
-	private Map<TexturedModel[], List<Plant>> plants = new HashMap<TexturedModel[], List<Plant>>();
 	private SkyboxRenderer skyboxRenderer;
 	private Loader loader;
 
-	public MasterRenderer() {
-		this.loader = Assets.loader;
+	public MasterRenderer(Loader loader) {
+		this.loader = loader;
 		enableCulling();
 		createProjectionMatrix();
 		renderer = new EntityRenderer(shader, projectionMatrix);
 		structureRenderer = new StructureRenderer(shader, projectionMatrix);
 		terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
 		skyboxRenderer = new SkyboxRenderer(loader, projectionMatrix);
-		plantRenderer = new PlantRenderer(shader, projectionMatrix);
 	}
 
 	public void render(List<Light> lights, Camera camera, Vector4f clipPlane) {
@@ -75,7 +69,6 @@ public class MasterRenderer {
 		shader.loadSkyColor(skyColor);
 		shader.loadLights(lights);
 		shader.loadViewMatrix(camera);
-		plantRenderer.render(plants);
 		shader.stop();
 		shader.start();
 		shader.loadClipPlane(clipPlane);
@@ -110,18 +103,6 @@ public class MasterRenderer {
 
 	public void processTerrain(Terrain terrain) {
 		terrains.add(terrain);
-	}
-
-	public void processPlant(Plant plant) {
-		TexturedModel[] plantModel = plant.getModel();
-		List<Plant> batch = plants.get(plantModel);
-		if (batch != null) {
-			batch.add(plant);
-		} else {
-			List<Plant> newBatch = new ArrayList<Plant>();
-			newBatch.add(plant);
-			plants.put(plantModel, newBatch);
-		}
 	}
 
 	public void processStructure(Structure structure) {

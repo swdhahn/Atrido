@@ -1,8 +1,9 @@
-package com.countgandi.com.engine.guis;
+package com.countgandi.com.game.guis;
 
 import org.lwjgl.util.vector.Vector2f;
 
-import com.countgandi.com.Assets;
+import com.countgandi.com.engine.guis.GuiTexture;
+import com.countgandi.com.game.Assets;
 
 public class WaterGui extends GuiTexture {
 

@@ -8,8 +8,8 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix4f;
 
-import com.countgandi.com.Assets;
 import com.countgandi.com.engine.Maths;
+import com.countgandi.com.engine.renderEngine.Loader;
 import com.countgandi.com.engine.renderEngine.models.RawModel;
 
 public class GuiRenderer {
@@ -17,9 +17,9 @@ public class GuiRenderer {
 	private final RawModel quad;
 	private GuiShader shader;
 
-	public GuiRenderer () {
+	public GuiRenderer (Loader loader) {
 		float[] positions = {-1, 1,/**/ -1, -1, /**/ 1, 1, /**/ 1, -1};
-		quad = Assets.loader.loadToVAO(positions, 2);
+		quad = loader.loadToVAO(positions, 2);
 		shader = new GuiShader();
 	}
 	

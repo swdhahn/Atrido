@@ -13,8 +13,7 @@ public class PerlinNoise {
 	private int xOffset = 0;
 	private int zOffset = 0;
 
-	public PerlinNoise(int gridX, int gridZ, int vertexCount, float amplitude, float octaves, float roughness,
-			int seed) {
+	public PerlinNoise(int gridX, int gridZ, int vertexCount, int seed) {
 		this.seed = seed;
 		xOffset = gridX * (vertexCount - 1);
 		zOffset = gridZ * (vertexCount - 1);
@@ -53,8 +52,7 @@ public class PerlinNoise {
 	}
 
 	private float getSmoothNoise(int x, int z) {
-		float corners = (getNoise(x - 1, z - 1) + getNoise(x + 1, z - 1) + getNoise(x - 1, z + 1)
-				+ getNoise(x + 1, z + 1)) / 16f;
+		float corners = (getNoise(x - 1, z - 1) + getNoise(x + 1, z - 1) + getNoise(x - 1, z + 1) + getNoise(x + 1, z + 1)) / 16f;
 		float sides = (getNoise(x - 1, z) + getNoise(x, z - 1) + getNoise(x + 1, z) + getNoise(x, z + 1)) / 8f;
 		float center = getNoise(x, z) / 4f;
 		return corners + sides + center;

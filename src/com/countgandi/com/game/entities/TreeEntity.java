@@ -2,8 +2,8 @@ package com.countgandi.com.game.entities;
 
 import org.lwjgl.util.vector.Vector3f;
 
-import com.countgandi.com.Assets;
 import com.countgandi.com.engine.renderEngine.MasterRenderer;
+import com.countgandi.com.game.Assets;
 import com.countgandi.com.game.Handler;
 
 public class TreeEntity extends Entity {

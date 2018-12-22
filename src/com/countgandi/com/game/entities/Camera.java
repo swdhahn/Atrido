@@ -6,31 +6,31 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
-import com.countgandi.com.Game;
 import com.countgandi.com.engine.audio.AudioMaster;
-import com.countgandi.com.engine.guis.WaterGui;
 import com.countgandi.com.engine.renderEngine.DisplayManager;
 import com.countgandi.com.game.Constants;
+import com.countgandi.com.game.Game;
 import com.countgandi.com.game.Handler;
+import com.countgandi.com.game.guis.WaterGui;
 
 public class Camera {
 
-	private Vector3f position = new Vector3f(0, 0, 0);
-	private float pitch, yaw, roll, height = 4;
-	private WaterGui waterGui;
+	protected Vector3f position = new Vector3f(0, 0, 0);
+	protected float pitch, yaw, roll, height = 4;
+	protected WaterGui waterGui;
 
-	private static final float runSpeed = 20, sprintSpeed = 100, JumpPower = 30;
+	protected static final float runSpeed = 20, sprintSpeed = 100, JumpPower = 30;
 
-	private float currentSpeed;
-	private float velX;
-	private float upwardsSpeed;
+	protected float currentSpeed;
+	protected float velX;
+	protected float upwardsSpeed;
 
-	private float TerrainHeight = 0;
+	protected float TerrainHeight = 0;
 
-	private boolean isInAir = false, isInWater = false;
-	private int preX;
+	protected boolean isInAir = false, isInWater = false;
+	protected int preX;
 
-	private Handler handler;
+	protected Handler handler;
 
 	public Camera(Handler handler) {
 		this.handler = handler;

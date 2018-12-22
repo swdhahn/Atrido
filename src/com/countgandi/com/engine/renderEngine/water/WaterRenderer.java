@@ -9,7 +9,6 @@ import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
-import com.countgandi.com.Assets;
 import com.countgandi.com.engine.Maths;
 import com.countgandi.com.engine.renderEngine.DisplayManager;
 import com.countgandi.com.engine.renderEngine.Loader;
@@ -32,16 +31,16 @@ public class WaterRenderer {
 	private int dudvTexture;
 	private int normalMap;
 
-	public WaterRenderer(Matrix4f projectionMatrix, WaterFrameBuffers fbos) {
+	public WaterRenderer(Matrix4f projectionMatrix, WaterFrameBuffers fbos, Loader loader) {
 		this.shader = new WaterShader();
 		this.fbos = fbos;
-		dudvTexture = Assets.loader.loadTexture(DUDVMAP);
-		normalMap = Assets.loader.loadTexture(NORMALMAP);
+		dudvTexture = loader.loadTexture(DUDVMAP);
+		normalMap = loader.loadTexture(NORMALMAP);
 		shader.start();
 		shader.connectTextureUnits();
 		shader.loadProjectionMatrix(projectionMatrix);
 		shader.stop();
-		setUpVAO(Assets.loader);
+		setUpVAO(loader);
 	}
 
 	public void render(List<WaterTile> water, Camera camera, Light sun) {

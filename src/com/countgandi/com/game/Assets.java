@@ -1,4 +1,4 @@
-package com.countgandi.com;
+package com.countgandi.com.game;
 
 import com.countgandi.com.engine.audio.AudioMaster;
 import com.countgandi.com.engine.renderEngine.Loader;
@@ -41,7 +41,7 @@ public class Assets {
 	}
 
 	public static TexturedModel loadTexturedModel(String modelName, String textureName, boolean trans) {
-		return new TexturedModel(OBJLoader.loadObjModel(modelName), new ModelTexture(loader.loadTexture(textureName), trans)) {
+		return new TexturedModel(OBJLoader.loadObjModel(modelName, loader), new ModelTexture(loader.loadTexture(textureName), trans)) {
 			@Override
 			public ModelTexture getTexture() {
 				return super.getTexture();
@@ -50,7 +50,7 @@ public class Assets {
 	}
 	
 	public static TexturedModel loadTexturedModel(String modelName, int texture, boolean trans) {
-		return new TexturedModel(OBJLoader.loadObjModel(modelName), new ModelTexture(texture, trans)) {
+		return new TexturedModel(OBJLoader.loadObjModel(modelName, loader), new ModelTexture(texture, trans)) {
 			@Override
 			public ModelTexture getTexture() {
 				return super.getTexture();

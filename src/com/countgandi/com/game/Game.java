@@ -1,4 +1,4 @@
-package com.countgandi.com;
+package com.countgandi.com.game;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.openal.AL10;
@@ -12,11 +12,10 @@ import com.countgandi.com.engine.renderEngine.font.TextMaster;
 import com.countgandi.com.engine.renderEngine.font.fontMeshCreator.GUIText;
 import com.countgandi.com.engine.renderEngine.particles.ParticleMaster;
 import com.countgandi.com.engine.renderEngine.water.WaterTile;
-import com.countgandi.com.game.Handler;
 import com.countgandi.com.game.entities.GameRegistry;
 import com.countgandi.com.game.entities.Light;
-import com.countgandi.com.menus.GameMenu;
-import com.countgandi.com.menus.Menu;
+import com.countgandi.com.game.menus.GameMenu;
+import com.countgandi.com.game.menus.Menu;
 
 //https://youtu.be/mnIQEQoHHCU?t=7m6s
 public class Game {
@@ -31,19 +30,19 @@ public class Game {
 
 	public Game() {
 		// INIT
-		DisplayManager.createDisplay();
+		DisplayManager.createDisplay(WIDTH, HEIGHT, TITLE);
 		AudioMaster.init();
 		AudioMaster.setListenerData(0, 0, 0);
 		AL10.alDistanceModel(AL10.AL_INVERSE_DISTANCE);
 
-		handler = new Handler();
+		handler = new Handler(false);
 		HEADER = new GUIText("Pos", 1, Assets.Fonts.arial, new Vector2f(0, 0), 1);
 		HEADER2 = new GUIText("Pos", 1, Assets.Fonts.arial, new Vector2f(0, 0.1f), 1);
 		menu = new GameMenu(handler);
 
 		GameRegistry.register();
 
-		handler.lights.add(new Light(new Vector3f(0, 1000, -7000), new Vector3f(1.0f, 1.0f, 1.0f)));
+		handler.lights.add(new Light(new Vector3f(0, 1000, -7000), new Vector3f(1.0f, 1.0f, 1.0f), Light.LIGHT_SUN));
 		handler.waters.add(new WaterTile(WaterTile.TILE_SIZE, WaterTile.TILE_SIZE, -1));
 
 		// END OF INIT

@@ -9,14 +9,13 @@ import java.util.List;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
-import com.countgandi.com.Assets;
 import com.countgandi.com.engine.ModelData;
 import com.countgandi.com.engine.Vertex;
 import com.countgandi.com.engine.renderEngine.models.RawModel;
 
 public class OBJLoader {
 
-	public static RawModel loadObjModel(String objFileName) {
+	public static RawModel loadObjModel(String objFileName, Loader loader) {
        
         BufferedReader reader = new BufferedReader(new InputStreamReader(OBJLoader.class.getResourceAsStream("/obj/" + objFileName + ".obj")));
         String line;
@@ -73,7 +72,7 @@ public class OBJLoader {
         int[] indicesArray = convertIndicesListToArray(indices);
         ModelData data = new ModelData(verticesArray, texturesArray, normalsArray, indicesArray,
                 furthest);
-        return Assets.loader.loadToVAO(data.getVertices(), data.getTextureCoords(), data.getNormals(), data.getIndices());
+        return loader.loadToVAO(data.getVertices(), data.getTextureCoords(), data.getNormals(), data.getIndices());
     }
  
     private static void processVertex(String[] vertex, List<Vertex> vertices, List<Integer> indices) {

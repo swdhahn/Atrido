@@ -124,5 +124,9 @@ public class TerrainShader extends ShaderProgram {
 	public void loadSkyColor(Vector3f skycolor) {
 		super.loadVector(location_skyColor, skycolor);
 	}
+	
+	public void loadTiling(float tiling) {
+		super.loadFloat(location_tiling, tiling);
+	}
 
 }

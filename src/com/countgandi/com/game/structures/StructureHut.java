@@ -2,7 +2,7 @@ package com.countgandi.com.game.structures;
 
 import org.lwjgl.util.vector.Vector3f;
 
-import com.countgandi.com.Assets;
+import com.countgandi.com.game.Assets;
 import com.countgandi.com.game.Handler;
 
 public class StructureHut extends Structure {

@@ -5,10 +5,14 @@ import java.util.Random;
 
 import org.lwjgl.util.vector.Vector3f;
 
-import com.countgandi.com.Assets;
+import com.countgandi.com.creationEngine.Main;
+import com.countgandi.com.creationEngine.menus.SessionObject;
 import com.countgandi.com.engine.renderEngine.MasterRenderer;
 import com.countgandi.com.engine.renderEngine.terrain.Terrain;
-import com.countgandi.com.game.biomes.Biome;
+import com.countgandi.com.engine.renderEngine.water.WaterTile;
+import com.countgandi.com.game.Assets;
+import com.countgandi.com.game.Handler;
+import com.countgandi.com.game.entities.Light;
 
 public class World {
 
@@ -18,8 +22,10 @@ public class World {
 
 	public ArrayList<Terrain> terrains = new ArrayList<Terrain>();
 
-	public World() {
-
+	private Handler handler;
+	
+	public World(Handler handler) {
+		this.handler = handler;
 	}
 
 	public void generateWorld() {
@@ -29,11 +35,25 @@ public class World {
 			int terrainWidth = (int) (terrainSideAmount / Terrain.SIZE);
 			for (int x = 0; x < terrainWidth; x++) {
 				for (int z = 0; z < terrainWidth; z++) {
-					terrains.add(new Terrain(0, 0, Assets.TERRAIN));
+					terrains.add(new Terrain(0, 0, Assets.TERRAIN, Assets.loader));
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public void addTerrain(Terrain terrain) {
+		terrains.add(terrain);
+		if(handler.getIsEngine()) {
+			Main.worldList.addElement(new SessionObject(terrain));
+		}
+	}
+		
+	public void addWater(WaterTile waterTile) {
+		handler.waters.add(waterTile);
+		if(handler.getIsEngine()) {
+			Main.worldList.addElement(new SessionObject(waterTile));
 		}
 	}
 
@@ -58,6 +78,13 @@ public class World {
 			}
 		}
 		return null;
+	}
+
+	public void addLight(Light light) {
+		handler.lights.add(light);
+		if(handler.getIsEngine()) {
+			Main.worldList.addElement(new SessionObject(light));
+		}
 	}
 
 }

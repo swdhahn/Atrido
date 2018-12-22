@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.countgandi.com.Assets;
 import com.countgandi.com.engine.renderEngine.Loader;
 import com.countgandi.com.engine.renderEngine.font.fontMeshCreator.FontType;
 import com.countgandi.com.engine.renderEngine.font.fontMeshCreator.GUIText;
@@ -18,9 +17,9 @@ public class TextMaster {
 	private static Map<FontType, List<GUIText>> texts = new HashMap<FontType, List<GUIText>>();
 	private static FontRenderer renderer;
 	
-	public static void init() {
+	public static void init(Loader loader) {
 		renderer = new FontRenderer();
-		TextMaster.loader = Assets.loader;
+		TextMaster.loader = loader;
 	}
 	
 	public static void render() {

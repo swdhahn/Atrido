@@ -24,6 +24,7 @@ public class TerrainRenderer {
 		shader.start();
 		shader.loadProjectionMatrix(projectionMatrix);
 		shader.connectTextureUnits();
+		shader.loadTiling(100);
 		shader.stop();
 	}
 

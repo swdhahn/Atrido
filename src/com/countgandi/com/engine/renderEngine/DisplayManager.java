@@ -1,5 +1,7 @@
 package com.countgandi.com.engine.renderEngine;
 
+import java.awt.Canvas;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
 import org.lwjgl.input.Mouse;
@@ -9,8 +11,6 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.PixelFormat;
 
-import com.countgandi.com.Game;
-
 public class DisplayManager {
 	private static final int FPSCAP = 120;
 
@@ -18,23 +18,23 @@ public class DisplayManager {
 	private static float delta;
 	public static ContextAttribs attribs;
 
-	public static void createDisplay() {
+	public static void createDisplay(int width, int height, String title) {
 
 		attribs = new ContextAttribs(3, 2).withForwardCompatible(true).withProfileCore(true);
 
 		try {
-			DisplayMode displayMode = null;
+			//DisplayMode displayMode = null;
 			DisplayMode[] modes = Display.getAvailableDisplayModes();
 
 			for (int i = 0; i < modes.length; i++) {
-				if (modes[i].getWidth() == Game.WIDTH && modes[i].getHeight() == Game.HEIGHT && modes[i].isFullscreenCapable()) {
-					displayMode = modes[i];
+				if (modes[i].getWidth() == width && modes[i].getHeight() == height && modes[i].isFullscreenCapable()) {
+					//displayMode = modes[i];
 				}
 			}
-			Display.setDisplayMode(new DisplayMode(Game.WIDTH, Game.HEIGHT));
+			Display.setDisplayMode(new DisplayMode(width, height));
 			// Display.setFullscreen(true);
 			Display.create(new PixelFormat().withDepthBits(24), attribs);
-			Display.setTitle(Game.TITLE);
+			Display.setTitle(title);
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}
@@ -45,15 +45,33 @@ public class DisplayManager {
 			e.printStackTrace();
 		}
 		Mouse.setClipMouseCoordinatesToWindow(true);
-		GL11.glViewport(0, 0, Game.WIDTH, Game.HEIGHT);
+		GL11.glViewport(0, 0, width, height);
 
 	}
+	
+	public static Canvas addToCanvas(Canvas canvas, int width, int height) {
+		attribs = new ContextAttribs(3, 2).withForwardCompatible(true).withProfileCore(true);
+		try {
+			Display.setParent(canvas);
+			Display.create(new PixelFormat().withDepthBits(24), attribs);
+		} catch (LWJGLException e) {
+			e.printStackTrace();
+		}
 
-	private static int frameRate = 0; 
+		try {
+			Mouse.create();
+		} catch (LWJGLException e) {
+			e.printStackTrace();
+		}
+		Mouse.setClipMouseCoordinatesToWindow(true);
+		GL11.glViewport(0, 0, width, height);
+		canvas.setSize(width, height);
+		return canvas;
+	}
+
 	private static float prev = 0;
 	
 	public static void updateDisplay() {
-		frameRate ++;
 		Mouse.updateCursor();
 		Display.sync(FPSCAP);
 		Display.update();
@@ -63,8 +81,6 @@ public class DisplayManager {
 		lastFrameTime = currentFrameTime;
 		if(delta - prev > 1) {
 			prev = delta;
-			System.out.println("FPS: " + frameRate);
-			frameRate = 0;
 		}
 	}
 
