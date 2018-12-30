@@ -6,7 +6,6 @@ import com.countgandi.com.engine.Maths;
 import com.countgandi.com.engine.renderEngine.shaders.ShaderProgram;
 import com.countgandi.com.game.entities.Camera;
 import com.countgandi.com.game.entities.Light;
-import com.countgandi.com.game.worldGen.World;
 
 public class WaterShader extends ShaderProgram {
 
@@ -30,7 +29,7 @@ public class WaterShader extends ShaderProgram {
 	public WaterShader() {
 		super(VERTEX_FILE, FRAGMENT_FILE);
 		start();
-		super.loadFloat(location_tiling, World.terrainSideAmount / 10.0f);
+		super.loadFloat(location_tiling, WaterTile.TILE_SIZE / 10);
 		stop();
 	}
 

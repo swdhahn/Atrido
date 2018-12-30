@@ -35,7 +35,7 @@ public class Handler {
 
 	private WaterRenderer waterRenderer;
 	private WaterFrameBuffers fbos;
-	private MasterRenderer renderer;
+	public MasterRenderer renderer;
 	private GuiRenderer guiRenderer;
 	private Camera camera;
 
@@ -128,7 +128,7 @@ public class Handler {
 		entities.clear();
 
 		world.generateWorld();
-		entities.add(new Player(new Vector3f(World.terrainSideAmount / 2, 0, World.terrainSideAmount / 2), this));
+		entities.add(new Player(new Vector3f(0, 0, 0), this));
 	}
 
 	public void addEntity(Entity entity) {

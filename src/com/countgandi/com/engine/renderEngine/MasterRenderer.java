@@ -11,11 +11,14 @@ import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
+import com.countgandi.com.engine.renderEngine.grass.GrassRenderer;
 import com.countgandi.com.engine.renderEngine.models.TexturedModel;
 import com.countgandi.com.engine.renderEngine.shaders.StaticShader;
 import com.countgandi.com.engine.renderEngine.skybox.SkyboxRenderer;
 import com.countgandi.com.engine.renderEngine.terrain.Terrain;
 import com.countgandi.com.engine.renderEngine.terrain.TerrainShader;
+import com.countgandi.com.game.Assets;
+import com.countgandi.com.game.Handler;
 import com.countgandi.com.game.entities.Camera;
 import com.countgandi.com.game.entities.Entity;
 import com.countgandi.com.game.entities.Light;
@@ -39,9 +42,11 @@ public class MasterRenderer {
 	private TerrainRenderer terrainRenderer;
 
 	private Map<TexturedModel, List<Entity>> entities = new HashMap<TexturedModel, List<Entity>>();
+	public Map<TexturedModel, List<Entity>> grass = new HashMap<TexturedModel, List<Entity>>();
 	private Map<TexturedModel, List<Structure>> structures = new HashMap<TexturedModel, List<Structure>>();
 	private List<Terrain> terrains = new ArrayList<Terrain>();
 	private SkyboxRenderer skyboxRenderer;
+	private GrassRenderer grassRenderer;
 	private Loader loader;
 
 	public MasterRenderer(Loader loader) {
@@ -52,6 +57,7 @@ public class MasterRenderer {
 		structureRenderer = new StructureRenderer(shader, projectionMatrix);
 		terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
 		skyboxRenderer = new SkyboxRenderer(loader, projectionMatrix);
+		grassRenderer = new GrassRenderer(projectionMatrix);
 	}
 
 	public void render(List<Light> lights, Camera camera, Vector4f clipPlane) {
@@ -64,12 +70,7 @@ public class MasterRenderer {
 		shader.loadViewMatrix(camera);
 		renderer.render(entities);
 		shader.stop();
-		shader.start();
-		shader.loadClipPlane(clipPlane);
-		shader.loadSkyColor(skyColor);
-		shader.loadLights(lights);
-		shader.loadViewMatrix(camera);
-		shader.stop();
+		
 		shader.start();
 		shader.loadClipPlane(clipPlane);
 		shader.loadSkyColor(skyColor);
@@ -84,6 +85,14 @@ public class MasterRenderer {
 		terrainShader.loadViewMatrix(camera);
 		terrainRenderer.render(terrains);
 		terrainShader.stop();
+		
+		grassRenderer.shader.start();
+		grassRenderer.shader.loadClipPlane(clipPlane);
+		grassRenderer.shader.loadSkyColor(skyColor);
+		grassRenderer.shader.loadLights(lights);
+		grassRenderer.shader.loadViewMatrix(camera);
+		grassRenderer.render(grass);
+		grassRenderer.shader.stop();
 
 		skyboxRenderer.render(camera, skyColor);
 
@@ -128,10 +137,24 @@ public class MasterRenderer {
 			entities.put(entityModel, newBatch);
 		}
 	}
+	
+	public void processGrass(Vector3f pos, Vector3f rot, Handler handler) {
+		Entity entity = new Entity(Assets.TexturedModels.grass, pos, rot, 2f, handler) {};
+		TexturedModel entityModel = entity.getModel();
+		List<Entity> batch = grass.get(entityModel);
+		if (batch != null) {
+			batch.add(entity);
+		} else {
+			List<Entity> newBatch = new ArrayList<Entity>();
+			newBatch.add(entity);
+			grass.put(entityModel, newBatch);
+		}
+	}
 
 	public void cleanUp() {
 		shader.cleanUp();
 		terrainShader.cleanUp();
+		grassRenderer.shader.cleanUp();
 	}
 
 	public void prepare() {

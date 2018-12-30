@@ -1,8 +1,10 @@
 package com.countgandi.com.engine.renderEngine.water;
 
+import com.countgandi.com.engine.renderEngine.terrain.Terrain;
+
 public class WaterTile {
 	
-	public static final float TILE_SIZE = 10000;
+	public static final float TILE_SIZE = 2000;
 	
 	private float height;
 	private float x,z;

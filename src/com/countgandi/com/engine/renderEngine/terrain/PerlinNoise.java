@@ -4,19 +4,22 @@ import java.util.Random;
 
 public class PerlinNoise {
 
-	private float AMPLITUDE = 100F;
-	private int OCTAVES = 5;
-	private float ROUGHNESS = 0.3f;
+	private float AMPLITUDE;
+	private int OCTAVES;
+	private float ROUGHNESS;
 
 	private Random random = new Random();
 	private int seed;
-	private int xOffset = 0;
-	private int zOffset = 0;
+	private long xOffset = 0;
+	private long zOffset = 0;
 
-	public PerlinNoise(int gridX, int gridZ, int vertexCount, int seed) {
+	public PerlinNoise(int gridX, int gridZ, int vertexCount, float amplitude, int octaves, float roughness, int seed) {
 		this.seed = seed;
-		xOffset = gridX * (vertexCount - 1);
-		zOffset = gridZ * (vertexCount - 1);
+		this.AMPLITUDE = amplitude;
+		this.OCTAVES = octaves;
+		this.ROUGHNESS = roughness;
+		xOffset = Terrain.ZERO + gridX * (vertexCount - 1);
+		zOffset = Terrain.ZERO + gridZ * (vertexCount - 1);
 	}
 
 	public float generateHeight(float x, float z) {
@@ -59,8 +62,8 @@ public class PerlinNoise {
 	}
 
 	private float getNoise(int x, int z) {
-		random.setSeed(x * 32416 + z * 94565 + seed);
-		return random.nextFloat() * 2f - 1f;
+		random.setSeed(x * 9322653 + z * 563442 + seed);
+		return random.nextFloat() * 8 - 4;
 	}
 
 }

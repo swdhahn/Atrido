@@ -11,22 +11,22 @@ import org.lwjgl.util.vector.Vector3f;
 import com.countgandi.com.engine.Maths;
 import com.countgandi.com.engine.renderEngine.Loader;
 import com.countgandi.com.engine.renderEngine.models.RawModel;
-import com.countgandi.com.engine.renderEngine.textures.TerrainTexture;
 import com.countgandi.com.engine.renderEngine.textures.TerrainTexturePack;
 import com.countgandi.com.game.worldGen.World;
 
 public class Terrain {
 
-	// use a single terrain, but determine colors of map with heights and determine
+	// use a single terrain, but determine colors of map with heights and
+	// determine
 	// biomes with heights
 
-	public static final int SIZE = 1000, VERTEX_COUNT = SIZE / 10;
+	public static final long ZERO = 9900000;
+	public static final int SIZE = 1024, VERTEX_COUNT = 100;
 	private static final float MAX_HEIGHT = 30, MAX_PIXEL_COLOR = 256 * 256 * 256;
 
-	private float x, z;
+	private long x, z;
 	private RawModel model;
 	private TerrainTexturePack texturePack;
-	private TerrainTexture blendMap;
 	private String heightmap;
 	private PerlinNoise generator;
 
@@ -36,18 +36,16 @@ public class Terrain {
 		this.texturePack = texturePack;
 		this.x = gridX * SIZE;
 		this.z = gridZ * SIZE;
-		generator = new PerlinNoise(gridX, gridZ, VERTEX_COUNT, World.SEED);
+		generator = new PerlinNoise(gridX, gridZ, VERTEX_COUNT, 75, 5, 0.05f, World.SEED);
 		this.model = generateTerrain(loader);
-		blendMap = this.generateTextureMap(loader);
 	}
-	
-	public Terrain(int gridX, int gridZ, TerrainTexturePack texturePack, TerrainTexture blendMap, String heightMap, Loader loader) {
+
+	public Terrain(int gridX, int gridZ, TerrainTexturePack texturePack, String heightMap, Loader loader) {
 		this.texturePack = texturePack;
 		this.x = gridX * SIZE;
 		this.z = gridZ * SIZE;
-		generator = new PerlinNoise(gridX, gridZ, VERTEX_COUNT, World.SEED);
+		generator = null;
 		this.model = generateTerrain(loader, heightMap);
-		this.blendMap = blendMap;
 	}
 
 	public float getX() {
@@ -82,13 +80,9 @@ public class Terrain {
 		float answer;
 
 		if (xCoord <= (1 - zCoord)) {
-			answer = Maths.barryCentric(new Vector3f(0, heights[gridX][gridZ], 0),
-					new Vector3f(1, heights[gridX + 1][gridZ], 0), new Vector3f(0, heights[gridX][gridZ + 1], 1),
-					new Vector2f(xCoord, zCoord));
+			answer = Maths.barryCentric(new Vector3f(0, heights[gridX][gridZ], 0), new Vector3f(1, heights[gridX + 1][gridZ], 0), new Vector3f(0, heights[gridX][gridZ + 1], 1), new Vector2f(xCoord, zCoord));
 		} else {
-			answer = Maths.barryCentric(new Vector3f(1, heights[gridX + 1][gridZ], 0),
-					new Vector3f(1, heights[gridX + 1][gridZ + 1], 1), new Vector3f(0, heights[gridX][gridZ + 1], 1),
-					new Vector2f(xCoord, zCoord));
+			answer = Maths.barryCentric(new Vector3f(1, heights[gridX + 1][gridZ], 0), new Vector3f(1, heights[gridX + 1][gridZ + 1], 1), new Vector3f(0, heights[gridX][gridZ + 1], 1), new Vector2f(xCoord, zCoord));
 		}
 		return answer;
 	}
@@ -114,8 +108,8 @@ public class Terrain {
 				normals[vertexPointer * 3] = normal.x;
 				normals[vertexPointer * 3 + 1] = normal.y;
 				normals[vertexPointer * 3 + 2] = normal.z;
-				textureCoords[vertexPointer * 2] = (float) j / ((float) VERTEX_COUNT - 1);
-				textureCoords[vertexPointer * 2 + 1] = (float) i / ((float) VERTEX_COUNT - 1);
+				textureCoords[vertexPointer * 2] = (float) j / ((float) VERTEX_COUNT);
+				textureCoords[vertexPointer * 2 + 1] = (float) i / ((float) VERTEX_COUNT + 1);
 				vertexPointer++;
 			}
 		}
@@ -171,23 +165,6 @@ public class Terrain {
 		return heightmap;
 	}
 
-	private TerrainTexture generateTextureMap(Loader loader) {
-		int width = SIZE, height = SIZE;
-		BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-
-		for (int z = 0; z < height; z++) {
-			for (int x = 0; x < width; x++) {
-				int color = 0xFF000000;
-				float theight = getHeightOfTerrain(x, z);
-				if (theight <= 5) {
-					color = 0xFFFF0000;
-				}
-				img.setRGB(x, z, color);
-			}
-		}
-		return new TerrainTexture(loader.loadTexture(img));
-	}
-	
 	private RawModel generateTerrain(Loader loader, String heightMap) {
 
 		BufferedImage img = null;
@@ -259,10 +236,6 @@ public class Terrain {
 		height /= MAX_PIXEL_COLOR / 2f;
 		height *= MAX_HEIGHT;
 		return height;
-	}
-
-	public TerrainTexture getBlendMap() {
-		return blendMap;
 	}
 
 }

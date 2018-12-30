@@ -22,16 +22,20 @@ public class Assets {
 	private static final TerrainTexture GRASS = new TerrainTexture(loader.loadTexture("grass2"));
 	private static final TerrainTexture ROCK = new TerrainTexture(loader.loadTexture("rock"));
 	private static final TerrainTexture SAND = new TerrainTexture(loader.loadTexture("sand"));
-	private static final TerrainTexture MUD = new TerrainTexture(loader.loadTexture("mud"));
-	public static final TerrainTexturePack TERRAIN = new TerrainTexturePack(GRASS, SAND, ROCK, MUD);
+	private static final TerrainTexture SNOW = new TerrainTexture(loader.loadTexture("snow"));
+	public static final TerrainTexturePack TERRAIN = new TerrainTexturePack(SAND, GRASS, ROCK, SNOW);
 
 	// Textures
 	public static final int Underwater = loader.loadTexture("underwater");
 
 	// Textured Models
 	public static final class TexturedModels {
-		public static final TexturedModel tree1 = loadTexturedModel("tree", "mapleTree", false);
-		//public static final TexturedModel tree1leaves = loadTexturedModel("tree2leaves", "mapleTree", true);
+		public static final TexturedModel pineTree = loadTexturedModel("PineTreeBranches", "pineTree", false);
+		public static final TexturedModel pineTreeLeaves = loadTexturedModel("PineTreeLeaves", "pineTree", true);
+		public static final TexturedModel pineTreeLeavesSnow = loadTexturedModel("PineTreeLeaves", "pineTreeSnow", true);
+		public static final TexturedModel tree1 = loadTexturedModel("tree2", "mapleTree", false);
+		public static final TexturedModel tree1leaves = loadTexturedModel("tree2leaves", "mapleTree", true);
+		public static final TexturedModel tree1leavesSnow = loadTexturedModel("tree2leaves", "mapleTreeSnow", true);
 		public static final TexturedModel hut = loadTexturedModel("hut", "thatch", true);
 		public static final TexturedModel grass = loadTexturedModel("grass", "grassTexture", true);
 	}

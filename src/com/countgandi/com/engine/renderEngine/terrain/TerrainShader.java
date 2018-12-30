@@ -28,11 +28,11 @@ public class TerrainShader extends ShaderProgram {
 	private int location_shineDamper;
 	private int location_reflectivity;
 	private int location_skyColor;
-	private int location_backgroundTexture;
-	private int location_rTexture;
-	private int location_gTexture;
-	private int location_bTexture;
-	private int location_blendMapTexture;
+	private int location_Texture0;
+	private int location_Texture1;
+	private int location_Texture2;
+	private int location_Texture3;
+	private int location_Texture4;
 	private int location_plane;
 	private int location_tiling;
 
@@ -58,11 +58,11 @@ public class TerrainShader extends ShaderProgram {
 		location_shineDamper = super.getUniformLocation("shineDamper");
 		location_reflectivity = super.getUniformLocation("reflectivity");
 		location_skyColor = super.getUniformLocation("skyColor");
-		location_backgroundTexture = super.getUniformLocation("backgroundTexture");
-		location_rTexture = super.getUniformLocation("rTexture");
-		location_gTexture = super.getUniformLocation("gTexture");
-		location_bTexture = super.getUniformLocation("bTexture");
-		location_blendMapTexture = super.getUniformLocation("blendMap");
+		location_Texture0 = super.getUniformLocation("texture0");
+		location_Texture1 = super.getUniformLocation("texture1");
+		location_Texture2 = super.getUniformLocation("texture2");
+		location_Texture3 = super.getUniformLocation("texture3");
+		location_Texture4 = super.getUniformLocation("texture4");
 		location_plane = super.getUniformLocation("plane");
 		location_tiling = super.getUniformLocation("tileDivision");
 
@@ -87,11 +87,11 @@ public class TerrainShader extends ShaderProgram {
 	}
 
 	public void connectTextureUnits() {
-		super.loadInt(location_backgroundTexture, 0);
-		super.loadInt(location_rTexture, 1);
-		super.loadInt(location_gTexture, 2);
-		super.loadInt(location_bTexture, 3);
-		super.loadInt(location_blendMapTexture, 4);
+		super.loadInt(location_Texture0, 0);
+		super.loadInt(location_Texture1, 1);
+		super.loadInt(location_Texture2, 2);
+		super.loadInt(location_Texture3, 3);
+		super.loadInt(location_Texture4, 4);
 	}
 
 	public void loadTransformationMatrix(Matrix4f matrix) {

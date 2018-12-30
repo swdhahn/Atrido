@@ -43,7 +43,7 @@ public class Game {
 		GameRegistry.register();
 
 		handler.lights.add(new Light(new Vector3f(0, 1000, -7000), new Vector3f(1.0f, 1.0f, 1.0f), Light.LIGHT_SUN));
-		handler.waters.add(new WaterTile(WaterTile.TILE_SIZE, WaterTile.TILE_SIZE, -1));
+		handler.waters.add(new WaterTile(0, 0, -1));
 
 		// END OF INIT
 		handler.gameStart();

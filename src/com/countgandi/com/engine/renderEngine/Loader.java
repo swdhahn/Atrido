@@ -74,8 +74,10 @@ public class Loader {
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR_MIPMAP_LINEAR);
 			GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, -0.4F);
 		} catch (FileNotFoundException e) {
+			System.err.println("Could not find file: " + fileName + ".png");
 			e.printStackTrace();
 		} catch (IOException e) {
+			System.err.println("Could not load file: " + fileName + ".png");
 			e.printStackTrace();
 		}
 		int textureID = texture.getTextureID();
@@ -166,7 +168,7 @@ public class Loader {
 	}
 
 	private int createVAO() {
-		int vaoID = GL30.glGenVertexArrays(); //creates empty vao and return vao ID
+		int vaoID = GL30.glGenVertexArrays();
 		vaos.add(vaoID);
 		GL30.glBindVertexArray(vaoID);
 		return vaoID;

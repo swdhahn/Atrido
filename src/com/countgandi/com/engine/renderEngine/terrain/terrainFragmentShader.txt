@@ -4,6 +4,7 @@ const int MaxLightsForEachEntity = 4;
 uniform float tileDivision;
 
 in vec2 pass_textureCoords;
+in vec4 vPos;
 in vec3 surfaceNormal;
 in vec3 toLightVector[MaxLightsForEachEntity];
 in vec3 toCameraVector;
@@ -11,11 +12,11 @@ in float visibility;
 
 out vec4 out_Color;
 
-uniform sampler2D backgroundTexture;
-uniform sampler2D rTexture;
-uniform sampler2D gTexture;
-uniform sampler2D bTexture;
-uniform sampler2D blendMap;
+uniform sampler2D texture0;
+uniform sampler2D texture1;
+uniform sampler2D texture2;
+uniform sampler2D texture3;
+uniform sampler2D texture4;
 
 uniform vec3 lightColor[MaxLightsForEachEntity];
 uniform vec3 attenuation[MaxLightsForEachEntity];
@@ -25,16 +26,24 @@ uniform vec3 skyColor;
 
 void main(void){
 
-	vec4 blendMapColor = texture(blendMap, pass_textureCoords);
-	
-	float backTextureAmount = 1 - (blendMapColor.r + blendMapColor.g + blendMapColor.b);
 	vec2 tiledCoords = pass_textureCoords * tileDivision;
-	vec4 backgroundTextureColor = texture(backgroundTexture, tiledCoords) * backTextureAmount;
-	vec4 rTextureColor = texture(rTexture, tiledCoords) * blendMapColor.r;
-	vec4 gTextureColor = texture(gTexture, tiledCoords) * blendMapColor.g;
-	vec4 bTextureColor = texture(bTexture, tiledCoords) * blendMapColor.b;
+	vec4 totalColor;
+	if(vPos.y < 5) {
+		totalColor = texture(texture0, tiledCoords);
+	} else if(vPos.y >= 5 && vPos.y <= 6) {
+		totalColor = mix(texture(texture1, tiledCoords), texture(texture0, tiledCoords), 6 - vPos.y);
+	} else if(vPos.y > 6 && vPos.y < 65) {
+		totalColor = texture(texture1, tiledCoords);
+	} else if(vPos.y >= 65 && vPos.y <= 66) {
+		totalColor = mix(texture(texture2, tiledCoords), texture(texture1, tiledCoords), 66 - vPos.y);
+	} else if(vPos.y > 66 && vPos.y < 70) {
+		totalColor = texture(texture2, tiledCoords);
+	} else if(vPos.y >= 70 && vPos.y <= 71) {
+		totalColor = mix(texture(texture3, tiledCoords), texture(texture2, tiledCoords), 71 - vPos.y);
+	} else if(vPos.y > 71) {
+		totalColor = texture(texture3, tiledCoords);
+	}
 	
-	vec4 totalColor = backgroundTextureColor + rTextureColor + gTextureColor + bTextureColor;
 	
 	vec3 unitNormal = normalize(surfaceNormal);
 	
