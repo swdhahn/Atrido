@@ -70,7 +70,7 @@ public class Main extends JPanel {
 		loader = new Loader();
 		
 		handler.getWorld().addLight(new Light(new Vector3f(0, 1000, -7000), new Vector3f(1.0f, 1.0f, 1.0f), Light.LIGHT_SUN));
-		handler.getWorld().addWater(new WaterTile(WaterTile.TILE_SIZE, WaterTile.TILE_SIZE, -1));
+		handler.getWorld().addWater(new WaterTile(WaterTile.SIZE, WaterTile.SIZE, -1));
 		handler.getWorld().addTerrain(new Terrain(0, 0, Assets.TERRAIN, loader));
 
 		start(frame);

@@ -35,6 +35,7 @@ public class DisplayManager {
 			// Display.setFullscreen(true);
 			Display.create(new PixelFormat().withDepthBits(24), attribs);
 			Display.setTitle(title);
+			//Display.setLocation(1920, 0);
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}

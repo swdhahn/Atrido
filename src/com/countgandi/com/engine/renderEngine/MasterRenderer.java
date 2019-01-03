@@ -16,6 +16,7 @@ import com.countgandi.com.engine.renderEngine.models.TexturedModel;
 import com.countgandi.com.engine.renderEngine.shaders.StaticShader;
 import com.countgandi.com.engine.renderEngine.skybox.SkyboxRenderer;
 import com.countgandi.com.engine.renderEngine.terrain.Terrain;
+import com.countgandi.com.engine.renderEngine.terrain.TerrainRenderer;
 import com.countgandi.com.engine.renderEngine.terrain.TerrainShader;
 import com.countgandi.com.game.Assets;
 import com.countgandi.com.game.Handler;

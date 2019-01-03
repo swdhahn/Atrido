@@ -29,13 +29,14 @@ public class WaterShader extends ShaderProgram {
 	public WaterShader() {
 		super(VERTEX_FILE, FRAGMENT_FILE);
 		start();
-		super.loadFloat(location_tiling, WaterTile.TILE_SIZE / 10);
+		super.loadFloat(location_tiling, WaterTile.SIZE / 10);
 		stop();
 	}
 
 	@Override
 	protected void bindAttributes() {
 		bindAttribute(0, "position");
+		bindAttribute(1, "texCoords");
 	}
 
 	@Override

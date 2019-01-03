@@ -44,7 +44,8 @@ public class World {
 			for(int i = 0; i < terrainSideAmount; i++) {
 				Vector3f pos = new Vector3f(random.nextFloat() * terrainSideAmount - terrainSideAmount / 2, 0, random.nextFloat() * terrainSideAmount - terrainSideAmount / 2);
 				pos.y = getTerrainStandingOn(pos).getHeightOfTerrain(pos.x, pos.z);
-				if(pos.y < 6) continue;
+				if(pos.y < 6)
+					continue;
 				//handler.addEntity(new Entity(Assets.TexturedModels.tree1, pos, new Vector3f(0, 0, 0), 10, handler) {});
 				//handler.addEntity(new Entity(Assets.TexturedModels.tree1leaves, pos, new Vector3f(0, 0, 0), 10, handler) {});
 				//handler.renderer.processGrass(pos, new Vector3f(0, 0, 0), handler);

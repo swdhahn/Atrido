@@ -1,4 +1,4 @@
-package com.countgandi.com.engine.renderEngine;
+package com.countgandi.com.engine.renderEngine.terrain;
 
 import java.util.List;
 
@@ -11,8 +11,6 @@ import org.lwjgl.util.vector.Vector3f;
 
 import com.countgandi.com.engine.Maths;
 import com.countgandi.com.engine.renderEngine.models.RawModel;
-import com.countgandi.com.engine.renderEngine.terrain.Terrain;
-import com.countgandi.com.engine.renderEngine.terrain.TerrainShader;
 import com.countgandi.com.engine.renderEngine.textures.TerrainTexturePack;
 
 public class TerrainRenderer {
@@ -52,7 +50,7 @@ public class TerrainRenderer {
 
 	private void bindTextures(Terrain terrain) {
 		TerrainTexturePack pack = terrain.getTexturePack();
-		
+
 		for(int i = 0; i < pack.getTerrainTextures().length; i++) {
 		GL13.glActiveTexture(GL13.GL_TEXTURE0 + i);
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, pack.getTerrainTextures()[i].getTextureID());

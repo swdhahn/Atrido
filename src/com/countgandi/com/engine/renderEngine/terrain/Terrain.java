@@ -21,7 +21,7 @@ public class Terrain {
 	// biomes with heights
 
 	public static final long ZERO = 9900000;
-	public static final int SIZE = 1024, VERTEX_COUNT = 100;
+	public static final int SIZE = 1000, VERTEX_COUNT = 100;
 	private static final float MAX_HEIGHT = 30, MAX_PIXEL_COLOR = 256 * 256 * 256;
 
 	private long x, z;

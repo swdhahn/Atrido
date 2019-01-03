@@ -15,6 +15,7 @@ uniform sampler2D depthMap;
 uniform vec3 lightColor;
 
 uniform float moveFactor;
+uniform float tiling;
 
 const float waveStrength = 0.04;
 const float shineDamper = 20.0;
@@ -23,6 +24,8 @@ const float near = 0.1;
 const float far = 1000;
 
 void main(void) {
+
+	vec2 texCoords = textureCoords * tiling;
 
 	vec2 ndc = (clipSpace.xy / clipSpace.w) / 2.0 + 0.5;
 	vec2 refractTexCoords = vec2(ndc.x, ndc.y);
@@ -35,8 +38,8 @@ void main(void) {
 	float waterDistance = 2.0 * near * far / (far + near - (2.0 * depth - 1.0) * (far - near));
 	float waterDepth = floorDistance - waterDistance;
 	
-	vec2 distortedTexCoords = texture(dudvMap, vec2(textureCoords.x + moveFactor, textureCoords.y)).rg*0.1;
-	distortedTexCoords = textureCoords + vec2(distortedTexCoords.x, distortedTexCoords.y+moveFactor);
+	vec2 distortedTexCoords = texture(dudvMap, vec2(texCoords.x + moveFactor, texCoords.y)).rg*0.1;
+	distortedTexCoords = texCoords + vec2(distortedTexCoords.x, distortedTexCoords.y+moveFactor);
 	vec2 totalDistortion = (texture(dudvMap, distortedTexCoords).rg * 2.0 - 1.0) * waveStrength * clamp(waterDepth / 20.0, 0.0, 1.0);
 	
 	refractTexCoords += totalDistortion;
