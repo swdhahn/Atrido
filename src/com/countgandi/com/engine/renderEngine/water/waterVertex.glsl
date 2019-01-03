@@ -13,6 +13,7 @@ uniform mat4 viewMatrix;
 uniform mat4 modelMatrix;
 uniform vec3 cameraPosition;
 uniform vec3 lightPosition;
+uniform float moveFactor2;
 
 vec3 mod289(vec3 x) {
   return x - floor(x * (1.0 / 289.0)) * 289.0;
@@ -75,7 +76,11 @@ float snoise(vec2 v)
   return 130.0 * dot(m, g);
 }
 
+float getNoise(vec2 pos, float multiple, float moveFactor) {
+	vec2 npos = vec2(pos.x + moveFactor, pos.y + moveFactor);
 
+	return ((snoise(npos) + 1) / 2.0) * multiple;
+}
 
 
 
@@ -86,9 +91,7 @@ float snoise(vec2 v)
 
 void main(void) {
 
-	vec4 worldPosition = modelMatrix * vec4(position.x, snoise(position.xz) * 4, position.z, 1.0);
-
-	
+	vec4 worldPosition = modelMatrix * vec4(position.x, getNoise(position.xz, 4, moveFactor2 * 2), position.z, 1.0);
 
 	clipSpace = projectionMatrix * viewMatrix * worldPosition;
 	gl_Position = clipSpace;

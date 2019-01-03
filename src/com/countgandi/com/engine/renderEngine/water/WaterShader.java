@@ -9,8 +9,9 @@ import com.countgandi.com.game.entities.Light;
 
 public class WaterShader extends ShaderProgram {
 
-	private final static String VERTEX_FILE = "src/com/countgandi/com/engine/renderEngine/water/waterVertex.txt";
-	private final static String FRAGMENT_FILE = "src/com/countgandi/com/engine/renderEngine/water/waterFragment.txt";
+	private final static String VERTEX_FILE = "src/com/countgandi/com/engine/renderEngine/water/waterVertex.glsl";
+	private final static String FRAGMENT_FILE = "src/com/countgandi/com/engine/renderEngine/water/waterFragment.glsl";
+	private final static String GEOMETRY_FILE = "src/com/countgandi/com/engine/renderEngine/water/waterGeometry.glsl";
 
 	private int location_modelMatrix;
 	private int location_viewMatrix;
@@ -19,6 +20,7 @@ public class WaterShader extends ShaderProgram {
 	private int location_refractionTexture;
 	private int location_dudvMap;
 	private int location_moveFactor;
+	private int location_moveFactor2;
 	private int location_cameraPosition;
 	private int location_normalMap;
 	private int location_lightColor;
@@ -27,7 +29,7 @@ public class WaterShader extends ShaderProgram {
 	private int location_tiling;
 
 	public WaterShader() {
-		super(VERTEX_FILE, FRAGMENT_FILE);
+		super(VERTEX_FILE, GEOMETRY_FILE, FRAGMENT_FILE);
 		start();
 		super.loadFloat(location_tiling, WaterTile.SIZE / 10);
 		stop();
@@ -49,6 +51,7 @@ public class WaterShader extends ShaderProgram {
 		location_dudvMap = super.getUniformLocation("dudvMap");
 		location_normalMap = super.getUniformLocation("normalMap");
 		location_moveFactor = super.getUniformLocation("moveFactor");
+		location_moveFactor2 = super.getUniformLocation("moveFactor2");
 		location_cameraPosition = super.getUniformLocation("cameraPosition");
 		location_lightPosition = super.getUniformLocation("lightPosition");
 		location_lightColor = super.getUniformLocation("lightColor");
@@ -58,6 +61,7 @@ public class WaterShader extends ShaderProgram {
 	
 	public void loadMoveFactor(float factor) {
 		super.loadFloat(location_moveFactor, factor);
+		super.loadFloat(location_moveFactor2, factor);
 	}
 	
 	public void connectTextureUnits() {
