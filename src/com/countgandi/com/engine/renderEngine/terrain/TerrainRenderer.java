@@ -21,7 +21,6 @@ public class TerrainRenderer {
 		this.shader = shader;
 		shader.start();
 		shader.connectTextureUnits();
-		shader.loadTiling(100);
 		shader.stop();
 	}
 
@@ -41,7 +40,8 @@ public class TerrainRenderer {
 		GL20.glEnableVertexAttribArray(1);
 		GL20.glEnableVertexAttribArray(2);
 
-		shader.loadShineVariable(1, 0);
+		shader.shineDamper.loadFloat(1);
+		shader.reflectivity.loadFloat(0);
 
 		bindTextures(terrain);
 
@@ -65,7 +65,7 @@ public class TerrainRenderer {
 
 	private void loadModelMatrix(Terrain terrain) {
 		Matrix4f transformationMatrix = Maths.createTransformationMatrix(new Vector3f(terrain.getX(), 0, terrain.getZ()), 0, 0, 0, 1);
-		shader.loadTransformationMatrix(transformationMatrix);
+		shader.transformationMatrix.loadMatrix(transformationMatrix);
 	}
 
 }

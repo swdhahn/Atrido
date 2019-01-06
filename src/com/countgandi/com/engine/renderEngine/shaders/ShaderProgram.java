@@ -52,6 +52,18 @@ public abstract class ShaderProgram {
 		}
 		GL20.glValidateProgram(programID);
 	}
+	
+	protected void getAllUniformLocations(Uniform[][] arrays, Uniform... uniforms){
+		for(int i = 0; i < arrays.length; i++) {
+			for(int k = 0; k < arrays[i].length; k++) {
+				arrays[i][k].storeUniformLocation(programID);
+			}
+		}
+		for(Uniform uniform : uniforms){
+			uniform.storeUniformLocation(programID);
+		}
+		GL20.glValidateProgram(programID);
+	}
 
 	public void start() {
 		GL20.glUseProgram(programID);

@@ -8,6 +8,7 @@ import com.countgandi.com.engine.renderEngine.models.TexturedModel;
 import com.countgandi.com.engine.renderEngine.textures.ModelTexture;
 import com.countgandi.com.engine.renderEngine.textures.TerrainTexture;
 import com.countgandi.com.engine.renderEngine.textures.TerrainTexturePack;
+import com.countgandi.com.engine.renderEngine.textures.Texture;
 
 public class Assets {
 
@@ -27,26 +28,27 @@ public class Assets {
 
 	// Textures
 	public static final int Underwater = loader.loadTexture("underwater");
+	
+	public static final Texture pineTreeTex = Texture.newTexture("pineTree").normalMipMap().create();
+	public static final Texture pineTreeSnowTex = Texture.newTexture("pineTreeSnow").normalMipMap().create();
 
 	// Textured Models
-	public static final class TexturedModels {
-		public static final TexturedModel pineTree = loadTexturedModel("PineTreeBranches", "pineTree", false);
-		public static final TexturedModel pineTreeLeaves = loadTexturedModel("PineTreeLeaves", "pineTree", true);
-		public static final TexturedModel pineTreeLeavesSnow = loadTexturedModel("PineTreeLeaves", "pineTreeSnow", true);
-		public static final TexturedModel tree1 = loadTexturedModel("tree2", "mapleTree", false);
-		public static final TexturedModel tree1leaves = loadTexturedModel("tree2leaves", "mapleTree", true);
-		public static final TexturedModel tree1leavesSnow = loadTexturedModel("tree2leaves", "mapleTreeSnow", true);
-		public static final TexturedModel ship = loadTexturedModel("Ship", "ShipTex", true);
-		public static final TexturedModel hut = loadTexturedModel("hut", "thatch", true);
-		public static final TexturedModel grass = loadTexturedModel("grass", "grassTexture", true);
-	}
+	public static final TexturedModel pineTreeModel = loadTexturedModel("PineTreeBranches", pineTreeTex, false);
+	public static final TexturedModel pineTreeLeavesModel = loadTexturedModel("PineTreeLeaves", pineTreeTex, true);
+	public static final TexturedModel pineTreeLeavesSnowModel = loadTexturedModel("PineTreeLeaves", pineTreeSnowTex, true);
+	public static final TexturedModel tree1Model = loadTexturedModel("tree2", "mapleTree", false);
+	public static final TexturedModel tree1leavesModel = loadTexturedModel("tree2leaves", "mapleTree", true);
+	public static final TexturedModel tree1leavesSnowModel = loadTexturedModel("tree2leaves", "mapleTreeSnow", true);
+	public static final TexturedModel shipModel = loadTexturedModel("Ship", "ShipTex", true);
+	public static final TexturedModel hutModel = loadTexturedModel("hut", "thatch", true);
+	public static final TexturedModel grassModel = loadTexturedModel("grass", "grassTexture", true);
+	
 
-	public static final class Sounds {
-		public static final int Bounce = AudioMaster.loadSound("bounce");
-	}
+	public static final int BounceSound = AudioMaster.loadSound("bounce");
+	
 
 	public static TexturedModel loadTexturedModel(String modelName, String textureName, boolean trans) {
-		return new TexturedModel(OBJLoader.loadObjModel(modelName, loader), new ModelTexture(loader.loadTexture(textureName), trans)) {
+		return new TexturedModel(OBJLoader.loadObjModel(modelName, loader), new ModelTexture(Texture.newTexture(textureName).create(), trans)) {
 			@Override
 			public ModelTexture getTexture() {
 				return super.getTexture();
@@ -54,8 +56,8 @@ public class Assets {
 		};
 	}
 	
-	public static TexturedModel loadTexturedModel(String modelName, int texture, boolean trans) {
-		return new TexturedModel(OBJLoader.loadObjModel(modelName, loader), new ModelTexture(texture, trans)) {
+	public static TexturedModel loadTexturedModel(String modelName, Texture tex, boolean trans) {
+		return new TexturedModel(OBJLoader.loadObjModel(modelName, loader), new ModelTexture(tex, trans)) {
 			@Override
 			public ModelTexture getTexture() {
 				return super.getTexture();

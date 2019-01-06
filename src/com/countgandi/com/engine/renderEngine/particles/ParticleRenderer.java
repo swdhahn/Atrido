@@ -8,7 +8,6 @@ import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
-import com.countgandi.com.engine.Maths;
 import com.countgandi.com.engine.renderEngine.Loader;
 import com.countgandi.com.engine.renderEngine.models.RawModel;
 import com.countgandi.com.game.entities.Camera;
@@ -24,15 +23,14 @@ public class ParticleRenderer {
 		quad = loader.loadToVAO(VERTICES, 2);
 		shader = new ParticleShader();
 		shader.start();
-		shader.loadModelViewMatrix(projectionMatrix);
+		shader.projectionMatrix.loadMatrix(projectionMatrix);
 		shader.stop();
 	}
 
 	protected void render(List<Particle> particles, Camera camera) {
-		Matrix4f viewMatrix = Maths.createViewMatrix(camera);
 		prepare();
 		for (Particle particle : particles) {
-			updateModelViewMatrix(particle.getPosition(), particle.getRotation(), particle.getScale(), viewMatrix);
+			updateModelViewMatrix(particle.getPosition(), particle.getRotation(), particle.getScale(), camera.getViewMatrix());
 			GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, quad.getVertexCount());
 		}
 		finishRendering();
@@ -57,7 +55,7 @@ public class ParticleRenderer {
 		Matrix4f.rotate((float) Math.toRadians(rotation), new Vector3f(0, 0, 1), modelMatrix, modelMatrix);
 		Matrix4f.scale(new Vector3f(scale, scale, scale), modelMatrix, modelMatrix);
 		Matrix4f modelViewMatrix = Matrix4f.mul(viewMatrix, modelMatrix, null);
-		shader.loadModelViewMatrix(modelViewMatrix);
+		shader.modelViewMatrix.loadMatrix(modelViewMatrix);
 	}
 
 	private void prepare() {

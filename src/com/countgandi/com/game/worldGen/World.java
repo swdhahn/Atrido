@@ -61,11 +61,11 @@ public class World {
 				int type = random.nextInt(2);
 				if(type == 0) {
 					if(pos.y > 70) {
-						handler.addEntity(new Entity(Assets.TexturedModels.pineTree, pos, new Vector3f(0, 0, 0), scale, handler) {});
-						handler.addEntity(new Entity(Assets.TexturedModels.pineTreeLeavesSnow, pos, new Vector3f(0, 0, 0), scale, handler) {});
+						handler.addEntity(new Entity(Assets.pineTreeModel, pos, new Vector3f(0, 0, 0), scale, handler) {});
+						handler.addEntity(new Entity(Assets.pineTreeLeavesSnowModel, pos, new Vector3f(0, 0, 0), scale, handler) {});
 					} else {
-						handler.addEntity(new Entity(Assets.TexturedModels.pineTree, pos, new Vector3f(0, 0, 0), scale, handler) {});
-						handler.addEntity(new Entity(Assets.TexturedModels.pineTreeLeaves, pos, new Vector3f(0, 0, 0), scale, handler) {});
+						handler.addEntity(new Entity(Assets.pineTreeModel, pos, new Vector3f(0, 0, 0), scale, handler) {});
+						handler.addEntity(new Entity(Assets.pineTreeLeavesModel, pos, new Vector3f(0, 0, 0), scale, handler) {});
 					}
 				} else if(type == 1) {
 					if(pos.y > 70) {

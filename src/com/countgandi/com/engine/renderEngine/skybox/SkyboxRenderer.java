@@ -79,7 +79,7 @@ private static final float SIZE = 500f;
 	public void render(Camera camera, Vector3f fogColor) {
 		shader.start();
 		shader.loadViewMatrix(camera);
-		shader.loadFogColor(fogColor);
+		shader.fogColor.loadVec3(fogColor);
 		GL30.glBindVertexArray(cube.getVaoID());
 		GL20.glEnableVertexAttribArray(0);
 		bindTextures();
@@ -94,7 +94,7 @@ private static final float SIZE = 500f;
 		GL11.glBindTexture(GL13.GL_TEXTURE_CUBE_MAP, texture);
 		GL13.glActiveTexture(GL13.GL_TEXTURE1);
 		GL11.glBindTexture(GL13.GL_TEXTURE_CUBE_MAP, nightTexture);
-		shader.loadBlendFactor(0.0f);
+		shader.blendFactor.loadFloat(0);
 	}
 	
 	/*private void bindTextures(){

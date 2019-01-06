@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix4f;
@@ -49,18 +48,18 @@ public class EntityRenderer {
 		GL20.glEnableVertexAttribArray(2);
 		ModelTexture texture = model.getTexture();
 		
-		shader.loadNumberOfRows(texture.getNumberOfRows());
+		shader.numberOfRows.loadInt(texture.getNumberOfRows());
 		
 		
 		if(texture.isHasTransparency()) {
 			OpenGlUtils.cullBackFaces(true);
 		}
 		
-		shader.loadFakeLightingVariable(texture.isUseFakeLighting());
-		shader.loadShineVariable(texture.getShineDamper(), texture.getReflectivity());
+		shader.useFakeLighting.loadBoolean(texture.isUseFakeLighting());
+		shader.shineDamper.loadFloat(texture.getShineDamper());
+		shader.reflectivity.loadFloat(texture.getReflectivity());
 
-		GL13.glActiveTexture(GL13.GL_TEXTURE0);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getTexture().getID());
+		model.getTexture().getID().bindToUnit(0);
 		
 	}
 	
@@ -74,8 +73,8 @@ public class EntityRenderer {
 	
 	private void prepareInstance(Entity entity) {
 		Matrix4f transformationMatrix = Maths.createTransformationMatrix(entity.getPosition(), entity.getRotX(), entity.getRotY(), entity.getRotZ(), entity.getScale());
-		shader.loadTransformationMatrix(transformationMatrix);
-		shader.loadOffset(entity.getTextureXOffset(), entity.getTextureYOffset());
+		shader.transformationMatrix.loadMatrix(transformationMatrix);
+		shader.offset.loadVec2(entity.getTextureXOffset(), entity.getTextureYOffset());
 	}
 
 	

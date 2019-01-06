@@ -21,17 +21,17 @@ public class TextureUtils {
 		int height = 0;
 		ByteBuffer buffer = null;
 		try {
-			InputStream in = TextureUtils.class.getResourceAsStream(res);
+			InputStream in = TextureUtils.class.getResourceAsStream("/tex/" + res + ".png");
 			PNGDecoder decoder = new PNGDecoder(in);
 			width = decoder.getWidth();
 			height = decoder.getHeight();
 			buffer = ByteBuffer.allocateDirect(4 * width * height);
-			decoder.decode(buffer, width * 4, Format.BGRA);
+			decoder.decode(buffer, width * 4, Format.RGBA);
 			buffer.flip();
 			in.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.err.println("Tried to load texture " + res + " , didn't work");
+			System.err.println("Tried to load texture " + res + ", didn't work");
 			System.exit(-1);
 		}
 		return new TextureData(buffer, width, height);

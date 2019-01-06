@@ -3,9 +3,12 @@ package com.countgandi.com.engine.renderEngine.skybox;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
-import com.countgandi.com.engine.Maths;
 import com.countgandi.com.engine.renderEngine.DisplayManager;
 import com.countgandi.com.engine.renderEngine.shaders.ShaderProgram;
+import com.countgandi.com.engine.renderEngine.shaders.UniformFloat;
+import com.countgandi.com.engine.renderEngine.shaders.UniformInt;
+import com.countgandi.com.engine.renderEngine.shaders.UniformMatrix;
+import com.countgandi.com.engine.renderEngine.shaders.UniformVec3;
 import com.countgandi.com.game.entities.Camera;
 
 public class SkyboxShader extends ShaderProgram {
@@ -15,54 +18,33 @@ public class SkyboxShader extends ShaderProgram {
 	
 	private static final float RotateSpeed = 1f;
 
-	private int location_projectionMatrix;
-	private int location_viewMatrix;
-	private int location_fogColor;
-	private int location_cubeMap;
-	private int location_cubeMap2;
-	private int location_blendFactor;
+	public UniformMatrix projectionMatrix = new UniformMatrix("projectionMatrix");
+	private UniformMatrix viewMatrix = new UniformMatrix("viewMatrix");
+	public UniformVec3 fogColor = new UniformVec3("fogColor");
+	private UniformInt cubeMap = new UniformInt("cubeMap");
+	private UniformInt cubeMap2 = new UniformInt("cubeMap2");
+	public UniformFloat blendFactor = new UniformFloat("blendFactor");
 	
 	private float rotation = 0;
 
 	public SkyboxShader() {
 		super(VERTEX_FILE, FRAGMENT_FILE);
-	}
-
-	public void loadProjectionMatrix(Matrix4f matrix) {
-		super.loadMatrix(location_projectionMatrix, matrix);
+		super.getAllUniformLocations(projectionMatrix, viewMatrix, fogColor, cubeMap, cubeMap2, blendFactor);
 	}
 
 	public void loadViewMatrix(Camera camera) {
-		Matrix4f matrix = Maths.createViewMatrix(camera);
+		Matrix4f matrix = new Matrix4f(camera.getViewMatrix());
 		matrix.m30 = 0;
 		matrix.m31 = 0;
 		matrix.m32 = 0;
 		rotation += RotateSpeed * DisplayManager.getFrameTimeSeconds();
 		Matrix4f.rotate((float) Math.toRadians(rotation), new Vector3f(0, 1, 0), matrix, matrix);
-		super.loadMatrix(location_viewMatrix, matrix);
-	}
-	
-	public void loadFogColor(Vector3f color) {
-		super.loadVector(location_fogColor, color);
-	}
-	
-	public void loadBlendFactor(float blend) {
-		super.loadFloat(location_blendFactor, blend);
+		viewMatrix.loadMatrix(matrix);
 	}
 	
 	public void connectTextureUnits() {
-		super.loadInt(location_cubeMap, 0);
-		super.loadInt(location_cubeMap2, 1);
-	}
-
-	@Override
-	protected void getAllUniformLocations() {
-		location_projectionMatrix = super.getUniformLocation("projectionMatrix");
-		location_viewMatrix = super.getUniformLocation("viewMatrix");
-		location_fogColor = super.getUniformLocation("fogColor");
-		location_cubeMap = super.getUniformLocation("cubeMap");
-		location_cubeMap2 = super.getUniformLocation("cubeMap2");
-		location_blendFactor = super.getUniformLocation("blendFactor");
+		cubeMap.loadInt(0);
+		cubeMap2.loadInt(1);
 	}
 
 	@Override

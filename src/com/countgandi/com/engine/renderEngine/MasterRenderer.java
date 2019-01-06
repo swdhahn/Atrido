@@ -19,7 +19,6 @@ import com.countgandi.com.engine.renderEngine.terrain.TerrainShader;
 import com.countgandi.com.game.entities.Camera;
 import com.countgandi.com.game.entities.Entity;
 import com.countgandi.com.game.entities.Light;
-import com.countgandi.com.game.structures.Structure;
 
 public class MasterRenderer {
 
@@ -33,7 +32,6 @@ public class MasterRenderer {
 
 	private Map<TexturedModel, List<Entity>> entities = new HashMap<TexturedModel, List<Entity>>();
 	public Map<TexturedModel, List<Entity>> grass = new HashMap<TexturedModel, List<Entity>>();
-	private Map<TexturedModel, List<Structure>> structures = new HashMap<TexturedModel, List<Structure>>();
 	private List<Terrain> terrains = new ArrayList<Terrain>();
 	private SkyboxRenderer skyboxRenderer;
 	private Loader loader;
@@ -44,24 +42,26 @@ public class MasterRenderer {
 		renderer = new EntityRenderer(shader);
 		terrainRenderer = new TerrainRenderer(terrainShader);
 		skyboxRenderer = new SkyboxRenderer(loader);
+		shader.projectionMatrix.loadMatrix(camera.getProjectionMatrix());
+		terrainShader.projectionMatrix.loadMatrix(camera.getProjectionMatrix());
 	}
 
 	public void render(List<Light> lights, Camera camera, Vector4f clipPlane) {
 		prepare();
 
 		shader.start();
-		shader.loadClipPlane(clipPlane);
-		shader.loadSkyColor(skyColor);
+		shader.plane.loadVec4(clipPlane);
+		shader.skyColor.loadVec3(skyColor);
 		shader.loadLights(lights);
-		shader.loadViewMatrix(camera);
+		shader.viewMatrix.loadMatrix(camera.getViewMatrix());
 		renderer.render(entities);
 		shader.stop();
 		
 		terrainShader.start();
-		terrainShader.loadClipPlane(clipPlane);
-		terrainShader.loadSkyColor(skyColor);
+		terrainShader.plane.loadVec4(clipPlane);
+		terrainShader.skyColor.loadVec3(skyColor);
 		terrainShader.loadLights(lights);
-		terrainShader.loadViewMatrix(camera);
+		terrainShader.viewMatrix.loadMatrix(camera.getViewMatrix());
 		terrainRenderer.render(terrains);
 		terrainShader.stop();
 
@@ -69,23 +69,10 @@ public class MasterRenderer {
 
 		terrains.clear();
 		entities.clear();
-		structures.clear();
 	}
 
 	public void processTerrain(Terrain terrain) {
 		terrains.add(terrain);
-	}
-
-	public void processStructure(Structure structure) {
-		TexturedModel structureModel = structure.getModel();
-		List<Structure> batch = structures.get(structureModel);
-		if (batch != null) {
-			batch.add(structure);
-		} else {
-			List<Structure> newBatch = new ArrayList<Structure>();
-			newBatch.add(structure);
-			structures.put(structureModel, newBatch);
-		}
 	}
 
 	public void processEntity(Entity entity) {

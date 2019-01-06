@@ -21,14 +21,11 @@ import com.countgandi.com.game.entities.Camera;
 import com.countgandi.com.game.entities.Entity;
 import com.countgandi.com.game.entities.Light;
 import com.countgandi.com.game.entities.Player;
-import com.countgandi.com.game.structures.Structure;
-import com.countgandi.com.game.structures.StructureHut;
 import com.countgandi.com.game.worldGen.World;
 
 public class Handler {
 
 	public ArrayList<Entity> entities = new ArrayList<Entity>();
-	public ArrayList<Structure> structures = new ArrayList<Structure>();
 	public ArrayList<GuiTexture> guis = new ArrayList<GuiTexture>();
 	public ArrayList<Light> lights = new ArrayList<Light>();
 	public ArrayList<WaterTile> waters = new ArrayList<WaterTile>();
@@ -66,11 +63,8 @@ public class Handler {
 		for (int i = 0; i < entities.size(); i++) {
 			entities.get(i).tick();
 		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_C)) {
-			structures.add(new StructureHut(new Vector3f(camera.getPosition().x, camera.getPosition().y - 2, camera.getPosition().z), new Vector3f(0, camera.getYaw(), 0), this));
-		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_B)) {
-			entities.add(new Entity(Assets.TexturedModels.ship, new Vector3f(camera.getPosition().x, camera.getPosition().y - 5, camera.getPosition().z), new Vector3f(0, camera.getYaw(), 0), 10f, this) {
+			entities.add(new Entity(Assets.shipModel, new Vector3f(camera.getPosition().x, camera.getPosition().y - 5, camera.getPosition().z), new Vector3f(0, camera.getYaw(), 0), 10f, this) {
 			});
 		}
 		// new Particle(new Vector3f(camera.getPosition().x,
@@ -116,9 +110,6 @@ public class Handler {
 		for (int i = 0; i < entities.size(); i++) {
 			renderer.processEntity(entities.get(i));
 		}
-		for (int i = 0; i < structures.size(); i++) {
-			renderer.processStructure(structures.get(i));
-		}
 		world.renderWorld(renderer);
 		renderer.render(lights, camera, clipPlane);
 
@@ -140,14 +131,6 @@ public class Handler {
 
 	public void removeEntity(Entity entity) {
 		entities.remove(entity);
-	}
-
-	public void addStructure(Structure structure) {
-		structures.add(structure);
-	}
-
-	public void removeStructure(Structure structure) {
-		structures.remove(structure);
 	}
 
 	public Player getPlayer() {

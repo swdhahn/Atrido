@@ -11,7 +11,6 @@ import com.countgandi.com.engine.renderEngine.DisplayManager;
 import com.countgandi.com.engine.renderEngine.font.TextMaster;
 import com.countgandi.com.engine.renderEngine.font.fontMeshCreator.GUIText;
 import com.countgandi.com.engine.renderEngine.particles.ParticleMaster;
-import com.countgandi.com.engine.renderEngine.water.WaterTile;
 import com.countgandi.com.game.entities.GameRegistry;
 import com.countgandi.com.game.entities.Light;
 import com.countgandi.com.game.menus.GameMenu;

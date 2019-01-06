@@ -2,7 +2,7 @@ package com.countgandi.com.engine.renderEngine.textures;
 
 public class ModelTexture {
 
-	private int textureID;
+	private Texture textureID;
 
 	private float shineDamper = 1;
 	private float reflectivity = 0;
@@ -12,7 +12,7 @@ public class ModelTexture {
 
 	private int numberOfRows = 1;
 
-	public ModelTexture(int id, boolean hasTransparency) {
+	public ModelTexture(Texture id, boolean hasTransparency) {
 		this.textureID = id;
 		this.hasTransparency = hasTransparency;
 	}
@@ -33,7 +33,7 @@ public class ModelTexture {
 		this.useFakeLighting = useFakeLighting;
 	}
 
-	public int getID() {
+	public Texture getID() {
 		return this.textureID;
 	}
 
