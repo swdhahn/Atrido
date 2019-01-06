@@ -2,14 +2,14 @@ package com.countgandi.com.engine.renderEngine.water;
 
 public class WaterTile {
 	
-	public static final int SIZE = 1024, VERTEX_COUNT = 100;
+	public static final int SIZE = 10240, VERTEX_COUNT = 1000;
 	
 	private float height;
 	private float x,z;
 	
-	public WaterTile(float centerX, float centerZ, float height){
-		this.x = centerX;
-		this.z = centerZ;
+	public WaterTile(float gridX, float gridY, float height){
+		this.x = SIZE * gridX;
+		this.z = SIZE * gridY;
 		this.height = height;
 	}
 

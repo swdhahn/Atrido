@@ -1,37 +1,34 @@
 package com.countgandi.com.engine.renderEngine.water;
 
-import org.lwjgl.util.vector.Matrix4f;
-
-import com.countgandi.com.engine.Maths;
 import com.countgandi.com.engine.renderEngine.shaders.ShaderProgram;
-import com.countgandi.com.game.entities.Camera;
-import com.countgandi.com.game.entities.Light;
+import com.countgandi.com.engine.renderEngine.shaders.UniformFloat;
+import com.countgandi.com.engine.renderEngine.shaders.UniformInt;
+import com.countgandi.com.engine.renderEngine.shaders.UniformMatrix;
+import com.countgandi.com.engine.renderEngine.shaders.UniformVec3;
 
 public class WaterShader extends ShaderProgram {
 
 	private final static String VERTEX_FILE = "src/com/countgandi/com/engine/renderEngine/water/waterVertex.glsl";
 	private final static String FRAGMENT_FILE = "src/com/countgandi/com/engine/renderEngine/water/waterFragment.glsl";
-	private final static String GEOMETRY_FILE = "src/com/countgandi/com/engine/renderEngine/water/waterGeometry.glsl";
 
-	private int location_modelMatrix;
-	private int location_viewMatrix;
-	private int location_projectionMatrix;
-	private int location_reflectionTexture;
-	private int location_refractionTexture;
-	private int location_dudvMap;
-	private int location_moveFactor;
-	private int location_moveFactor2;
-	private int location_cameraPosition;
-	private int location_normalMap;
-	private int location_lightColor;
-	private int location_lightPosition;
-	private int location_depthMap;
-	private int location_tiling;
+	public UniformMatrix modelMatrix = new UniformMatrix("modelMatrix");
+	public UniformMatrix projectionViewMatrix = new UniformMatrix("projectionViewMatrix");
+	public UniformInt reflectionTexture = new UniformInt("reflectionTexture");
+	public UniformInt refractionTexture = new UniformInt("refractionTexture");
+	public UniformInt dudvMap = new UniformInt("dudvMap");
+	public UniformFloat moveFactor = new UniformFloat("moveFactor");
+	public UniformVec3 cameraPosition = new UniformVec3("cameraPosition");
+	public UniformInt normalMap = new UniformInt("normalMap");
+	public UniformVec3 lightColor = new UniformVec3("lightColor");
+	public UniformVec3 lightPosition = new UniformVec3("lightPosition");
+	public UniformInt depthMap = new UniformInt("depthMap");
+	public UniformFloat tiling = new UniformFloat("tiling");
 
 	public WaterShader() {
-		super(VERTEX_FILE, GEOMETRY_FILE, FRAGMENT_FILE);
+		super(VERTEX_FILE, FRAGMENT_FILE);
+		super.getAllUniformLocations(modelMatrix, projectionViewMatrix, reflectionTexture, refractionTexture, dudvMap, moveFactor, cameraPosition, normalMap, lightColor, lightPosition, depthMap, tiling);
 		start();
-		super.loadFloat(location_tiling, WaterTile.SIZE / 10);
+		tiling.loadFloat(WaterTile.SIZE / 10);
 		stop();
 	}
 
@@ -41,54 +38,12 @@ public class WaterShader extends ShaderProgram {
 		bindAttribute(1, "texCoords");
 	}
 
-	@Override
-	protected void getAllUniformLocations() {
-		location_projectionMatrix = getUniformLocation("projectionMatrix");
-		location_viewMatrix = getUniformLocation("viewMatrix");
-		location_modelMatrix = getUniformLocation("modelMatrix");
-		location_reflectionTexture = super.getUniformLocation("reflectionTexture");
-		location_refractionTexture = super.getUniformLocation("refractionTexture");
-		location_dudvMap = super.getUniformLocation("dudvMap");
-		location_normalMap = super.getUniformLocation("normalMap");
-		location_moveFactor = super.getUniformLocation("moveFactor");
-		location_moveFactor2 = super.getUniformLocation("moveFactor2");
-		location_cameraPosition = super.getUniformLocation("cameraPosition");
-		location_lightPosition = super.getUniformLocation("lightPosition");
-		location_lightColor = super.getUniformLocation("lightColor");
-		location_depthMap = super.getUniformLocation("depthMap");
-		location_tiling = super.getUniformLocation("tiling");
-	}
-	
-	public void loadMoveFactor(float factor) {
-		super.loadFloat(location_moveFactor, factor);
-		super.loadFloat(location_moveFactor2, factor);
-	}
-	
 	public void connectTextureUnits() {
-		super.loadInt(location_reflectionTexture, 0);
-		super.loadInt(location_refractionTexture, 1);
-		super.loadInt(location_dudvMap, 2);
-		super.loadInt(location_normalMap, 3);
-		super.loadInt(location_depthMap, 4);
-	}
-	
-	public void loadLight(Light sun) {
-		super.loadVector(location_lightColor, sun.getColor());
-		super.loadVector(location_lightPosition, sun.getPosition());
-	}
-
-	public void loadProjectionMatrix(Matrix4f projection) {
-		loadMatrix(location_projectionMatrix, projection);
-	}
-	
-	public void loadViewMatrix(Camera camera){
-		Matrix4f viewMatrix = Maths.createViewMatrix(camera);
-		loadMatrix(location_viewMatrix, viewMatrix);
-		super.loadVector(location_cameraPosition, camera.getPosition());
-	}
-
-	public void loadModelMatrix(Matrix4f modelMatrix){
-		loadMatrix(location_modelMatrix, modelMatrix);
+		reflectionTexture.loadInt(0);
+		refractionTexture.loadInt(1);
+		dudvMap.loadInt(2);
+		normalMap.loadInt(3);
+		depthMap.loadInt(4);
 	}
 
 }

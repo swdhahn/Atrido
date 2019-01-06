@@ -44,19 +44,19 @@ public class Handler {
 	private boolean isEngine;
 
 	public Handler(boolean isEngine) {
-		renderer = new MasterRenderer(Assets.loader);
-		guiRenderer = new GuiRenderer(Assets.loader);
 		if(isEngine) {
 			this.camera = new IndependentCamera(this);
 		} else {
 			this.camera = new Camera(this);
 		}
+		renderer = new MasterRenderer(camera, Assets.loader);
+		guiRenderer = new GuiRenderer(Assets.loader);
 		this.isEngine = isEngine;
 
-		ParticleMaster.init(renderer.getProjectionMatrix(), Assets.loader);
+		ParticleMaster.init(camera.getProjectionViewMatrix(), Assets.loader);
 		TextMaster.init(Assets.loader);
 		fbos = new WaterFrameBuffers();
-		waterRenderer = new WaterRenderer(renderer.getProjectionMatrix(), fbos, Assets.loader);
+		waterRenderer = new WaterRenderer(camera, fbos, Assets.loader);
 		world = new World(this);
 	}
 
@@ -70,7 +70,7 @@ public class Handler {
 			structures.add(new StructureHut(new Vector3f(camera.getPosition().x, camera.getPosition().y - 2, camera.getPosition().z), new Vector3f(0, camera.getYaw(), 0), this));
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_B)) {
-			entities.add(new Entity(Assets.TexturedModels.grass, new Vector3f(camera.getPosition().x, camera.getPosition().y - 5, camera.getPosition().z), new Vector3f(0, camera.getYaw(), 0), 10f, this) {
+			entities.add(new Entity(Assets.TexturedModels.ship, new Vector3f(camera.getPosition().x, camera.getPosition().y - 5, camera.getPosition().z), new Vector3f(0, camera.getYaw(), 0), 10f, this) {
 			});
 		}
 		// new Particle(new Vector3f(camera.getPosition().x,

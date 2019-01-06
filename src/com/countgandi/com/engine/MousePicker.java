@@ -12,15 +12,10 @@ import com.countgandi.com.game.entities.Camera;
 public class MousePicker {
 	
 	private Vector3f currentRay;
-	
-	private Matrix4f projectionMatrix;
-	private Matrix4f viewMatrix;
 	private Camera camera;
 	
-	public MousePicker(Camera cam, Matrix4f projection) {
+	public MousePicker(Camera cam) {
 		this.camera = cam;
-		this.projectionMatrix = projection;
-		this.viewMatrix = Maths.createViewMatrix(camera);
 	}
 	
 	public Vector3f getCurrentRay() {
@@ -28,7 +23,6 @@ public class MousePicker {
 	}
 	
 	public void tick() {
-		viewMatrix = Maths.createViewMatrix(camera);
 		currentRay = calculateMouseRay();
 	}
 	
@@ -43,7 +37,7 @@ public class MousePicker {
 	}
 	
 	private Vector3f toWorldCoords(Vector4f eyeCoords) {
-		Matrix4f invertedView = Matrix4f.invert(viewMatrix, null);
+		Matrix4f invertedView = Matrix4f.invert(camera.getViewMatrix(), null);
 		Vector4f rayWorld = Matrix4f.transform(invertedView, eyeCoords, null);
 		Vector3f mouseRay = new Vector3f(rayWorld.x, rayWorld.y, rayWorld.z);
 		mouseRay.normalise();
@@ -51,7 +45,7 @@ public class MousePicker {
 	}
 	
 	private Vector4f toEyeCoords(Vector4f clipCoords) {
-		Matrix4f invertedProjection = Matrix4f.invert(projectionMatrix, null);
+		Matrix4f invertedProjection = Matrix4f.invert(camera.getProjectionMatrix(), null);
 		Vector4f eyeCoords = Matrix4f.transform(invertedProjection, clipCoords, null);
 		return new Vector4f(eyeCoords.x, eyeCoords.y, -1f, 1f);
 	}

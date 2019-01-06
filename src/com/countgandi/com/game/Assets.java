@@ -20,10 +20,10 @@ public class Assets {
 
 	// Terrain Texture Packs
 	private static final TerrainTexture GRASS = new TerrainTexture(loader.loadTexture("grass2"));
-	private static final TerrainTexture ROCK = new TerrainTexture(loader.loadTexture("rock"));
+	//private static final TerrainTexture ROCK = new TerrainTexture(loader.loadTexture("rock"));
 	private static final TerrainTexture SAND = new TerrainTexture(loader.loadTexture("sand"));
 	private static final TerrainTexture SNOW = new TerrainTexture(loader.loadTexture("snow"));
-	public static final TerrainTexturePack TERRAIN = new TerrainTexturePack(SAND, GRASS, ROCK, SNOW);
+	public static final TerrainTexturePack TERRAIN = new TerrainTexturePack(SAND, GRASS, SNOW, SNOW);
 
 	// Textures
 	public static final int Underwater = loader.loadTexture("underwater");
@@ -36,10 +36,11 @@ public class Assets {
 		public static final TexturedModel tree1 = loadTexturedModel("tree2", "mapleTree", false);
 		public static final TexturedModel tree1leaves = loadTexturedModel("tree2leaves", "mapleTree", true);
 		public static final TexturedModel tree1leavesSnow = loadTexturedModel("tree2leaves", "mapleTreeSnow", true);
+		public static final TexturedModel ship = loadTexturedModel("Ship", "ShipTex", true);
 		public static final TexturedModel hut = loadTexturedModel("hut", "thatch", true);
 		public static final TexturedModel grass = loadTexturedModel("grass", "grassTexture", true);
 	}
-	
+
 	public static final class Sounds {
 		public static final int Bounce = AudioMaster.loadSound("bounce");
 	}

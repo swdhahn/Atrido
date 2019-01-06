@@ -17,10 +17,9 @@ public class TerrainRenderer {
 
 	private TerrainShader shader;
 
-	public TerrainRenderer(TerrainShader shader, Matrix4f projectionMatrix) {
+	public TerrainRenderer(TerrainShader shader) {
 		this.shader = shader;
 		shader.start();
-		shader.loadProjectionMatrix(projectionMatrix);
 		shader.connectTextureUnits();
 		shader.loadTiling(100);
 		shader.stop();

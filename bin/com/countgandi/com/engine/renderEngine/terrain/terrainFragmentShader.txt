@@ -32,18 +32,13 @@ void main(void){
 		totalColor = texture(texture0, tiledCoords);
 	} else if(vPos.y >= 5 && vPos.y <= 6) {
 		totalColor = mix(texture(texture1, tiledCoords), texture(texture0, tiledCoords), 6 - vPos.y);
-	} else if(vPos.y > 6 && vPos.y < 65) {
+	} else if(vPos.y > 6 && vPos.y < 70) {
 		totalColor = texture(texture1, tiledCoords);
-	} else if(vPos.y >= 65 && vPos.y <= 66) {
-		totalColor = mix(texture(texture2, tiledCoords), texture(texture1, tiledCoords), 66 - vPos.y);
-	} else if(vPos.y > 66 && vPos.y < 70) {
-		totalColor = texture(texture2, tiledCoords);
 	} else if(vPos.y >= 70 && vPos.y <= 71) {
-		totalColor = mix(texture(texture3, tiledCoords), texture(texture2, tiledCoords), 71 - vPos.y);
+		totalColor = mix(texture(texture2, tiledCoords), texture(texture1, tiledCoords), 71 - vPos.y);
 	} else if(vPos.y > 71) {
-		totalColor = texture(texture3, tiledCoords);
+		totalColor = texture(texture2, tiledCoords);
 	}
-	
 	
 	vec3 unitNormal = normalize(surfaceNormal);
 	

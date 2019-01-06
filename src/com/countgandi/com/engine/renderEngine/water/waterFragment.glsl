@@ -1,4 +1,5 @@
 #version 400 core
+#extension GL_OES_standard_derivatives : enable
 
 out vec4 out_Color;
 
@@ -26,6 +27,8 @@ const float far = 1000;
 void main(void) {
 
 	vec2 texCoords = textureCoords * tiling;
+	
+	vec3 NORMAL = normalize( cross( dFdx( clipSpace.xyz ), dFdy( clipSpace.xyz ) ) );
 
 	vec2 ndc = (clipSpace.xy / clipSpace.w) / 2.0 + 0.5;
 	vec2 refractTexCoords = vec2(ndc.x, ndc.y);
@@ -65,9 +68,36 @@ void main(void) {
 	float specular = max(dot(reflectedLight, viewVector), 0.0);
 	specular = pow(specular, shineDamper);
 	vec3 specularHighlights = lightColor * specular * reflectivity * clamp(waterDepth / 5.0, 0.0, 1.0);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	float distance = length(fromLightVector);
+	vec3 unitLightVector = normalize(fromLightVector);
+	float nDot1 = dot(NORMAL, unitLightVector);
+	float brightness = max(nDot1, 0.0);
+	vec3 unitVectorToCamera = normalize(toCameraVector);
+	vec3 lightDirection = -unitLightVector;
+	vec3 reflectedLightDirection = reflect(lightDirection, NORMAL);
+	vec3 totalDiffuse  = vec3((brightness * lightColor));
+	totalDiffuse = max(totalDiffuse, 0.2);
 
+	
+	//out_Color = mix(vec4(skyColor, 1.0), out_Color, visibility);
+	
+	
+	
+	
+	
+	
+	
 	out_Color = mix(reflectColor, refractColor, refractiveFactor);
-	out_Color = mix(out_Color, vec4(0.0, 0.3, 0.5, 1.0), 0.2) + vec4(specularHighlights, 0.0);
+	out_Color = mix(out_Color, vec4(0.0, 0.3, 0.5, 1.0), 0.2) * vec4(totalDiffuse, 1.0) + vec4(specularHighlights, 0.0);
 	out_Color.a = clamp(waterDepth / 5.0, 0.0, 1.0);
 
 }

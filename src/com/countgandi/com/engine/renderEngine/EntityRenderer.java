@@ -10,6 +10,7 @@ import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix4f;
 
 import com.countgandi.com.engine.Maths;
+import com.countgandi.com.engine.OpenGlUtils;
 import com.countgandi.com.engine.renderEngine.models.RawModel;
 import com.countgandi.com.engine.renderEngine.models.TexturedModel;
 import com.countgandi.com.engine.renderEngine.shaders.StaticShader;
@@ -22,12 +23,8 @@ public class EntityRenderer {
 	
 	private StaticShader shader;
 
-	public EntityRenderer(StaticShader shader, Matrix4f projectionMatrix) {
+	public EntityRenderer(StaticShader shader) {
 		this.shader = shader;
-		
-		shader.start();
-		shader.loadProjectionMatrix(projectionMatrix);
-		shader.stop();
 	}
 
 	public void render(Map<TexturedModel, List<Entity>> entities) {
@@ -56,7 +53,7 @@ public class EntityRenderer {
 		
 		
 		if(texture.isHasTransparency()) {
-			MasterRenderer.disableCulling();
+			OpenGlUtils.cullBackFaces(true);
 		}
 		
 		shader.loadFakeLightingVariable(texture.isUseFakeLighting());
@@ -68,7 +65,7 @@ public class EntityRenderer {
 	}
 	
 	private void unbindTexturedModel() {
-		MasterRenderer.enableCulling();
+		OpenGlUtils.cullBackFaces(false);
 		GL20.glDisableVertexAttribArray(0);
 		GL20.glDisableVertexAttribArray(1);
 		GL20.glDisableVertexAttribArray(2);

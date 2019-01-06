@@ -12,6 +12,7 @@ import com.countgandi.com.engine.Maths;
 import com.countgandi.com.engine.renderEngine.Loader;
 import com.countgandi.com.engine.renderEngine.models.RawModel;
 import com.countgandi.com.engine.renderEngine.textures.TerrainTexturePack;
+import com.countgandi.com.engine.renderEngine.water.WaterTile;
 import com.countgandi.com.game.worldGen.World;
 
 public class Terrain {
@@ -36,7 +37,7 @@ public class Terrain {
 		this.texturePack = texturePack;
 		this.x = gridX * SIZE;
 		this.z = gridZ * SIZE;
-		generator = new PerlinNoise(gridX, gridZ, VERTEX_COUNT, 75, 5, 0.05f, World.SEED);
+		generator = new PerlinNoise(gridX, gridZ, VERTEX_COUNT, 75, 6, 0.1f, World.SEED);
 		this.model = generateTerrain(loader);
 	}
 

@@ -20,7 +20,7 @@ public class WaterRenderer {
 
 	private static final String DUDVMAP = "waterDUDV";
 	private static final String NORMALMAP = "normalMap";
-	private static final float WaveSpeed = 0.03f;
+	private static final float WaveSpeed = 0.1f;
 
 	private WaterShader shader;
 	private WaterFrameBuffers fbos;
@@ -31,7 +31,7 @@ public class WaterRenderer {
 	private int dudvTexture;
 	private int normalMap;
 
-	public WaterRenderer(Matrix4f projectionMatrix, WaterFrameBuffers fbos, Loader loader) {
+	public WaterRenderer(Camera camera, WaterFrameBuffers fbos, Loader loader) {
 		this.shader = new WaterShader();
 		this.fbos = fbos;
 		dudvTexture = loader.loadTexture(DUDVMAP);
@@ -39,7 +39,7 @@ public class WaterRenderer {
 		model = this.generateWater(loader);
 		shader.start();
 		shader.connectTextureUnits();
-		shader.loadProjectionMatrix(projectionMatrix);
+		shader.projectionViewMatrix.loadMatrix(camera.getProjectionViewMatrix());
 		shader.stop();
 	}
 
@@ -47,7 +47,7 @@ public class WaterRenderer {
 		prepareRender(camera, sun);
 		for (WaterTile tile : water) {
 			Matrix4f modelMatrix = Maths.createTransformationMatrix(new Vector3f(tile.getX(), tile.getHeight(), tile.getZ()), 0, 0, 0, 1);
-			shader.loadModelMatrix(modelMatrix);
+			shader.modelMatrix.loadMatrix(modelMatrix);
 			GL11.glDrawElements(GL11.GL_TRIANGLES, model.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
 		}
 		unbind();
@@ -55,11 +55,12 @@ public class WaterRenderer {
 
 	private void prepareRender(Camera camera, Light sun) {
 		shader.start();
-		shader.loadViewMatrix(camera);
+		shader.projectionViewMatrix.loadMatrix(camera.getProjectionViewMatrix());
 		moveFactor += WaveSpeed * DisplayManager.getFrameTimeSeconds();
 		moveFactor %= 1;
-		shader.loadMoveFactor(moveFactor);
-		shader.loadLight(sun);
+		shader.moveFactor.loadFloat(moveFactor);
+		shader.lightColor.loadVec3(sun.getColor());
+		shader.lightPosition.loadVec3(sun.getPosition());
 		GL30.glBindVertexArray(model.getVaoID());
 		GL20.glEnableVertexAttribArray(0);
 		GL20.glEnableVertexAttribArray(1);
