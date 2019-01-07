@@ -20,14 +20,14 @@ public class Assets {
 	}
 
 	// Terrain Texture Packs
-	private static final TerrainTexture GRASS = new TerrainTexture(loader.loadTexture("grass2"));
+	private static final TerrainTexture GRASS = new TerrainTexture(Texture.newTexture("grass2").normalMipMap().create());
 	//private static final TerrainTexture ROCK = new TerrainTexture(loader.loadTexture("rock"));
-	private static final TerrainTexture SAND = new TerrainTexture(loader.loadTexture("sand"));
-	private static final TerrainTexture SNOW = new TerrainTexture(loader.loadTexture("snow"));
-	public static final TerrainTexturePack TERRAIN = new TerrainTexturePack(SAND, GRASS, SNOW, SNOW);
+	private static final TerrainTexture SAND = new TerrainTexture(Texture.newTexture("sand").normalMipMap().create());
+	//private static final TerrainTexture SNOW = new TerrainTexture(loader.loadTexture("snow"));
+	public static final TerrainTexturePack TERRAIN = new TerrainTexturePack(SAND, GRASS, SAND, SAND);
 
 	// Textures
-	public static final int Underwater = loader.loadTexture("underwater");
+	public static final Texture Underwater = Texture.newTexture("underwater").create();
 	
 	public static final Texture pineTreeTex = Texture.newTexture("pineTree").normalMipMap().create();
 	public static final Texture pineTreeSnowTex = Texture.newTexture("pineTreeSnow").normalMipMap().create();

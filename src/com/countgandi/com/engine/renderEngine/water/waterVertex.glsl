@@ -8,7 +8,8 @@ out vec2 textureCoords;
 out vec3 toCameraVector;
 out vec3 fromLightVector;
 
-uniform mat4 projectionViewMatrix;
+uniform mat4 projectionMatrix;
+uniform mat4 viewMatrix;
 uniform mat4 modelMatrix;
 uniform vec3 cameraPosition;
 uniform vec3 lightPosition;
@@ -78,7 +79,7 @@ float getNoise(vec2 pos, float multiple, float moveFactor) {
 void main(void) {
 	vec4 worldPosition = modelMatrix * vec4(position.x, 0, /*getNoise(position.xz, 40, moveFactor2),*/ position.z, 1.0);
 
-	clipSpace = projectionViewMatrix * worldPosition;
+	clipSpace = projectionMatrix * viewMatrix * worldPosition;
 	gl_Position = clipSpace;
 	textureCoords = texCoords;
 	toCameraVector = cameraPosition - worldPosition.xyz;

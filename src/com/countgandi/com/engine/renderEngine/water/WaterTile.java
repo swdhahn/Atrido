@@ -2,7 +2,7 @@ package com.countgandi.com.engine.renderEngine.water;
 
 public class WaterTile {
 	
-	public static final int SIZE = 10240, VERTEX_COUNT = 1000;
+	public static final int SIZE = 1024, VERTEX_COUNT = 2;
 	
 	private float height;
 	private float x,z;

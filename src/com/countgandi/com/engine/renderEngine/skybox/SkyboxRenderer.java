@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
+import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.countgandi.com.engine.renderEngine.Loader;
@@ -66,13 +67,14 @@ private static final float SIZE = 500f;
 	private SkyboxShader shader;
 	//private float time;
 	
-	public SkyboxRenderer(Loader loader) {
+	public SkyboxRenderer(Matrix4f projectionMatrix, Loader loader) {
 		cube = loader.loadToVAO(VERTICES, 3);
 		texture = loader.loadCubeMap(TextureFiles);
 		nightTexture = loader.loadCubeMap(NightTextureFiles);
 		shader = new SkyboxShader();
 		shader.start();
 		shader.connectTextureUnits();
+		shader.projectionMatrix.loadMatrix(projectionMatrix);
 		shader.stop();
 	}
 	

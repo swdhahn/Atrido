@@ -3,7 +3,6 @@ package com.countgandi.com.engine.renderEngine.terrain;
 import java.util.List;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix4f;
@@ -17,10 +16,11 @@ public class TerrainRenderer {
 
 	private TerrainShader shader;
 
-	public TerrainRenderer(TerrainShader shader) {
+	public TerrainRenderer(Matrix4f projectionMatrix, TerrainShader shader) {
 		this.shader = shader;
 		shader.start();
 		shader.connectTextureUnits();
+		shader.projectionMatrix.loadMatrix(projectionMatrix);
 		shader.stop();
 	}
 
@@ -51,8 +51,7 @@ public class TerrainRenderer {
 		TerrainTexturePack pack = terrain.getTexturePack();
 
 		for(int i = 0; i < pack.getTerrainTextures().length; i++) {
-		GL13.glActiveTexture(GL13.GL_TEXTURE0 + i);
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, pack.getTerrainTextures()[i].getTextureID());
+			pack.getTerrainTextures()[i].getTexture().bindToUnit(i);
 		}
 	}
 

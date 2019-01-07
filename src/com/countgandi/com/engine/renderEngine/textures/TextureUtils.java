@@ -26,7 +26,7 @@ public class TextureUtils {
 			width = decoder.getWidth();
 			height = decoder.getHeight();
 			buffer = ByteBuffer.allocateDirect(4 * width * height);
-			decoder.decode(buffer, width * 4, Format.RGBA);
+			decoder.decode(buffer, width * 4, Format.BGRA);
 			buffer.flip();
 			in.close();
 		} catch (Exception e) {

@@ -2,13 +2,13 @@ package com.countgandi.com.engine.renderEngine.textures;
 
 public class TerrainTexture {
 	
-	private int textureID;
+	private Texture textureID;
 	
-	public TerrainTexture(int id) {
-		this.textureID = id;
+	public TerrainTexture(Texture tex) {
+		this.textureID = tex;
 	}
 	
-	public int getTextureID() {
+	public Texture getTexture() {
 		return textureID;
 	}
 

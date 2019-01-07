@@ -1,8 +1,5 @@
 package com.countgandi.com.engine.renderEngine;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,8 +8,6 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.imageio.ImageIO;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
@@ -74,7 +69,7 @@ public class Loader {
 		return new RawModel(vaoID, positions.length / dimensions);
 	}
 	
-	public int loadTexture(String fileName) {
+	/*public int loadTexture(String fileName) {
 		Texture texture = null;
 		try {
 			InputStream in = Class.class.getResourceAsStream("/tex/" + fileName + ".png");
@@ -106,7 +101,7 @@ public class Loader {
 		int texId = texture.getTextureID();
 		textures.add(texId);
 		return texId;
-	}
+	}*/
 	
 	public int loadFontTexture(String fileName) {
 		Texture texture = null;

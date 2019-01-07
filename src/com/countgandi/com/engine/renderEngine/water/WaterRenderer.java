@@ -13,6 +13,7 @@ import com.countgandi.com.engine.Maths;
 import com.countgandi.com.engine.renderEngine.DisplayManager;
 import com.countgandi.com.engine.renderEngine.Loader;
 import com.countgandi.com.engine.renderEngine.models.RawModel;
+import com.countgandi.com.engine.renderEngine.textures.Texture;
 import com.countgandi.com.game.entities.Camera;
 import com.countgandi.com.game.entities.Light;
 
@@ -34,12 +35,12 @@ public class WaterRenderer {
 	public WaterRenderer(Camera camera, WaterFrameBuffers fbos, Loader loader) {
 		this.shader = new WaterShader();
 		this.fbos = fbos;
-		dudvTexture = loader.loadTexture(DUDVMAP);
-		normalMap = loader.loadTexture(NORMALMAP);
+		dudvTexture = Texture.newTexture(DUDVMAP).create().textureId;
+		normalMap = Texture.newTexture(NORMALMAP).create().textureId;
 		model = this.generateWater(loader);
 		shader.start();
 		shader.connectTextureUnits();
-		shader.projectionViewMatrix.loadMatrix(camera.getProjectionViewMatrix());
+		shader.projectionMatrix.loadMatrix(camera.getProjectionMatrix());
 		shader.stop();
 	}
 
@@ -55,7 +56,7 @@ public class WaterRenderer {
 
 	private void prepareRender(Camera camera, Light sun) {
 		shader.start();
-		shader.projectionViewMatrix.loadMatrix(camera.getProjectionViewMatrix());
+		shader.viewMatrix.loadMatrix(camera.getViewMatrix());
 		moveFactor += WaveSpeed * DisplayManager.getFrameTimeSeconds();
 		moveFactor %= 1;
 		shader.moveFactor.loadFloat(moveFactor);

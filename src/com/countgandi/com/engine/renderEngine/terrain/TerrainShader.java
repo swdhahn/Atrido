@@ -30,16 +30,17 @@ public class TerrainShader extends ShaderProgram {
 	public UniformFloat shineDamper = new UniformFloat("shineDamper");
 	public UniformFloat reflectivity = new UniformFloat("reflectivity");
 	public UniformVec3 skyColor = new UniformVec3("skyColor");
-	private UniformInt Texture0 = new UniformInt("texture0");
-	private UniformInt Texture1 = new UniformInt("texture1");
-	private UniformInt Texture2 = new UniformInt("texture2");
-	private UniformInt Texture3 = new UniformInt("texture3");
-	private UniformInt Texture4 = new UniformInt("texture4");
+	private UniformInt texture0 = new UniformInt("texture0");
+	private UniformInt texture1 = new UniformInt("texture1");
+	private UniformInt texture2 = new UniformInt("texture2");
+	private UniformInt texture3 = new UniformInt("texture3");
+	private UniformInt texture4 = new UniformInt("texture4");
 	public UniformVec4 plane = new UniformVec4("plane");
 	private UniformFloat tiling = new UniformFloat("tileDivision");
 
 	public TerrainShader() {
 		super(VERTEX_FILE, FRAGMENT_FILE);
+		
 		Uniform arrays[][] = new Uniform[3][MaxLights];
 		for (int i = 0; i < MaxLights; i++) {
 			lightPosition[i] = new UniformVec3("lightPosition[" + i + "]");
@@ -49,9 +50,9 @@ public class TerrainShader extends ShaderProgram {
 			arrays[1][i] = lightColor[i];
 			arrays[2][i] = attenuation[i];
 		}
-		super.getAllUniformLocations(arrays, transformationMatrix, projectionMatrix, viewMatrix, shineDamper, reflectivity, skyColor, Texture0, Texture1, Texture2, Texture3, Texture4, plane, tiling);
+		super.getAllUniformLocations(arrays, transformationMatrix, projectionMatrix, viewMatrix, shineDamper, reflectivity, skyColor, texture0, texture1, texture2, texture3, texture4, plane, tiling);
 		start();
-		tiling.loadFloat(World.terrainSideAmount / 10.0f);
+		tiling.loadFloat(World.terrainSideAmount / 100.0f);
 		stop();
 	}
 
@@ -63,11 +64,11 @@ public class TerrainShader extends ShaderProgram {
 	}
 
 	public void connectTextureUnits() {
-		Texture0.loadInt(0);
-		Texture1.loadInt(1);
-		Texture2.loadInt(2);
-		Texture3.loadInt(3);
-		Texture4.loadInt(4);
+		texture0.loadInt(0);
+		texture1.loadInt(1);
+		texture2.loadInt(2);
+		texture3.loadInt(3);
+		texture4.loadInt(4);
 	}
 
 	public void loadLights(List<Light> lights) {

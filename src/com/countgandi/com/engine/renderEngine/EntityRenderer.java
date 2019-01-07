@@ -22,8 +22,11 @@ public class EntityRenderer {
 	
 	private StaticShader shader;
 
-	public EntityRenderer(StaticShader shader) {
+	public EntityRenderer(Matrix4f projectionMatrix, StaticShader shader) {
 		this.shader = shader;
+		shader.start();
+		shader.projectionMatrix.loadMatrix(projectionMatrix);
+		shader.stop();
 	}
 
 	public void render(Map<TexturedModel, List<Entity>> entities) {

@@ -39,11 +39,9 @@ public class MasterRenderer {
 	public MasterRenderer(Camera camera, Loader loader) {
 		this.loader = loader;
 		OpenGlUtils.cullBackFaces(true);
-		renderer = new EntityRenderer(shader);
-		terrainRenderer = new TerrainRenderer(terrainShader);
-		skyboxRenderer = new SkyboxRenderer(loader);
-		shader.projectionMatrix.loadMatrix(camera.getProjectionMatrix());
-		terrainShader.projectionMatrix.loadMatrix(camera.getProjectionMatrix());
+		renderer = new EntityRenderer(camera.getProjectionMatrix(), shader);
+		terrainRenderer = new TerrainRenderer(camera.getProjectionMatrix(), terrainShader);
+		skyboxRenderer = new SkyboxRenderer(camera.getProjectionMatrix(), loader);
 	}
 
 	public void render(List<Light> lights, Camera camera, Vector4f clipPlane) {

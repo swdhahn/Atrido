@@ -171,10 +171,6 @@ public class Camera {
 		return new Vector3f(pitch, roll, yaw);
 	}
 
-	public Matrix4f getProjectionViewMatrix() {
-		return Matrix4f.mul(projectionMatrix, viewMatrix, null);
-	}
-	
 	private void updateViewMatrix() {
 		viewMatrix.setIdentity();
 		Matrix4f.rotate((float) Math.toRadians(pitch), new Vector3f(1, 0, 0), viewMatrix, viewMatrix);

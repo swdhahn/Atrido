@@ -12,7 +12,8 @@ public class WaterShader extends ShaderProgram {
 	private final static String FRAGMENT_FILE = "src/com/countgandi/com/engine/renderEngine/water/waterFragment.glsl";
 
 	public UniformMatrix modelMatrix = new UniformMatrix("modelMatrix");
-	public UniformMatrix projectionViewMatrix = new UniformMatrix("projectionViewMatrix");
+	public UniformMatrix projectionMatrix = new UniformMatrix("projectionMatrix");
+	public UniformMatrix viewMatrix = new UniformMatrix("viewMatrix");
 	public UniformInt reflectionTexture = new UniformInt("reflectionTexture");
 	public UniformInt refractionTexture = new UniformInt("refractionTexture");
 	public UniformInt dudvMap = new UniformInt("dudvMap");
@@ -26,7 +27,7 @@ public class WaterShader extends ShaderProgram {
 
 	public WaterShader() {
 		super(VERTEX_FILE, FRAGMENT_FILE);
-		super.getAllUniformLocations(modelMatrix, projectionViewMatrix, reflectionTexture, refractionTexture, dudvMap, moveFactor, cameraPosition, normalMap, lightColor, lightPosition, depthMap, tiling);
+		super.getAllUniformLocations(modelMatrix, projectionMatrix, viewMatrix, reflectionTexture, refractionTexture, dudvMap, moveFactor, cameraPosition, normalMap, lightColor, lightPosition, depthMap, tiling);
 		start();
 		tiling.loadFloat(WaterTile.SIZE / 10);
 		stop();
@@ -39,8 +40,8 @@ public class WaterShader extends ShaderProgram {
 	}
 
 	public void connectTextureUnits() {
-		reflectionTexture.loadInt(0);
-		refractionTexture.loadInt(1);
+		refractionTexture.loadInt(0);
+		reflectionTexture.loadInt(1);
 		dudvMap.loadInt(2);
 		normalMap.loadInt(3);
 		depthMap.loadInt(4);

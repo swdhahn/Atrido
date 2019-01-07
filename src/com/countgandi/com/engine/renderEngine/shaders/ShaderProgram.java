@@ -27,7 +27,10 @@ public abstract class ShaderProgram {
 		bindAttributes();
 		
 		GL20.glLinkProgram(programID);
-		GL20.glValidateProgram(programID);
+		GL20.glDetachShader(programID, vertexShaderID);
+		GL20.glDetachShader(programID, fragmentShaderID);
+		GL20.glDeleteShader(vertexShaderID);
+		GL20.glDeleteShader(fragmentShaderID);
 	}
 	
 	public ShaderProgram (String vertexFile, String geometryFile, String fragmentFile) {
@@ -43,7 +46,10 @@ public abstract class ShaderProgram {
 		bindAttributes();
 		
 		GL20.glLinkProgram(programID);
-		GL20.glValidateProgram(programID);
+		GL20.glDetachShader(programID, vertexShaderID);
+		GL20.glDetachShader(programID, fragmentShaderID);
+		GL20.glDeleteShader(vertexShaderID);
+		GL20.glDeleteShader(fragmentShaderID);
 	}
 	
 	protected void getAllUniformLocations(Uniform... uniforms){

@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.lwjgl.input.Mouse;
 
-import com.countgandi.com.engine.guis.GuiRenderer;
-import com.countgandi.com.engine.guis.GuiTexture;
+import com.countgandi.com.engine.renderEngine.guis.GuiRenderer;
+import com.countgandi.com.engine.renderEngine.guis.GuiTexture;
 import com.countgandi.com.game.Assets;
 import com.countgandi.com.game.Game;
 import com.countgandi.com.game.Handler;

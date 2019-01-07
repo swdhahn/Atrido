@@ -9,10 +9,10 @@ import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
 import com.countgandi.com.creationEngine.IndependentCamera;
-import com.countgandi.com.engine.guis.GuiRenderer;
-import com.countgandi.com.engine.guis.GuiTexture;
 import com.countgandi.com.engine.renderEngine.MasterRenderer;
 import com.countgandi.com.engine.renderEngine.font.TextMaster;
+import com.countgandi.com.engine.renderEngine.guis.GuiRenderer;
+import com.countgandi.com.engine.renderEngine.guis.GuiTexture;
 import com.countgandi.com.engine.renderEngine.particles.ParticleMaster;
 import com.countgandi.com.engine.renderEngine.water.WaterFrameBuffers;
 import com.countgandi.com.engine.renderEngine.water.WaterRenderer;
@@ -50,7 +50,7 @@ public class Handler {
 		guiRenderer = new GuiRenderer(Assets.loader);
 		this.isEngine = isEngine;
 
-		ParticleMaster.init(camera.getProjectionViewMatrix(), Assets.loader);
+		ParticleMaster.init(camera.getProjectionMatrix(), Assets.loader);
 		TextMaster.init(Assets.loader);
 		fbos = new WaterFrameBuffers();
 		waterRenderer = new WaterRenderer(camera, fbos, Assets.loader);
