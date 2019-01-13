@@ -38,7 +38,7 @@ public class World {
 				for (int z = -terrainWidth; z < terrainWidth; z++) {
 					System.out.println("POS  x:" + x + " z:" + z);
 					addTerrain(new Terrain(x, z, Assets.TERRAIN, Assets.loader));
-					handler.waters.add(new WaterTile(x, z, -40));
+					handler.waters.add(new WaterTile(x, z, -40, WaterTile.SIZE));
 				}
 			}
 

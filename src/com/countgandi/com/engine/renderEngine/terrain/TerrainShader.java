@@ -53,6 +53,7 @@ public class TerrainShader extends ShaderProgram {
 		super.getAllUniformLocations(arrays, transformationMatrix, projectionMatrix, viewMatrix, shineDamper, reflectivity, skyColor, texture0, texture1, texture2, texture3, texture4, plane, tiling);
 		start();
 		tiling.loadFloat(World.terrainSideAmount / 100.0f);
+		connectTextureUnits();
 		stop();
 	}
 

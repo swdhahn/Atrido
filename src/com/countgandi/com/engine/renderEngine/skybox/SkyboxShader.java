@@ -24,7 +24,6 @@ public class SkyboxShader extends ShaderProgram {
 	private UniformInt cubeMap = new UniformInt("cubeMap");
 	private UniformInt cubeMap2 = new UniformInt("cubeMap2");
 	public UniformFloat blendFactor = new UniformFloat("blendFactor");
-	
 	private float rotation = 0;
 
 	public SkyboxShader() {

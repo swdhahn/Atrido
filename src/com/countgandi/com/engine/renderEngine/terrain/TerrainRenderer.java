@@ -19,7 +19,6 @@ public class TerrainRenderer {
 	public TerrainRenderer(Matrix4f projectionMatrix, TerrainShader shader) {
 		this.shader = shader;
 		shader.start();
-		shader.connectTextureUnits();
 		shader.projectionMatrix.loadMatrix(projectionMatrix);
 		shader.stop();
 	}
@@ -43,16 +42,12 @@ public class TerrainRenderer {
 		shader.shineDamper.loadFloat(1);
 		shader.reflectivity.loadFloat(0);
 
-		bindTextures(terrain);
-
-	}
-
-	private void bindTextures(Terrain terrain) {
 		TerrainTexturePack pack = terrain.getTexturePack();
 
 		for(int i = 0; i < pack.getTerrainTextures().length; i++) {
 			pack.getTerrainTextures()[i].getTexture().bindToUnit(i);
 		}
+
 	}
 
 	private void unbindTexturedModel() {

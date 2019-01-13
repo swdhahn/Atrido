@@ -23,5 +23,9 @@ public abstract class Uniform {
 	protected int getLocation(){
 		return location;
 	}
+	
+	public String toString() {
+		return name;
+	}
 
 }

@@ -2,15 +2,19 @@ package com.countgandi.com.engine.renderEngine.water;
 
 public class WaterTile {
 	
-	public static final int SIZE = 1024, VERTEX_COUNT = 2;
+	public static final int VERTEX_COUNT = 100;
+
+	public static int SIZE = 1024;
 	
 	private float height;
-	private float x,z;
+	private float x, z;
+	public float scale;
 	
-	public WaterTile(float gridX, float gridY, float height){
-		this.x = SIZE * gridX;
-		this.z = SIZE * gridY;
+	public WaterTile(float x, float y, float height, float scale){
+		this.x = x * SIZE;
+		this.z = y * SIZE;
 		this.height = height;
+		this.scale = scale;
 	}
 
 	public float getHeight() {

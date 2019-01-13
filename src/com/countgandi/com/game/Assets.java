@@ -20,9 +20,9 @@ public class Assets {
 	}
 
 	// Terrain Texture Packs
-	private static final TerrainTexture GRASS = new TerrainTexture(Texture.newTexture("grass2").normalMipMap().create());
+	private static final TerrainTexture GRASS = loadTerrainTexture("grass2");
 	//private static final TerrainTexture ROCK = new TerrainTexture(loader.loadTexture("rock"));
-	private static final TerrainTexture SAND = new TerrainTexture(Texture.newTexture("sand").normalMipMap().create());
+	private static final TerrainTexture SAND = loadTerrainTexture("sand");
 	//private static final TerrainTexture SNOW = new TerrainTexture(loader.loadTexture("snow"));
 	public static final TerrainTexturePack TERRAIN = new TerrainTexturePack(SAND, GRASS, SAND, SAND);
 
@@ -43,9 +43,11 @@ public class Assets {
 	public static final TexturedModel hutModel = loadTexturedModel("hut", "thatch", true);
 	public static final TexturedModel grassModel = loadTexturedModel("grass", "grassTexture", true);
 	
-
 	public static final int BounceSound = AudioMaster.loadSound("bounce");
 	
+	public static TerrainTexture loadTerrainTexture(String res) {
+		return new TerrainTexture(Texture.newTexture(res).normalMipMap().create());
+	}
 
 	public static TexturedModel loadTexturedModel(String modelName, String textureName, boolean trans) {
 		return new TexturedModel(OBJLoader.loadObjModel(modelName, loader), new ModelTexture(Texture.newTexture(textureName).create(), trans)) {

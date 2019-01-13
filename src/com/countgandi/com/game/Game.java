@@ -34,14 +34,14 @@ public class Game {
 		AudioMaster.setListenerData(0, 0, 0);
 		AL10.alDistanceModel(AL10.AL_INVERSE_DISTANCE);
 
-		handler = new Handler(true);
+		handler = new Handler(false);
 		HEADER = new GUIText("Pos", 1, Assets.Fonts.arial, new Vector2f(0, 0), 1);
 		HEADER2 = new GUIText("Pos", 1, Assets.Fonts.arial, new Vector2f(0, 0.1f), 1);
 		menu = new GameMenu(handler);
 
 		GameRegistry.register();
 
-		handler.lights.add(new Light(new Vector3f(0, 1000, -70000), new Vector3f(1.0f, 1.0f, 1.0f), Light.LIGHT_SUN));
+		handler.lights.add(new Light(new Vector3f(0, 1000, 0), new Vector3f(1.0f, 1.0f, 1.0f), Light.LIGHT_SUN));
 
 		// END OF INIT
 		handler.gameStart();
