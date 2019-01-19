@@ -13,7 +13,6 @@ import com.countgandi.com.engine.renderEngine.MasterRenderer;
 import com.countgandi.com.engine.renderEngine.font.TextMaster;
 import com.countgandi.com.engine.renderEngine.guis.GuiRenderer;
 import com.countgandi.com.engine.renderEngine.guis.GuiTexture;
-import com.countgandi.com.engine.renderEngine.particles.ParticleMaster;
 import com.countgandi.com.engine.renderEngine.water.WaterFrameBuffers;
 import com.countgandi.com.engine.renderEngine.water.WaterRenderer;
 import com.countgandi.com.engine.renderEngine.water.WaterTile;
@@ -21,6 +20,7 @@ import com.countgandi.com.game.entities.Camera;
 import com.countgandi.com.game.entities.Entity;
 import com.countgandi.com.game.entities.Light;
 import com.countgandi.com.game.entities.Player;
+import com.countgandi.com.game.guis.InventoryGui;
 import com.countgandi.com.game.worldGen.World;
 
 public class Handler {
@@ -36,12 +36,14 @@ public class Handler {
 	private GuiRenderer guiRenderer;
 	private Camera camera;
 
+	private InventoryGui inventoryGui;
+
 	private Player player;
 	private World world;
 	private boolean isEngine;
 
 	public Handler(boolean isEngine) {
-		if(isEngine) {
+		if (isEngine) {
 			this.camera = new IndependentCamera(this);
 		} else {
 			this.camera = new Camera(this);
@@ -50,11 +52,11 @@ public class Handler {
 		guiRenderer = new GuiRenderer(Assets.loader);
 		this.isEngine = isEngine;
 
-		ParticleMaster.init(camera.getProjectionMatrix(), Assets.loader);
 		TextMaster.init(Assets.loader);
 		fbos = new WaterFrameBuffers();
 		waterRenderer = new WaterRenderer(camera, fbos, Assets.loader);
 		world = new World(this);
+		inventoryGui = new InventoryGui(this);
 	}
 
 	public void tick() {
@@ -64,13 +66,22 @@ public class Handler {
 			entities.get(i).tick();
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_B)) {
-			entities.add(new Entity(Assets.shipModel, new Vector3f(camera.getPosition().x, camera.getPosition().y - 5, camera.getPosition().z), new Vector3f(0, camera.getYaw(), 0), 10f, this) {
+			entities.add(new Entity(Assets.stoneFlooringModel, new Vector3f(camera.getPosition().x, camera.getPosition().y - 5, camera.getPosition().z), new Vector3f(0, camera.getYaw(), 0), 10f, this) {
 			});
 		}
-		// new Particle(new Vector3f(camera.getPosition().x,
-		// camera.getPosition().y, camera.getPosition().z - 10), new Vector3f(0,
-		// 30, 0), 0.1F, 100, 0, 10);
-		ParticleMaster.tick();
+		if (Keyboard.isKeyDown(Keyboard.KEY_N)) {
+			entities.add(new Entity(Assets.stoneRoofingModel, new Vector3f(camera.getPosition().x, camera.getPosition().y - 5, camera.getPosition().z), new Vector3f(0, camera.getYaw(), 0), 10f, this) {
+			});
+		}
+		if (Keyboard.getEventKey() == Keyboard.KEY_E) {
+			if (!Keyboard.getEventKeyState()) {
+				if (inventoryGui.isOpen()) {
+					inventoryGui.remove();
+				} else {
+					inventoryGui.add();
+				}
+			}
+		}
 	}
 
 	public void render(boolean isEngine) {
@@ -96,8 +107,6 @@ public class Handler {
 
 		renderScene(new Vector4f(0, -1, 0, 10000));
 		waterRenderer.render(waters, camera, lights.get(0));
-
-		ParticleMaster.renderParticles(camera);
 
 		if (!isEngine) {
 			// 2D stuff

@@ -48,18 +48,18 @@ public class MasterRenderer {
 		prepare();
 
 		shader.start();
-		shader.plane.loadVec4(clipPlane);
-		shader.skyColor.loadVec3(skyColor);
+		shader.loadClipPlane(clipPlane);
+		shader.loadSkyColor(skyColor);
 		shader.loadLights(lights);
-		shader.viewMatrix.loadMatrix(camera.getViewMatrix());
+		shader.loadViewMatrix(camera.getViewMatrix());
 		renderer.render(entities);
 		shader.stop();
 		
 		terrainShader.start();
-		terrainShader.plane.loadVec4(clipPlane);
-		terrainShader.skyColor.loadVec3(skyColor);
+		terrainShader.loadClipPlane(clipPlane);
+		terrainShader.loadSkyColor(skyColor);
 		terrainShader.loadLights(lights);
-		terrainShader.viewMatrix.loadMatrix(camera.getViewMatrix());
+		terrainShader.loadViewMatrix(camera.getViewMatrix());
 		terrainRenderer.render(terrains);
 		terrainShader.stop();
 

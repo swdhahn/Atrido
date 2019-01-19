@@ -1,33 +1,55 @@
 package com.countgandi.com.engine.renderEngine.font.fontRendering;
 
+import org.lwjgl.util.vector.Vector2f;
+import org.lwjgl.util.vector.Vector3f;
+
 import com.countgandi.com.engine.renderEngine.shaders.ShaderProgram;
-import com.countgandi.com.engine.renderEngine.shaders.UniformFloat;
-import com.countgandi.com.engine.renderEngine.shaders.UniformVec2;
-import com.countgandi.com.engine.renderEngine.shaders.UniformVec3;
 
 public class FontShader extends ShaderProgram {
 
 	private static final String VERTEX_FILE = "src/com/countgandi/com/engine/renderEngine/font/fontRendering/fontVertex.txt";
 	private static final String FRAGMENT_FILE = "src/com/countgandi/com/engine/renderEngine/font/fontRendering/fontFragment.txt";
 	
-	public UniformVec3 color = new UniformVec3("color");
-	public UniformVec3 outlineColor = new UniformVec3("outlineColor");
-	public UniformVec2 translation = new UniformVec2("translation");
-	public UniformVec2 offset = new UniformVec2("offset");
-	public UniformFloat width = new UniformFloat("width");
-	public UniformFloat edge = new UniformFloat("edge");
-	public UniformFloat borderWidth = new UniformFloat("borderWidth");
-	public UniformFloat borderEdge = new UniformFloat("borderEdge");
+	private int location_color;
+	private int location_outlineColor;
+	private int location_translation;
+	private int location_offset;
+	private int location_width;
+	private int location_edge;
+	private int location_borderWidth;
+	private int location_borderEdge;
 	
 	public FontShader() {
 		super(VERTEX_FILE, FRAGMENT_FILE);
-		super.getAllUniformLocations(color, outlineColor, translation, offset, width, edge, borderWidth, borderEdge);
 	}
 
 	@Override
 	protected void bindAttributes() {
 		super.bindAttribute(0, "position");
 		super.bindAttribute(1, "textureCoords");
+	}
+
+	@Override
+	protected void getAllUniformLocations() {
+		location_color = super.getUniformLocation("color");
+		location_outlineColor = super.getUniformLocation("outlineColor");
+		location_translation = super.getUniformLocation("translation");
+		location_offset = super.getUniformLocation("offset");
+		location_edge = super.getUniformLocation("edge");
+		location_borderEdge = super.getUniformLocation("borderEdge");
+		location_width = super.getUniformLocation("width");
+		location_borderWidth = super.getUniformLocation("borderWidth");
+	}
+	
+	public void loadFontLol(Vector2f translation, Vector2f offset, Vector3f color, Vector3f outlineColor, float width, float borderWidth, float edge, float borderEdge) {
+		super.load2DVector(location_translation, translation);
+		super.load2DVector(location_offset, offset);
+		super.loadVector(location_color, color);
+		super.loadVector(location_outlineColor, outlineColor);
+		super.loadFloat(location_width, width);
+		super.loadFloat(location_borderWidth, borderWidth);
+		super.loadFloat(location_edge, edge);
+		super.loadFloat(location_borderEdge, borderEdge);
 	}
 
 }

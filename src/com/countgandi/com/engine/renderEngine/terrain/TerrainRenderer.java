@@ -9,6 +9,7 @@ import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.countgandi.com.engine.Maths;
+import com.countgandi.com.engine.OpenGlUtils;
 import com.countgandi.com.engine.renderEngine.models.RawModel;
 import com.countgandi.com.engine.renderEngine.textures.TerrainTexturePack;
 
@@ -19,7 +20,7 @@ public class TerrainRenderer {
 	public TerrainRenderer(Matrix4f projectionMatrix, TerrainShader shader) {
 		this.shader = shader;
 		shader.start();
-		shader.projectionMatrix.loadMatrix(projectionMatrix);
+		shader.loadProjectionMatrix(projectionMatrix);
 		shader.stop();
 	}
 
@@ -39,8 +40,8 @@ public class TerrainRenderer {
 		GL20.glEnableVertexAttribArray(1);
 		GL20.glEnableVertexAttribArray(2);
 
-		shader.shineDamper.loadFloat(1);
-		shader.reflectivity.loadFloat(0);
+		shader.loadShineVariable(1, 0);
+		OpenGlUtils.cullBackFaces(true);
 
 		TerrainTexturePack pack = terrain.getTexturePack();
 
@@ -51,6 +52,7 @@ public class TerrainRenderer {
 	}
 
 	private void unbindTexturedModel() {
+		OpenGlUtils.cullBackFaces(false);
 		GL20.glDisableVertexAttribArray(0);
 		GL20.glDisableVertexAttribArray(1);
 		GL20.glDisableVertexAttribArray(2);
@@ -59,7 +61,7 @@ public class TerrainRenderer {
 
 	private void loadModelMatrix(Terrain terrain) {
 		Matrix4f transformationMatrix = Maths.createTransformationMatrix(new Vector3f(terrain.getX(), 0, terrain.getZ()), 0, 0, 0, 1);
-		shader.transformationMatrix.loadMatrix(transformationMatrix);
+		shader.loadTransformationMatrix(transformationMatrix);
 	}
 
 }

@@ -15,7 +15,7 @@ import com.countgandi.com.game.Handler;
 import com.countgandi.com.game.guis.WaterGui;
 
 public class Camera {
-	
+
 	private static final float FOV = 70;
 	private static final float NEAR_PLANE = 0.2f;
 	private static final float FAR_PLANE = 1000;
@@ -55,24 +55,26 @@ public class Camera {
 			handler.guis.remove(waterGui);
 			isInWater = false;
 		}
-		
+
 		AudioMaster.setListenerData(position.x, position.y, position.z);
 
 		collision();
 		checkInputs();
 
-		if (Mouse.getX() >= Game.WIDTH - 20) {
-			Mouse.setCursorPosition(30, Mouse.getY());
-			preX = Mouse.getX();
-		}
-		if (Mouse.getX() <= 20) {
-			Mouse.setCursorPosition(Game.WIDTH - 30, Mouse.getY());
-			preX = Mouse.getX();
-		}
+		if (Display.isActive()) {
+			if (Mouse.getX() >= Game.WIDTH - 20) {
+				Mouse.setCursorPosition(30, Mouse.getY());
+				preX = Mouse.getX();
+			}
+			if (Mouse.getX() <= 20) {
+				Mouse.setCursorPosition(Game.WIDTH - 30, Mouse.getY());
+				preX = Mouse.getX();
+			}
 
-		pitch = ((Display.getHeight() / 2) - Mouse.getY()) / 5;
-		yaw -= (float) (Math.toRadians(preX - Mouse.getX()) * 2) * ((float) Game.WIDTH / 180.0F);
-		preX = Mouse.getX();
+			pitch = ((Display.getHeight() / 2) - Mouse.getY()) / 5;
+			yaw -= (float) (Math.toRadians(preX - Mouse.getX()) * 2) * ((float) Game.WIDTH / 180.0F);
+			preX = Mouse.getX();
+		}
 
 		float dx = (float) ((currentSpeed * DisplayManager.getFrameTimeSeconds()) * Math.sin(Math.toRadians(-yaw)));
 		float dz = (float) ((currentSpeed * DisplayManager.getFrameTimeSeconds()) * Math.cos(Math.toRadians(-yaw)));
@@ -90,7 +92,7 @@ public class Camera {
 			position.y = TerrainHeight + height;
 			isInAir = false;
 		}
-		
+
 		updateViewMatrix();
 	}
 
@@ -194,11 +196,11 @@ public class Camera {
 		projectionMatrix.m33 = 0;
 		return projectionMatrix;
 	}
-	
+
 	public Matrix4f getViewMatrix() {
 		return this.viewMatrix;
 	}
-	
+
 	public Matrix4f getProjectionMatrix() {
 		return this.projectionMatrix;
 	}

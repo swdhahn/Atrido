@@ -40,7 +40,7 @@ public class WaterRenderer {
 		model = this.generateWater(loader);
 		shader.start();
 		shader.connectTextureUnits();
-		shader.projectionMatrix.loadMatrix(camera.getProjectionMatrix());
+		shader.loadProjectionMatrix(camera.getProjectionMatrix());
 		shader.stop();
 	}
 
@@ -48,7 +48,7 @@ public class WaterRenderer {
 		prepareRender(camera, sun);
 		for (WaterTile tile : water) {
 			Matrix4f modelMatrix = Maths.createTransformationMatrix(new Vector3f(tile.getX(), tile.getHeight(), tile.getZ()), 0, 0, 0, 1);
-			shader.modelMatrix.loadMatrix(modelMatrix);
+			shader.loadTransformationMatrix(modelMatrix);
 			GL11.glDrawElements(GL11.GL_TRIANGLES, model.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
 		}
 		unbind();
@@ -56,12 +56,11 @@ public class WaterRenderer {
 
 	private void prepareRender(Camera camera, Light sun) {
 		shader.start();
-		shader.viewMatrix.loadMatrix(camera.getViewMatrix());
+		shader.loadViewMatrix(camera.getViewMatrix());
 		moveFactor += WaveSpeed * DisplayManager.getFrameTimeSeconds();
 		moveFactor %= 1;
-		shader.moveFactor.loadFloat(moveFactor);
-		shader.lightColor.loadVec3(sun.getColor());
-		shader.lightPosition.loadVec3(sun.getPosition());
+		shader.loadMoveFactor(moveFactor);
+		shader.loadLight(sun.getColor(), sun.getPosition());
 		GL30.glBindVertexArray(model.getVaoID());
 		GL20.glEnableVertexAttribArray(0);
 		GL20.glEnableVertexAttribArray(1);

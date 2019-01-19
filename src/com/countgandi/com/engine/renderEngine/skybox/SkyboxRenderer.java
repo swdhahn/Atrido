@@ -74,14 +74,14 @@ private static final float SIZE = 500f;
 		shader = new SkyboxShader();
 		shader.start();
 		shader.connectTextureUnits();
-		shader.projectionMatrix.loadMatrix(projectionMatrix);
+		shader.loadProjectionMatrix(projectionMatrix);
 		shader.stop();
 	}
 	
 	public void render(Camera camera, Vector3f fogColor) {
 		shader.start();
 		shader.loadViewMatrix(camera);
-		shader.fogColor.loadVec3(fogColor);
+		shader.loadFogColor(fogColor);
 		GL30.glBindVertexArray(cube.getVaoID());
 		GL20.glEnableVertexAttribArray(0);
 		bindTextures();
@@ -96,7 +96,7 @@ private static final float SIZE = 500f;
 		GL11.glBindTexture(GL13.GL_TEXTURE_CUBE_MAP, texture);
 		GL13.glActiveTexture(GL13.GL_TEXTURE1);
 		GL11.glBindTexture(GL13.GL_TEXTURE_CUBE_MAP, nightTexture);
-		shader.blendFactor.loadFloat(0);
+		shader.loadBlendFactor(0);
 	}
 	
 	/*private void bindTextures(){

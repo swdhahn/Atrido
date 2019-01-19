@@ -2,7 +2,10 @@ package com.countgandi.com.engine.renderEngine.shaders;
 
 import java.util.List;
 
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
+import org.lwjgl.util.vector.Vector4f;
 
 import com.countgandi.com.game.entities.Light;
 
@@ -13,32 +16,23 @@ public class StaticShader extends ShaderProgram {
 	private static final String VERTEX_FILE = "src/com/countgandi/com/engine/renderEngine/shaders/vertexShader.txt";
 	private static final String FRAGMENT_FILE = "src/com/countgandi/com/engine/renderEngine/shaders/fragmentShader.txt";
 
-	public UniformMatrix transformationMatrix = new UniformMatrix("transformationMatrix");
-	public UniformMatrix projectionMatrix = new UniformMatrix("projectionMatrix");
-	public UniformMatrix viewMatrix = new UniformMatrix("viewMatrix");
-	public UniformVec3 lightPosition[] = new UniformVec3[MaxLights];
-	public UniformVec3 lightColor[] = new UniformVec3[MaxLights];
-	public UniformVec3 attenuation[] = new UniformVec3[MaxLights];
-	public UniformFloat shineDamper = new UniformFloat("shineDamper");
-	public UniformFloat reflectivity = new UniformFloat("reflectivity");
-	public UniformBoolean useFakeLighting = new UniformBoolean("useFakeLighting");
-	public UniformVec3 skyColor = new UniformVec3("skyColor");
-	public UniformInt numberOfRows = new UniformInt("numberOfRows");
-	public UniformVec2 offset = new UniformVec2("offset");
-	public UniformVec4 plane = new UniformVec4("plane");
+	private int location_transformationMatrix;
+	private int location_projectionMatrix;
+	private int location_viewMatrix;
+	private int location_lightPosition[];
+	private int location_lightColor[];
+	private int location_attenuation[];
+	private int location_shineDamper;
+	private int location_reflectivity;
+	private int location_useFakeLighting;
+	private int location_skyColor;
+	private int location_numberOfRows;
+	private int location_offset;
+	private int location_plane;
 
 	public StaticShader() {
 		super(VERTEX_FILE, FRAGMENT_FILE);
-		Uniform arrays[][] = new Uniform[3][MaxLights];
-		for (int i = 0; i < MaxLights; i++) {
-			lightPosition[i] = new UniformVec3("lightPosition[" + i + "]");
-			lightColor[i] = new UniformVec3("lightColor[" + i + "]");
-			attenuation[i] = new UniformVec3("attenuation[" + i + "]");
-			arrays[0][i] = lightPosition[i];
-			arrays[1][i] = lightColor[i];
-			arrays[2][i] = attenuation[i];
-		}
-		super.getAllUniformLocations(arrays, transformationMatrix, projectionMatrix, viewMatrix, shineDamper, reflectivity, useFakeLighting, skyColor, numberOfRows, offset, plane);
+
 	}
 
 	@Override
@@ -47,19 +41,78 @@ public class StaticShader extends ShaderProgram {
 		super.bindAttribute(1, "textureCoords");
 		super.bindAttribute(2, "normal");
 	}
+	
+	@Override
+	protected void getAllUniformLocations() {
+		location_transformationMatrix = super.getUniformLocation("transformationMatrix");
+		location_projectionMatrix = super.getUniformLocation("projectionMatrix");
+		location_viewMatrix = super.getUniformLocation("viewMatrix");
+		location_shineDamper = super.getUniformLocation("shineDamper");
+		location_reflectivity = super.getUniformLocation("reflectivity");
+		location_useFakeLighting = super.getUniformLocation("useFakeLighting");
+		location_skyColor = super.getUniformLocation("skyColor");
+		location_numberOfRows = super.getUniformLocation("numberOfRows");
+		location_offset = super.getUniformLocation("offset");
+		location_plane = super.getUniformLocation("plane");
+		
+		location_lightPosition = new int[MaxLights];
+		location_lightColor = new int[MaxLights];
+		location_attenuation = new int[MaxLights];
+		for(int i = 0; i < MaxLights; i++) {
+			location_lightPosition[i] = super.getUniformLocation("lightPosition[" + i + "]");
+			location_lightColor[i] = super.getUniformLocation("lightColor[" + i + "]");
+			location_attenuation[i] = super.getUniformLocation("attenuation[" + i + "]");
+		}
+		
+	}
 
 	public void loadLights(List<Light> lights) {
 		for (int i = 0; i < MaxLights; i++) {
 			if (i < lights.size()) {
-				lightPosition[i].loadVec3(lights.get(i).getPosition());
-				lightColor[i].loadVec3(lights.get(i).getColor());
-				attenuation[i].loadVec3(lights.get(i).getAttenuation());
+				super.loadVector(location_lightPosition[i], lights.get(i).getPosition());
+				super.loadVector(location_lightColor[i], lights.get(i).getColor());
+				super.loadVector(location_attenuation[i], lights.get(i).getAttenuation());
 			} else {
-				lightPosition[i].loadVec3(new Vector3f(0, 0, 0));
-				lightColor[i].loadVec3(new Vector3f(0, 0, 0));
-				attenuation[i].loadVec3(new Vector3f(0, 0, 0));
+				super.loadVector(location_lightPosition[i], new Vector3f(0, 0, 0));
+				super.loadVector(location_lightColor[i], new Vector3f(0, 0, 0));
+				super.loadVector(location_attenuation[i], new Vector3f(1, 0, 0));
 			}
 		}
+	}
+	
+	public void loadClipPlane(Vector4f plane) {
+		super.loadVector(location_plane, plane);
+	}
+	
+	public void loadNumberOfRows(int numberOfRows) {
+		super.loadFloat(location_numberOfRows, numberOfRows);
+	}
+	
+	public void loadOffset(float x, float y) {
+		super.load2DVector(location_offset, new Vector2f(x, y));
+	}
+	
+	public void loadSkyColor(Vector3f color) {
+		super.loadVector(location_skyColor, color);
+	}
+	
+	public void loadFakeLightingVariable(boolean useFakeLighting) {
+		super.loadBoolean(location_useFakeLighting, useFakeLighting);
+	}
+	
+	public void loadShineVariable(float damper, float reflectivity) {
+		super.loadFloat(location_shineDamper, damper);
+		super.loadFloat(location_reflectivity, reflectivity);
+	}
+	
+	public void loadProjectionMatrix(Matrix4f projectionMatrix) {
+		super.loadMatrix(location_projectionMatrix, projectionMatrix);
+	}
+	public void loadTransformationMatrix(Matrix4f transformationMatrix) {
+		super.loadMatrix(location_transformationMatrix, transformationMatrix);
+	}
+	public void loadViewMatrix(Matrix4f viewMatrix) {
+		super.loadMatrix(location_viewMatrix, viewMatrix);
 	}
 
 }

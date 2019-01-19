@@ -36,7 +36,7 @@ public class AnimatedModelRenderer {
 		prepare(camera, lightDir);
 		model.getTexture().bindToUnit(0);
 		model.getModel().bind(0, 1, 2, 3, 4);
-		shader.jointTransforms.loadMatrixArray(model.getJointTransforms());
+		shader.loadJointTransformations(model.getJointTransforms());
 		GL11.glDrawElements(GL11.GL_TRIANGLES, model.getModel().getIndexCount(), GL11.GL_UNSIGNED_INT, 0);
 		model.getModel().unbind(0, 1, 2, 3, 4);
 		finish();
@@ -61,8 +61,8 @@ public class AnimatedModelRenderer {
 	 */
 	private void prepare(Camera camera, Vector3f lightDir) {
 		shader.start();
-		shader.projectionViewMatrix.loadMatrix(Matrix4f.mul(camera.getProjectionMatrix(), camera.getViewMatrix(), null));
-		shader.lightDirection.loadVec3(lightDir);
+		shader.loadProjectionViewMatrix(Matrix4f.mul(camera.getProjectionMatrix(), camera.getViewMatrix(), null));
+		shader.loadLightDirection(lightDir);
 		OpenGlUtils.antialias(true);
 		OpenGlUtils.disableBlending();
 		OpenGlUtils.enableDepthTesting(true);

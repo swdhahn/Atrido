@@ -10,7 +10,6 @@ import com.countgandi.com.engine.audio.AudioMaster;
 import com.countgandi.com.engine.renderEngine.DisplayManager;
 import com.countgandi.com.engine.renderEngine.font.TextMaster;
 import com.countgandi.com.engine.renderEngine.font.fontMeshCreator.GUIText;
-import com.countgandi.com.engine.renderEngine.particles.ParticleMaster;
 import com.countgandi.com.game.entities.GameRegistry;
 import com.countgandi.com.game.entities.Light;
 import com.countgandi.com.game.menus.GameMenu;
@@ -36,7 +35,7 @@ public class Game {
 
 		handler = new Handler(false);
 		HEADER = new GUIText("Pos", 1, Assets.Fonts.arial, new Vector2f(0, 0), 1);
-		HEADER2 = new GUIText("Pos", 1, Assets.Fonts.arial, new Vector2f(0, 0.1f), 1);
+		HEADER2 = new GUIText("Seed: ", 1, Assets.Fonts.arial, new Vector2f(0, 0.08f), 1);
 		menu = new GameMenu(handler);
 
 		GameRegistry.register();
@@ -81,7 +80,6 @@ public class Game {
 		Assets.loader.cleanUp();
 		TextMaster.cleanUp();
 		AudioMaster.cleanUp();
-		ParticleMaster.cleanUp();
 		DisplayManager.closeDisplay();
 		System.exit(0);
 	}

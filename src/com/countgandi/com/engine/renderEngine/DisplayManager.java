@@ -4,6 +4,7 @@ import java.awt.Canvas;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.ContextAttribs;
 import org.lwjgl.opengl.Display;
@@ -35,13 +36,15 @@ public class DisplayManager {
 			// Display.setFullscreen(true);
 			Display.create(new PixelFormat().withDepthBits(24), attribs);
 			Display.setTitle(title);
-			Display.setLocation(1920, 0);
+			//Display.setLocation(1920, 0);
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}
 
 		try {
 			Mouse.create();
+			Keyboard.create();
+	        Keyboard.enableRepeatEvents(true);
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}

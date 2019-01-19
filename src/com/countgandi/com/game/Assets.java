@@ -23,25 +23,29 @@ public class Assets {
 	private static final TerrainTexture GRASS = loadTerrainTexture("grass2");
 	//private static final TerrainTexture ROCK = new TerrainTexture(loader.loadTexture("rock"));
 	private static final TerrainTexture SAND = loadTerrainTexture("sand");
-	//private static final TerrainTexture SNOW = new TerrainTexture(loader.loadTexture("snow"));
-	public static final TerrainTexturePack TERRAIN = new TerrainTexturePack(SAND, GRASS, SAND, SAND);
+	private static final TerrainTexture SNOW = loadTerrainTexture("snow");
+	public static final TerrainTexturePack TERRAIN = new TerrainTexturePack(SAND, GRASS, SNOW, SAND, SAND);
 
 	// Textures
 	public static final Texture Underwater = Texture.newTexture("underwater").create();
 	
 	public static final Texture pineTreeTex = Texture.newTexture("pineTree").normalMipMap().create();
 	public static final Texture pineTreeSnowTex = Texture.newTexture("pineTreeSnow").normalMipMap().create();
+	public static final Texture stoneTexture = Texture.newTexture("stoneTexture").normalMipMap().create();
 
 	// Textured Models
-	public static final TexturedModel pineTreeModel = loadTexturedModel("PineTreeBranches", pineTreeTex, false);
-	public static final TexturedModel pineTreeLeavesModel = loadTexturedModel("PineTreeLeaves", pineTreeTex, true);
-	public static final TexturedModel pineTreeLeavesSnowModel = loadTexturedModel("PineTreeLeaves", pineTreeSnowTex, true);
-	public static final TexturedModel tree1Model = loadTexturedModel("tree2", "mapleTree", false);
-	public static final TexturedModel tree1leavesModel = loadTexturedModel("tree2leaves", "mapleTree", true);
-	public static final TexturedModel tree1leavesSnowModel = loadTexturedModel("tree2leaves", "mapleTreeSnow", true);
-	public static final TexturedModel shipModel = loadTexturedModel("Ship", "ShipTex", true);
-	public static final TexturedModel hutModel = loadTexturedModel("hut", "thatch", true);
-	public static final TexturedModel grassModel = loadTexturedModel("grass", "grassTexture", true);
+	public static final TexturedModel pineTreeModel = loadTexturedModel("PineTreeBranches", pineTreeTex, true);
+	public static final TexturedModel pineTreeLeavesModel = loadTexturedModel("PineTreeLeaves", pineTreeTex, false);
+	public static final TexturedModel pineTreeLeavesSnowModel = loadTexturedModel("PineTreeLeaves", pineTreeSnowTex, false);
+	public static final TexturedModel tree1Model = loadTexturedModel("tree2", "mapleTree", true);
+	public static final TexturedModel tree1leavesModel = loadTexturedModel("tree2leaves", "mapleTree", false);
+	public static final TexturedModel tree1leavesSnowModel = loadTexturedModel("tree2leaves", "mapleTreeSnow", false);
+	public static final TexturedModel shipModel = loadTexturedModel("Ship", "ShipTex", false);
+	public static final TexturedModel hutModel = loadTexturedModel("hut", "thatch", false);
+	public static final TexturedModel grassModel = loadTexturedModel("grass", "grassTexture", false);
+	
+	public static final TexturedModel stoneFlooringModel = loadTexturedModel("stoneFlooring", stoneTexture, true);
+	public static final TexturedModel stoneRoofingModel = loadTexturedModel("stoneRoofing", stoneTexture, true);
 	
 	public static final int BounceSound = AudioMaster.loadSound("bounce");
 	
@@ -49,8 +53,8 @@ public class Assets {
 		return new TerrainTexture(Texture.newTexture(res).normalMipMap().create());
 	}
 
-	public static TexturedModel loadTexturedModel(String modelName, String textureName, boolean trans) {
-		return new TexturedModel(OBJLoader.loadObjModel(modelName, loader), new ModelTexture(Texture.newTexture(textureName).create(), trans)) {
+	public static TexturedModel loadTexturedModel(String modelName, String textureName, boolean culling) {
+		return new TexturedModel(OBJLoader.loadObjModel(modelName, loader), new ModelTexture(Texture.newTexture(textureName).normalMipMap().create(), culling)) {
 			@Override
 			public ModelTexture getTexture() {
 				return super.getTexture();
@@ -58,8 +62,8 @@ public class Assets {
 		};
 	}
 	
-	public static TexturedModel loadTexturedModel(String modelName, Texture tex, boolean trans) {
-		return new TexturedModel(OBJLoader.loadObjModel(modelName, loader), new ModelTexture(tex, trans)) {
+	public static TexturedModel loadTexturedModel(String modelName, Texture tex, boolean culling) {
+		return new TexturedModel(OBJLoader.loadObjModel(modelName, loader), new ModelTexture(tex, culling)) {
 			@Override
 			public ModelTexture getTexture() {
 				return super.getTexture();

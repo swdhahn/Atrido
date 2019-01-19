@@ -4,10 +4,16 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.FloatBuffer;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL32;
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector2f;
+import org.lwjgl.util.vector.Vector3f;
+import org.lwjgl.util.vector.Vector4f;
 
 public abstract class ShaderProgram {
 
@@ -15,6 +21,8 @@ public abstract class ShaderProgram {
 	private int vertexShaderID;
 	private int fragmentShaderID;
 	private int geometryShaderID;
+	
+	private static FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
 		
 	public ShaderProgram (String vertexFile, String fragmentFile) {
 		vertexShaderID = loadShader(vertexFile, GL20.GL_VERTEX_SHADER);
@@ -31,6 +39,10 @@ public abstract class ShaderProgram {
 		GL20.glDetachShader(programID, fragmentShaderID);
 		GL20.glDeleteShader(vertexShaderID);
 		GL20.glDeleteShader(fragmentShaderID);
+		
+		getAllUniformLocations();
+		GL20.glValidateProgram(programID);
+		
 	}
 	
 	public ShaderProgram (String vertexFile, String geometryFile, String fragmentFile) {
@@ -50,26 +62,56 @@ public abstract class ShaderProgram {
 		GL20.glDetachShader(programID, fragmentShaderID);
 		GL20.glDeleteShader(vertexShaderID);
 		GL20.glDeleteShader(fragmentShaderID);
+		
+		getAllUniformLocations();
+		GL20.glValidateProgram(programID);
+		
 	}
 	
-	protected void getAllUniformLocations(Uniform... uniforms){
-		for(Uniform uniform : uniforms){
-			uniform.storeUniformLocation(programID);
+	protected abstract void getAllUniformLocations();
+	
+	protected int getUniformLocation(String uniformName) {
+		int loc = GL20.glGetUniformLocation(programID, uniformName);
+		if(loc == -1) {
+			System.err.println("No uniform location found in shader for variable: " + uniformName);
 		}
-		GL20.glValidateProgram(programID);
+		return loc;
 	}
 	
-	protected void getAllUniformLocations(Uniform[][] arrays, Uniform... uniforms){
-		for(int i = 0; i < arrays.length; i++) {
-			for(int k = 0; k < arrays[i].length; k++) {
-				arrays[i][k].storeUniformLocation(programID);
-			}
-		}
-		for(Uniform uniform : uniforms){
-			uniform.storeUniformLocation(programID);
-		}
-		GL20.glValidateProgram(programID);
+	protected void loadFloat(int location, float value) {
+		GL20.glUniform1f(location, value);
 	}
+	
+	protected void loadInt(int location, int value) {
+		GL20.glUniform1i(location, value);
+	}
+	
+	protected void loadVector(int location, Vector3f vector) {
+		GL20.glUniform3f(location, vector.x, vector.y, vector.z);
+	}
+	
+	protected void loadVector(int location, Vector4f vector) {
+		GL20.glUniform4f(location, vector.x, vector.y, vector.z, vector.w);
+	}
+	
+	protected void load2DVector(int location, Vector2f vector) {
+		GL20.glUniform2f(location, vector.x, vector.y);
+	}
+	
+	protected void loadBoolean(int location, boolean value) {
+		float toLoad = 0;
+		if(value) {
+			toLoad = 1;
+		}
+		GL20.glUniform1f(location, toLoad);
+	}
+	
+	protected void loadMatrix(int location, Matrix4f matrix) {
+		matrix.store(matrixBuffer);
+		matrixBuffer.flip();
+		GL20.glUniformMatrix4(location, false, matrixBuffer);
+	}
+	
 
 	public void start() {
 		GL20.glUseProgram(programID);

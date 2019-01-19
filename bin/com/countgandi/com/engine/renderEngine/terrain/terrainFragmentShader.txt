@@ -28,15 +28,15 @@ void main(void){
 
 	vec2 tiledCoords = pass_textureCoords * tileDivision;
 	vec4 totalColor;
-	if(vPos.y < 5) {
+	if(vPos.y < -11) {
 		totalColor = texture(texture0, tiledCoords);
-	} else if(vPos.y >= 5 && vPos.y <= 6) {
-		totalColor = mix(texture(texture1, tiledCoords), texture(texture0, tiledCoords), 6 - vPos.y);
-	} else if(vPos.y > 6 && vPos.y < 70) {
+	} else if(vPos.y >= -11 && vPos.y <= -10) {
+		totalColor = mix(texture(texture1, tiledCoords), texture(texture0, tiledCoords), -10 - vPos.y);
+	} else if(vPos.y > -10 && vPos.y < 99) {
 		totalColor = texture(texture1, tiledCoords);
-	} else if(vPos.y >= 70 && vPos.y <= 71) {
-		totalColor = mix(texture(texture2, tiledCoords), texture(texture1, tiledCoords), 71 - vPos.y);
-	} else if(vPos.y > 71) {
+	} else if(vPos.y >= 99 && vPos.y <= 100) {
+		totalColor = mix(texture(texture2, tiledCoords), texture(texture1, tiledCoords), 100 - vPos.y);
+	} else if(vPos.y > 100) {
 		totalColor = texture(texture2, tiledCoords);
 	}
 	

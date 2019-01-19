@@ -11,6 +11,7 @@ import com.countgandi.com.engine.renderEngine.MasterRenderer;
 import com.countgandi.com.engine.renderEngine.terrain.Terrain;
 import com.countgandi.com.engine.renderEngine.water.WaterTile;
 import com.countgandi.com.game.Assets;
+import com.countgandi.com.game.Game;
 import com.countgandi.com.game.Handler;
 import com.countgandi.com.game.entities.Entity;
 import com.countgandi.com.game.entities.Light;
@@ -18,7 +19,7 @@ import com.countgandi.com.game.entities.Light;
 public class World {
 
 	public static int SEED = 0;
-	private static Random random = new Random();
+	public static Random random = new Random();
 	public static final int terrainSideAmount = 2 * Terrain.SIZE;
 
 	public ArrayList<Terrain> terrains = new ArrayList<Terrain>();
@@ -32,6 +33,7 @@ public class World {
 	public void generateWorld() {
 		SEED = new Random().nextInt(1000000000);
 		random.setSeed(SEED);
+		Game.HEADER2.setText("Seed: " + SEED);
 		try {
 			int terrainWidth = (int) (terrainSideAmount / Terrain.SIZE) / 2;
 			for (int x = -terrainWidth; x < terrainWidth; x++) {
@@ -49,18 +51,17 @@ public class World {
 					continue;
 				//handler.addEntity(new Entity(Assets.TexturedModels.tree1, pos, new Vector3f(0, 0, 0), 10, handler) {});
 				//handler.addEntity(new Entity(Assets.TexturedModels.tree1leaves, pos, new Vector3f(0, 0, 0), 10, handler) {});
-				//handler.renderer.processGrass(pos, new Vector3f(0, 0, 0), handler);
 			
 			}
 			
-			for(int i = 0; i < terrainSideAmount / 10; i++) {
+			for(int i = 0; i < terrainSideAmount; i++) {
 				Vector3f pos = new Vector3f(random.nextFloat() * terrainSideAmount - terrainSideAmount / 2, 0, random.nextFloat() * terrainSideAmount - terrainSideAmount / 2);
-				pos.y = getTerrainStandingOn(pos).getHeightOfTerrain(pos.x, pos.z);
+				pos.y = getTerrainStandingOn(pos).getHeightOfTerrain(pos.x, pos.z) - 1;
 				if(pos.y < 6) continue;
 				int scale = random.nextInt(10) + 5;
 				int type = random.nextInt(2);
 				if(type == 0) {
-					if(pos.y > 70) {
+					if(pos.y > 99) {
 						handler.addEntity(new Entity(Assets.pineTreeModel, pos, new Vector3f(0, 0, 0), scale, handler) {});
 						handler.addEntity(new Entity(Assets.pineTreeLeavesSnowModel, pos, new Vector3f(0, 0, 0), scale, handler) {});
 					} else {
@@ -80,7 +81,6 @@ public class World {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 	
 	public void addTerrain(Terrain terrain) {

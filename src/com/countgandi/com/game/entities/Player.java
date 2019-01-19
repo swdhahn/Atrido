@@ -13,7 +13,7 @@ public class Player extends Entity {
 
 	
 	public Player(Vector3f position, Handler handler) {
-		super(new TexturedModel(OBJLoader.loadObjModel("cube", Assets.loader), new ModelTexture(Texture.newTexture("SmallTransparentBlock").create(), false)), handler.getCamera().getPosition(), new Vector3f(handler.getCamera().getPitch(), handler.getCamera().getRoll(), handler.getCamera().getYaw()), handler);
+		super(new TexturedModel(OBJLoader.loadObjModel("cube", Assets.loader), new ModelTexture(Texture.newTexture("SmallTransparentBlock").create(), true)), handler.getCamera().getPosition(), new Vector3f(handler.getCamera().getPitch(), handler.getCamera().getRoll(), handler.getCamera().getYaw()), handler);
 		handler.getCamera().setPosition(position);
 	}
 	
