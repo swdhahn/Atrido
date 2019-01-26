@@ -45,9 +45,27 @@ public class Camera {
 		viewMatrix = new Matrix4f();
 	}
 
-	public void move() {
+	public final void move() {
 
 		Game.HEADER.setText("x:" + (int) position.getX() + " y:" + (int) position.getY() + " z:" + (int) position.z);
+		AudioMaster.setListenerData(position.x, position.y, position.z);
+
+		collision();
+		checkInputs();
+
+		updateViewMatrix();
+	}
+
+	private void jump() {
+		if (!isInAir) {
+			this.upwardsSpeed = JumpPower;
+			isInAir = true;
+		}
+	}
+
+	private void collision() {
+		TerrainHeight = handler.getWorld().getHeight(position);
+		
 		if (position.getY() <= handler.waters.get(0).getHeight() + 0.1f && !isInWater) {
 			handler.guis.add(waterGui);
 			isInWater = true;
@@ -55,12 +73,32 @@ public class Camera {
 			handler.guis.remove(waterGui);
 			isInWater = false;
 		}
+	}
 
-		AudioMaster.setListenerData(position.x, position.y, position.z);
+	protected void checkInputs() {
+		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
+			this.currentSpeed = -runSpeed;
+			if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+				this.currentSpeed = -sprintSpeed;
+			}
+		} else if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
+			this.currentSpeed = runSpeed;
+		} else {
+			currentSpeed = 0;
+		}
 
-		collision();
-		checkInputs();
+		if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
+			this.velX = runSpeed;
+		} else if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
+			this.velX = -runSpeed;
+		} else {
+			this.velX = 0;
+		}
 
+		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
+			jump();
+		}
+		
 		if (Display.isActive()) {
 			if (Mouse.getX() >= Game.WIDTH - 20) {
 				Mouse.setCursorPosition(30, Mouse.getY());
@@ -92,45 +130,6 @@ public class Camera {
 			position.y = TerrainHeight + height;
 			isInAir = false;
 		}
-
-		updateViewMatrix();
-	}
-
-	private void jump() {
-		if (!isInAir) {
-			this.upwardsSpeed = JumpPower;
-			isInAir = true;
-		}
-	}
-
-	private void collision() {
-		TerrainHeight = handler.getWorld().getHeight(position);
-	}
-
-	private void checkInputs() {
-		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
-			this.currentSpeed = -runSpeed;
-			if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-				this.currentSpeed = -sprintSpeed;
-			}
-		} else if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
-			this.currentSpeed = runSpeed;
-		} else {
-			currentSpeed = 0;
-		}
-
-		if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-			this.velX = runSpeed;
-		} else if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
-			this.velX = -runSpeed;
-		} else {
-			this.velX = 0;
-		}
-
-		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-			jump();
-		}
-
 	}
 
 	public Vector3f getPosition() {
@@ -173,7 +172,7 @@ public class Camera {
 		return new Vector3f(pitch, roll, yaw);
 	}
 
-	private void updateViewMatrix() {
+	protected void updateViewMatrix() {
 		viewMatrix.setIdentity();
 		Matrix4f.rotate((float) Math.toRadians(pitch), new Vector3f(1, 0, 0), viewMatrix, viewMatrix);
 		Matrix4f.rotate((float) Math.toRadians(yaw), new Vector3f(0, 1, 0), viewMatrix, viewMatrix);

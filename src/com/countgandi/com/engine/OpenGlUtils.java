@@ -2,6 +2,7 @@ package com.countgandi.com.engine;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
+import org.lwjgl.util.vector.Matrix4f;
 
 public class OpenGlUtils {
 	
@@ -77,6 +78,18 @@ public class OpenGlUtils {
 			GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
 			inWireframe = false;
 		}
+	}
+
+	public static boolean isWireFrame() {
+		return inWireframe;
+	}
+	
+	public static void printMatrix(Matrix4f matrix) {
+		System.out.println("{[" + matrix.m00 + ", " + matrix.m01 + ", " + matrix.m02 + ", " + matrix.m03 + "],");
+		System.out.println(" [" + matrix.m10 + ", " + matrix.m11 + ", " + matrix.m12 + ", " + matrix.m13 + "],");
+		System.out.println(" [" + matrix.m20 + ", " + matrix.m21 + ", " + matrix.m22 + ", " + matrix.m23 + "],");
+		System.out.println(" [" + matrix.m30 + ", " + matrix.m31 + ", " + matrix.m32 + ", " + matrix.m33 + "]}");
+
 	}
 
 }

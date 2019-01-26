@@ -4,6 +4,8 @@ import com.countgandi.com.engine.renderEngine.textures.ModelTexture;
 
 public class TexturedModel {
 
+	public boolean isInstanced = false;
+	public int vbo = -1;
 	private RawModel rawModel;
 	private ModelTexture texture;
 	

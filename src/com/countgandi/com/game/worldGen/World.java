@@ -8,6 +8,8 @@ import org.lwjgl.util.vector.Vector3f;
 import com.countgandi.com.creationEngine.Main;
 import com.countgandi.com.creationEngine.menus.SessionObject;
 import com.countgandi.com.engine.renderEngine.MasterRenderer;
+import com.countgandi.com.engine.renderEngine.foilage.Foilage;
+import com.countgandi.com.engine.renderEngine.foilage.FoilageRenderer;
 import com.countgandi.com.engine.renderEngine.terrain.Terrain;
 import com.countgandi.com.engine.renderEngine.water.WaterTile;
 import com.countgandi.com.game.Assets;
@@ -54,12 +56,12 @@ public class World {
 			
 			}
 			
-			for(int i = 0; i < terrainSideAmount; i++) {
+			for(int i = 0; i < terrainSideAmount * 10; i++) {
 				Vector3f pos = new Vector3f(random.nextFloat() * terrainSideAmount - terrainSideAmount / 2, 0, random.nextFloat() * terrainSideAmount - terrainSideAmount / 2);
 				pos.y = getTerrainStandingOn(pos).getHeightOfTerrain(pos.x, pos.z) - 1;
-				if(pos.y < 6) continue;
+				if(pos.y < -6) continue;
 				int scale = random.nextInt(10) + 5;
-				int type = random.nextInt(2);
+				int type = random.nextInt(10);
 				if(type == 0) {
 					if(pos.y > 99) {
 						handler.addEntity(new Entity(Assets.pineTreeModel, pos, new Vector3f(0, 0, 0), scale, handler) {});
@@ -68,15 +70,15 @@ public class World {
 						handler.addEntity(new Entity(Assets.pineTreeModel, pos, new Vector3f(0, 0, 0), scale, handler) {});
 						handler.addEntity(new Entity(Assets.pineTreeLeavesModel, pos, new Vector3f(0, 0, 0), scale, handler) {});
 					}
-				} else if(type == 1) {
-					if(pos.y > 70) {
-						//handler.addEntity(new Entity(Assets.TexturedModels.tree1, pos, new Vector3f(0, 0, 0), scale, handler) {});
-						//handler.addEntity(new Entity(Assets.TexturedModels.tree1leavesSnow, pos, new Vector3f(0, 0, 0), scale, handler) {});
-					} else {
-						//handler.addEntity(new Entity(Assets.TexturedModels.tree1, pos, new Vector3f(0, 0, 0), scale, handler) {});
-						//handler.addEntity(new Entity(Assets.TexturedModels.tree1leaves, pos, new Vector3f(0, 0, 0), scale, handler) {});
-					}
+				} else if(type >= 1) {
+					pos.y = pos.y + 1;
+					//FoilageRenderer.addFoilage(new Foilage(Assets.fernModel, pos, new Vector3f(0, 0, 0), scale + 3f));
+					handler.addEntity(new Entity(Assets.grassModel, pos, new Vector3f(0, 0, 0), 4, handler) {});
+					pos.y = pos.y - 1;
 				}
+			}
+			for(int i = 0; i < terrainSideAmount * 10; i++) {
+				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

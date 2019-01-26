@@ -21,7 +21,7 @@ public class DisplayManager {
 
 	public static void createDisplay(int width, int height, String title) {
 
-		attribs = new ContextAttribs(3, 2).withForwardCompatible(true).withProfileCore(true);
+		attribs = new ContextAttribs(3, 3).withForwardCompatible(true).withProfileCore(true);
 
 		try {
 			//DisplayMode displayMode = null;

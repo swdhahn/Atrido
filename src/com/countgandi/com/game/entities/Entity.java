@@ -4,6 +4,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import com.countgandi.com.engine.audio.Source;
 import com.countgandi.com.engine.renderEngine.models.TexturedModel;
+import com.countgandi.com.engine.renderEngine.shaders.StaticShader;
 import com.countgandi.com.game.Handler;
 
 public abstract class Entity {
@@ -113,14 +114,14 @@ public abstract class Entity {
 	/**
 	 * Used if you need an extra OpenGL code for rendering an entity
 	 */
-	public void render() {
+	public void render(StaticShader shader) {
 
 	}
 
 	/**
 	 * Used if you need an extra OpenGL code for ending the rendering of an entity
 	 */
-	public void endRender() {
+	public void endRender(StaticShader shader) {
 
 	}
 

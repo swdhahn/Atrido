@@ -20,6 +20,7 @@ import com.countgandi.com.game.entities.Camera;
 import com.countgandi.com.game.entities.Entity;
 import com.countgandi.com.game.entities.Light;
 import com.countgandi.com.game.entities.Player;
+import com.countgandi.com.game.entities.structures.StoneFlooring;
 import com.countgandi.com.game.guis.InventoryGui;
 import com.countgandi.com.game.worldGen.World;
 
@@ -66,11 +67,11 @@ public class Handler {
 			entities.get(i).tick();
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_B)) {
-			entities.add(new Entity(Assets.stoneFlooringModel, new Vector3f(camera.getPosition().x, camera.getPosition().y - 5, camera.getPosition().z), new Vector3f(0, camera.getYaw(), 0), 10f, this) {
+			entities.add(new Entity(Assets.fernModel, new Vector3f(camera.getPosition().x, camera.getPosition().y - 5, camera.getPosition().z), new Vector3f(0, 0, 0), 10f, this) {
 			});
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_N)) {
-			entities.add(new Entity(Assets.stoneRoofingModel, new Vector3f(camera.getPosition().x, camera.getPosition().y - 5, camera.getPosition().z), new Vector3f(0, camera.getYaw(), 0), 10f, this) {
+			entities.add(new StoneFlooring(new Vector3f(camera.getPosition().x, camera.getPosition().y - 5, camera.getPosition().z), this) {
 			});
 		}
 		if (Keyboard.getEventKey() == Keyboard.KEY_E) {
@@ -163,6 +164,10 @@ public class Handler {
 
 	public boolean getIsEngine() {
 		return isEngine;
+	}
+
+	public void changeToIndependantCamera() {
+		this.camera = new IndependentCamera(this);
 	}
 
 }

@@ -17,13 +17,13 @@ public class IndependentCamera extends Camera {
 		super(handler);
 	}
 
-	public void move() {
-
+	@Override
+	public void checkInputs() {
+		
 		if (Mouse.isButtonDown(2)) {
-			
 			if(Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
-				MAX_DOWNSPEED = 100;
-				XZ_SPEED = 100;
+				MAX_DOWNSPEED = 200;
+				XZ_SPEED = 200;
 			} else {
 				MAX_DOWNSPEED = 20;
 				XZ_SPEED = 20;

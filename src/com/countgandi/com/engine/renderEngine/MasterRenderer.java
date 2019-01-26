@@ -10,7 +10,9 @@ import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
 import com.countgandi.com.engine.OpenGlUtils;
+import com.countgandi.com.engine.renderEngine.foilage.FoilageRenderer;
 import com.countgandi.com.engine.renderEngine.models.TexturedModel;
+import com.countgandi.com.engine.renderEngine.shaders.InstancedStaticShader;
 import com.countgandi.com.engine.renderEngine.shaders.StaticShader;
 import com.countgandi.com.engine.renderEngine.skybox.SkyboxRenderer;
 import com.countgandi.com.engine.renderEngine.terrain.Terrain;
@@ -25,10 +27,12 @@ public class MasterRenderer {
 	private static final Vector3f skyColor = new Vector3f(0.5444F, 0.62F, 0.69F);// (0.5F, 0.5F, 0.5F);
 
 	private StaticShader shader = new StaticShader();
+	private InstancedStaticShader instancedShader = new InstancedStaticShader();
 	private TerrainShader terrainShader = new TerrainShader();
 
 	private EntityRenderer renderer;
 	private TerrainRenderer terrainRenderer;
+	private FoilageRenderer foilageRenderer;
 
 	private Map<TexturedModel, List<Entity>> entities = new HashMap<TexturedModel, List<Entity>>();
 	public Map<TexturedModel, List<Entity>> grass = new HashMap<TexturedModel, List<Entity>>();
@@ -40,6 +44,7 @@ public class MasterRenderer {
 		this.loader = loader;
 		OpenGlUtils.cullBackFaces(true);
 		renderer = new EntityRenderer(camera.getProjectionMatrix(), shader);
+		foilageRenderer = new FoilageRenderer(camera.getProjectionMatrix(), instancedShader);
 		terrainRenderer = new TerrainRenderer(camera.getProjectionMatrix(), terrainShader);
 		skyboxRenderer = new SkyboxRenderer(camera.getProjectionMatrix(), loader);
 	}
@@ -54,6 +59,14 @@ public class MasterRenderer {
 		shader.loadViewMatrix(camera.getViewMatrix());
 		renderer.render(entities);
 		shader.stop();
+		
+		instancedShader.start();
+		instancedShader.loadClipPlane(clipPlane);
+		instancedShader.loadSkyColor(skyColor);
+		instancedShader.loadLights(lights);
+		instancedShader.loadViewMatrix(camera.getViewMatrix());
+		//foilageRenderer.render();
+		instancedShader.stop();
 		
 		terrainShader.start();
 		terrainShader.loadClipPlane(clipPlane);

@@ -34,6 +34,7 @@ public class Game {
 		AL10.alDistanceModel(AL10.AL_INVERSE_DISTANCE);
 
 		handler = new Handler(false);
+		//handler.changeToIndependantCamera();
 		HEADER = new GUIText("Pos", 1, Assets.Fonts.arial, new Vector2f(0, 0), 1);
 		HEADER2 = new GUIText("Seed: ", 1, Assets.Fonts.arial, new Vector2f(0, 0.08f), 1);
 		menu = new GameMenu(handler);
