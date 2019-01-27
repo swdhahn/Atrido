@@ -8,8 +8,6 @@ import org.lwjgl.util.vector.Vector3f;
 import com.countgandi.com.creationEngine.Main;
 import com.countgandi.com.creationEngine.menus.SessionObject;
 import com.countgandi.com.engine.renderEngine.MasterRenderer;
-import com.countgandi.com.engine.renderEngine.foilage.Foilage;
-import com.countgandi.com.engine.renderEngine.foilage.FoilageRenderer;
 import com.countgandi.com.engine.renderEngine.terrain.Terrain;
 import com.countgandi.com.engine.renderEngine.water.WaterTile;
 import com.countgandi.com.game.Assets;
@@ -53,7 +51,6 @@ public class World {
 					continue;
 				//handler.addEntity(new Entity(Assets.TexturedModels.tree1, pos, new Vector3f(0, 0, 0), 10, handler) {});
 				//handler.addEntity(new Entity(Assets.TexturedModels.tree1leaves, pos, new Vector3f(0, 0, 0), 10, handler) {});
-			
 			}
 			
 			for(int i = 0; i < terrainSideAmount * 10; i++) {

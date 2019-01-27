@@ -16,6 +16,9 @@ import com.countgandi.com.game.menus.GameMenu;
 import com.countgandi.com.game.menus.Menu;
 
 //https://youtu.be/mnIQEQoHHCU?t=7m6s
+/*
+ * 
+ */
 public class Game {
 
 	public static final int WIDTH = 1600, HEIGHT = 900;
