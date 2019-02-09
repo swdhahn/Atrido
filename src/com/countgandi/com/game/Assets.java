@@ -21,10 +21,11 @@ public class Assets {
 
 	// Terrain Texture Packs
 	private static final TerrainTexture GRASS = loadTerrainTexture("ngrassblended1080p");
-	//private static final TerrainTexture ROCK = new TerrainTexture(loader.loadTexture("rock"));
+	private static final TerrainTexture ROCK = loadTerrainTexture("rock");
 	private static final TerrainTexture SAND = loadTerrainTexture("sand");
 	private static final TerrainTexture SNOW = loadTerrainTexture("snow");
-	public static final TerrainTexturePack TERRAIN = new TerrainTexturePack(SAND, GRASS, SNOW, SAND, SAND);
+	private static final TerrainTexture REEF = loadTerrainTexture("reef");
+	public static final TerrainTexturePack TERRAIN = new TerrainTexturePack(SAND, GRASS, SNOW, REEF, ROCK);
 
 	// Textures
 	public static final Texture Underwater = Texture.newTexture("underwater").create();
@@ -35,7 +36,6 @@ public class Assets {
 	
 	public static final Texture fernTexture = Texture.newTexture("fern").normalMipMap().create();
 
-	
 	// Textured Models
 	public static final TexturedModel pineTreeModel = loadTexturedModel("PineTreeBranches", pineTreeTex, true);
 	public static final TexturedModel pineTreeLeavesModel = loadTexturedModel("PineTreeLeaves", pineTreeTex, false);
@@ -54,7 +54,7 @@ public class Assets {
 	public static final int BounceSound = AudioMaster.loadSound("bounce");
 
 	public static TerrainTexture loadTerrainTexture(String res) {
-		return new TerrainTexture(Texture.newTexture(res).normalMipMap().create());
+		return new TerrainTexture(Texture.newTexture("terrain/" + res).normalMipMap().create());
 	}
 
 	public static TexturedModel loadTexturedModel(String modelName, String textureName, boolean culling) {

@@ -1,7 +1,7 @@
 #version 400 core
 
 const float density = 0.003;
-const float gradient = 3.0;
+const float gradient = 2.0;
 const int MaxLightsForEachEntity = 4;
 
 in vec3 position;

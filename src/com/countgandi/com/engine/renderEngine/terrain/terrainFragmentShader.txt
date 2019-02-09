@@ -1,6 +1,6 @@
 #version 400 core
 
-const int MaxLightsForEachEntity = 4;
+const int MaxLightsForEachEntity = 10;
 uniform float tileDivision;
 
 in vec2 pass_textureCoords;
@@ -20,25 +20,25 @@ uniform sampler2D texture4;
 
 uniform vec3 lightColor[MaxLightsForEachEntity];
 uniform vec3 attenuation[MaxLightsForEachEntity];
+uniform int lightType[MaxLightsForEachEntity];
 uniform float shineDamper;
 uniform float reflectivity;
 uniform vec3 skyColor;
 
+float rand(vec2 n);
+float noise(vec2 p);
+
 void main(void){
 
 	vec2 tiledCoords = pass_textureCoords * tileDivision;
-	vec4 totalColor;
-	if(vPos.y < -11) {
-		totalColor = texture(texture0, tiledCoords);
-	} else if(vPos.y >= -11 && vPos.y <= -10) {
-		totalColor = mix(texture(texture1, tiledCoords), texture(texture0, tiledCoords), -10 - vPos.y);
-	} else if(vPos.y > -10 && vPos.y < 99) {
-		totalColor = texture(texture1, tiledCoords);
-	} else if(vPos.y >= 99 && vPos.y <= 100) {
-		totalColor = mix(texture(texture2, tiledCoords), texture(texture1, tiledCoords), 100 - vPos.y);
-	} else if(vPos.y > 100) {
-		totalColor = texture(texture2, tiledCoords);
-	}
+	
+	float heightOffset = vPos.y + noise(vPos.xz);
+	
+	vec4 totalColor = mix(mix(mix(texture(texture2, tiledCoords),
+	 texture(texture1, tiledCoords), clamp(100 - heightOffset, 0, 1)),
+	   texture(texture0, tiledCoords), clamp(10 - heightOffset, 0, 1)),
+	   	 texture(texture3, tiledCoords), clamp(-140 - heightOffset, 0, 1));
+	
 	
 	vec3 unitNormal = normalize(surfaceNormal);
 	vec3 unitVectorToCamera = normalize(toCameraVector);
@@ -57,12 +57,38 @@ void main(void){
 		float specularFactor = dot(reflectedLightDirection , unitVectorToCamera);
 		specularFactor = max(specularFactor,0.0);
 		float dampedFactor = pow(specularFactor,shineDamper);
-		totalDiffuse = totalDiffuse + (brightness * lightColor[i]) / attFactor;
-		totalSpecular = totalSpecular + (dampedFactor * reflectivity * lightColor[i]) / attFactor;
+		
+		switch(lightType[i]) {
+		case 0:
+			
+			totalDiffuse = totalDiffuse + (brightness * lightColor[i]);
+			totalSpecular = totalSpecular + (dampedFactor * reflectivity * lightColor[i]);
+		break;
+		case 1:
+			
+			totalDiffuse = totalDiffuse + (brightness * lightColor[i]) / attFactor;
+			totalSpecular = totalSpecular + (dampedFactor * reflectivity * lightColor[i]) / attFactor;
+		break;
+		}
 	}
 	totalDiffuse = max(totalDiffuse, 0.2);
 	
 	out_Color = vec4(totalDiffuse, 1.0) * totalColor + vec4(totalSpecular, 1.0);
 	out_Color = mix(vec4(skyColor, 1.0), out_Color, visibility);
 	
+}
+
+float rand(vec2 n) { 
+	return fract(sin(dot(n, vec2(12.9898, 4.1414))) * 43758.5453);
+}
+
+float noise(vec2 p){
+	vec2 ip = floor(p);
+	vec2 u = fract(p);
+	u = u*u*(3.0-2.0*u);
+	
+	float res = mix(
+		mix(rand(ip),rand(ip+vec2(1.0,0.0)),u.x),
+		mix(rand(ip+vec2(0.0,1.0)),rand(ip+vec2(1.0,1.0)),u.x),u.y);
+	return res*res;
 }

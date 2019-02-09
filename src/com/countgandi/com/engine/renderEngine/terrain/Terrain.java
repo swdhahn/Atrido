@@ -2,6 +2,7 @@ package com.countgandi.com.engine.renderEngine.terrain;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 
@@ -12,6 +13,9 @@ import com.countgandi.com.engine.Maths;
 import com.countgandi.com.engine.renderEngine.Loader;
 import com.countgandi.com.engine.renderEngine.models.RawModel;
 import com.countgandi.com.engine.renderEngine.textures.TerrainTexturePack;
+import com.countgandi.com.game.Assets;
+import com.countgandi.com.game.Handler;
+import com.countgandi.com.game.entities.Entity;
 import com.countgandi.com.game.worldGen.World;
 
 public class Terrain {
@@ -24,7 +28,7 @@ public class Terrain {
 	public static final int SIZE = 1000, VERTEX_COUNT = 100;
 	private static final float MAX_HEIGHT = 30, MAX_PIXEL_COLOR = 256 * 256 * 256;
 
-	private long x, z;
+	private int x, z;
 	private RawModel model;
 	private TerrainTexturePack texturePack;
 	private String heightmap;
@@ -36,7 +40,7 @@ public class Terrain {
 		this.texturePack = texturePack;
 		this.x = gridX * SIZE;
 		this.z = gridZ * SIZE;
-		generator = new PerlinNoise(gridX, gridZ, VERTEX_COUNT, 75, 6, 0.1f, World.SEED);
+		generator = new PerlinNoise(gridX, gridZ, VERTEX_COUNT, 75, 6, 0.34f, World.SEED);
 		this.model = generateTerrain(loader);
 	}
 
@@ -46,6 +50,36 @@ public class Terrain {
 		this.z = gridZ * SIZE;
 		generator = null;
 		this.model = generateTerrain(loader, heightMap);
+	}
+
+	public Terrain(int x, int z, TerrainTexturePack texturePack, float[][] heights, RawModel model, Handler handler) {
+		this.texturePack = texturePack;
+		this.x = x;
+		this.z = z;
+		this.heights = heights;
+		generator = new PerlinNoise(x, z, VERTEX_COUNT, 75, 6, 0.34f, World.SEED);
+		this.model = model;
+		decorateTerrain(handler);
+	}
+
+	private void decorateTerrain(Handler handler) {
+		Random ran = new Random();
+		
+		for (int i = 0; i < ran.nextInt(10) + 20; i++) {
+			Vector3f pos = new Vector3f(ran.nextInt(Terrain.SIZE) + x, 0, ran.nextInt(Terrain.SIZE) + z);
+			Vector3f rot = new Vector3f(ran.nextFloat(), 0, 0);
+			pos.y = this.getHeightOfTerrain(pos.x, pos.z) - 1;
+			int scale = ran.nextInt(10) + 5;
+			if (pos.y < 12)
+				continue;
+			if (pos.y > 100) {
+				handler.addEntity(new Entity(Assets.pineTreeLeavesSnowModel, pos, rot, scale, handler) {});
+				handler.addEntity(new Entity(Assets.pineTreeModel, pos, rot, scale, handler) {});
+			} else if (pos.y < 98){
+				handler.addEntity(new Entity(Assets.pineTreeLeavesModel, pos, rot, scale, handler) {});
+				handler.addEntity(new Entity(Assets.pineTreeModel, pos, rot, scale, handler) {});
+			}
+		}
 	}
 
 	public float getX() {

@@ -13,11 +13,12 @@ public class WaterShader extends ShaderProgram {
 	private int location_modelMatrix;
 	private int location_projectionMatrix;
 	private int location_viewMatrix;
-	private int location_reflectionTexture;
-	private int location_refractionTexture;
 	private int location_dudvMap;
 	private int location_normalMap;
 	private int location_depthMap;
+	private int location_reflectionTexture;
+	private int location_refractionTexture;
+	private int location_waterColor;
 
 	private int location_moveFactor;
 	private int location_cameraPosition;
@@ -29,14 +30,13 @@ public class WaterShader extends ShaderProgram {
 	public WaterShader() {
 		super(VERTEX_FILE, FRAGMENT_FILE);
 		start();
-		super.loadFloat(location_tiling, WaterTile.SIZE / 10);
+		super.loadFloat(location_tiling, WaterTile.SIZE / 100 * 4);
 		stop();
 	}
 
 	@Override
 	protected void bindAttributes() {
 		bindAttribute(0, "position");
-		bindAttribute(1, "texCoords");
 	}
 
 	@Override
@@ -44,24 +44,25 @@ public class WaterShader extends ShaderProgram {
 		location_modelMatrix = super.getUniformLocation("modelMatrix");
 		location_projectionMatrix = super.getUniformLocation("projectionMatrix");
 		location_viewMatrix = super.getUniformLocation("viewMatrix");
-		location_reflectionTexture = super.getUniformLocation("reflectionTexture");
-		location_refractionTexture = super.getUniformLocation("refractionTexture");
 		location_dudvMap = super.getUniformLocation("dudvMap");
 		location_depthMap = super.getUniformLocation("depthMap");
 		location_normalMap = super.getUniformLocation("normalMap");
+		location_reflectionTexture = super.getUniformLocation("reflectionTexture");
+		location_refractionTexture = super.getUniformLocation("refractionTexture");
 		location_moveFactor = super.getUniformLocation("moveFactor");
 		location_cameraPosition = super.getUniformLocation("cameraPosition");
+		location_waterColor = super.getUniformLocation("waterColor");
 		location_lightColor = super.getUniformLocation("lightColor");
 		location_lightPosition = super.getUniformLocation("lightPosition");
 		location_tiling = super.getUniformLocation("tiling");
 	}
 
 	public void connectTextureUnits() {
-		super.loadInt(location_refractionTexture, 0);
-		super.loadInt(location_reflectionTexture, 1);
-		super.loadInt(location_dudvMap, 2);
-		super.loadInt(location_normalMap, 3);
-		super.loadInt(location_depthMap, 4);
+		super.loadInt(location_dudvMap, 0);
+		super.loadInt(location_normalMap, 1);
+		super.loadInt(location_depthMap, 2);
+		super.loadInt(location_reflectionTexture, 3);
+		super.loadInt(location_refractionTexture, 4);
 	}
 
 	public void loadProjectionMatrix(Matrix4f projectionMatrix) {
@@ -91,6 +92,10 @@ public class WaterShader extends ShaderProgram {
 	public void loadLight(Vector3f lightColor, Vector3f lightPosition) {
 		super.loadVector(location_lightColor, lightColor);
 		super.loadVector(location_lightPosition, lightPosition);
+	}
+	
+	public void loadWaterColor(Vector3f color) {
+		super.loadVector(location_waterColor, color);
 	}
 
 }

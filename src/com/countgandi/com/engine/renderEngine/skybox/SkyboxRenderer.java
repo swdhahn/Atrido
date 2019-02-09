@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
+import com.countgandi.com.engine.renderEngine.DisplayManager;
 import com.countgandi.com.engine.renderEngine.Loader;
 import com.countgandi.com.engine.renderEngine.models.RawModel;
 import com.countgandi.com.game.entities.Camera;
@@ -65,7 +66,7 @@ private static final float SIZE = 500f;
 	private RawModel cube;
 	private int texture, nightTexture;
 	private SkyboxShader shader;
-	//private float time;
+	private float time;
 	
 	public SkyboxRenderer(Matrix4f projectionMatrix, Loader loader) {
 		cube = loader.loadToVAO(VERTICES, 3);
@@ -96,6 +97,10 @@ private static final float SIZE = 500f;
 		GL11.glBindTexture(GL13.GL_TEXTURE_CUBE_MAP, texture);
 		GL13.glActiveTexture(GL13.GL_TEXTURE1);
 		GL11.glBindTexture(GL13.GL_TEXTURE_CUBE_MAP, nightTexture);
+		time += DisplayManager.getFrameTimeSeconds() * 1000;
+		time %= 24000;
+		float blendFactor = -((time/1000f)-13)*((time/1000f)-13) * 0.02f + 1;
+		if(blendFactor < 0) blendFactor = 0;
 		shader.loadBlendFactor(0);
 	}
 	
@@ -104,7 +109,7 @@ private static final float SIZE = 500f;
 		time %= 24000;
 		int texture1;
 		int texture2;
-		float blendFactor;		
+		float blendFactor;
 		if(time >= 0 && time < 5000){
 			texture1 = nightTexture;
 			texture2 = nightTexture;

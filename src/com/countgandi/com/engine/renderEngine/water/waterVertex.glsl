@@ -1,7 +1,6 @@
 #version 400 core
 
 in vec3 position;
-in vec2 texCoords;
 
 out vec4 clipSpace;
 out vec2 textureCoords;
@@ -13,76 +12,16 @@ uniform mat4 viewMatrix;
 uniform mat4 modelMatrix;
 uniform vec3 cameraPosition;
 uniform vec3 lightPosition;
-uniform float moveFactor2;
-
-float hash(float n) { return fract(sin(n) * 1e4); }
-float hash(vec2 p) { return fract(1e4 * sin(17.0 * p.x + p.y * 0.1) * (0.1 + abs(sin(p.y * 13.0 + p.x)))); }
-
-float noise(float x) {
-	float i = floor(x);
-	float f = fract(x);
-	float u = f * f * (3.0 - 2.0 * f);
-	return mix(hash(i), hash(i + 1.0), u);
-}
-
-float noise(vec2 x) {
-	vec2 i = floor(x);
-	vec2 f = fract(x);
-
-	// Four corners in 2D of a tile
-	float a = hash(i);
-	float b = hash(i + vec2(1.0, 0.0));
-	float c = hash(i + vec2(0.0, 1.0));
-	float d = hash(i + vec2(1.0, 1.0));
-
-	// Simple 2D lerp using smoothstep envelope between the values.
-	// return vec3(mix(mix(a, b, smoothstep(0.0, 1.0, f.x)),
-	//			mix(c, d, smoothstep(0.0, 1.0, f.x)),
-	//			smoothstep(0.0, 1.0, f.y)));
-
-	// Same code, with the clamps in smoothstep and common subexpressions
-	// optimized away.
-	vec2 u = f * f * (3.0 - 2.0 * f);
-	return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
-}
-
-// This one has non-ideal tiling properties that I'm still tuning
-float noise(vec3 x) {
-	const vec3 step = vec3(110, 241, 171);
-
-	vec3 i = floor(x);
-	vec3 f = fract(x);
- 
-	// For performance, compute the base input to a 1D hash from the integer part of the argument and the 
-	// incremental change to the 1D based on the 3D -> 1D wrapping
-    float n = dot(i, step);
-
-	vec3 u = f * f * (3.0 - 2.0 * f);
-	return mix(mix(mix( hash(n + dot(step, vec3(0, 0, 0))), hash(n + dot(step, vec3(1, 0, 0))), u.x),
-                   mix( hash(n + dot(step, vec3(0, 1, 0))), hash(n + dot(step, vec3(1, 1, 0))), u.x), u.y),
-               mix(mix( hash(n + dot(step, vec3(0, 0, 1))), hash(n + dot(step, vec3(1, 0, 1))), u.x),
-                   mix( hash(n + dot(step, vec3(0, 1, 1))), hash(n + dot(step, vec3(1, 1, 1))), u.x), u.y), u.z);
-}
-
-
-float getNoise(vec2 pos, float multiple, float moveFactor) {
-	vec2 npos = vec2((pos.x / 64) + moveFactor, (pos.y / 64) + moveFactor);
-	return ((noise(npos) + 1) / 2.0) * multiple;
-}
-
-
-
-
-
-
+uniform float tiling;
 
 void main(void) {
-	vec4 worldPosition = modelMatrix * vec4(position.x, 0, /*getNoise(position.xz, 40, moveFactor2),*/ position.z, 1.0);
 
+	vec4 worldPosition = modelMatrix * vec4(position.x, 0.0, position.y, 1.0);
 	clipSpace = projectionMatrix * viewMatrix * worldPosition;
 	gl_Position = clipSpace;
-	textureCoords = texCoords;
+	textureCoords = vec2(position.x / 2.0 + 0.5, position.y / 2.0 + 0.5) * tiling;
 	toCameraVector = cameraPosition - worldPosition.xyz;
+	
 	fromLightVector = worldPosition.xyz - lightPosition;
 
 }

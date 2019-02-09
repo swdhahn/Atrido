@@ -19,6 +19,8 @@ import com.countgandi.com.game.entities.Light;
 
 public class WaterRenderer {
 
+	public static Vector3f waterColor = new Vector3f(0.0f, 0.3f, 0.5f);
+
 	private static final String DUDVMAP = "waterDUDV";
 	private static final String NORMALMAP = "normalMap";
 	private static final float WaveSpeed = 0.1f;
@@ -37,43 +39,43 @@ public class WaterRenderer {
 		this.fbos = fbos;
 		dudvTexture = Texture.newTexture(DUDVMAP).create().textureId;
 		normalMap = Texture.newTexture(NORMALMAP).create().textureId;
-		model = this.generateWater(loader);
 		shader.start();
 		shader.connectTextureUnits();
 		shader.loadProjectionMatrix(camera.getProjectionMatrix());
 		shader.stop();
+		model = this.setUpVAO(loader);
 	}
 
 	public void render(List<WaterTile> water, Camera camera, Light sun) {
-		prepareRender(camera, sun);
+		prepareRender(camera, waterColor, sun);
 		for (WaterTile tile : water) {
-			Matrix4f modelMatrix = Maths.createTransformationMatrix(new Vector3f(tile.getX(), tile.getHeight(), tile.getZ()), 0, 0, 0, 1);
+			Matrix4f modelMatrix = Maths.createTransformationMatrix(new Vector3f(tile.getX(), tile.getHeight(), tile.getZ()), 0, 0, 0, WaterTile.SIZE);
 			shader.loadTransformationMatrix(modelMatrix);
-			GL11.glDrawElements(GL11.GL_TRIANGLES, model.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
+			GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, model.getVertexCount());
 		}
 		unbind();
 	}
 
-	private void prepareRender(Camera camera, Light sun) {
+	private void prepareRender(Camera camera, Vector3f waterColor, Light sun) {
 		shader.start();
 		shader.loadViewMatrix(camera.getViewMatrix());
 		moveFactor += WaveSpeed * DisplayManager.getFrameTimeSeconds();
 		moveFactor %= 1;
 		shader.loadMoveFactor(moveFactor);
 		shader.loadLight(sun.getColor(), sun.getPosition());
+		shader.loadWaterColor(waterColor);
 		GL30.glBindVertexArray(model.getVaoID());
 		GL20.glEnableVertexAttribArray(0);
-		GL20.glEnableVertexAttribArray(1);
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, fbos.getReflectionTexture());
-		GL13.glActiveTexture(GL13.GL_TEXTURE1);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, fbos.getRefractionTexture());
-		GL13.glActiveTexture(GL13.GL_TEXTURE2);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, dudvTexture);
-		GL13.glActiveTexture(GL13.GL_TEXTURE3);
+		GL13.glActiveTexture(GL13.GL_TEXTURE1);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, normalMap);
-		GL13.glActiveTexture(GL13.GL_TEXTURE4);
+		GL13.glActiveTexture(GL13.GL_TEXTURE2);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, fbos.getRefractionDepthTexture());
+		GL13.glActiveTexture(GL13.GL_TEXTURE3);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, fbos.getReflectionTexture());
+		GL13.glActiveTexture(GL13.GL_TEXTURE4);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, fbos.getRefractionTexture());
 
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -84,7 +86,6 @@ public class WaterRenderer {
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glDisable(GL11.GL_BLEND);
 		GL20.glDisableVertexAttribArray(0);
-		GL20.glDisableVertexAttribArray(1);
 		GL30.glBindVertexArray(0);
 		shader.stop();
 	}
@@ -92,42 +93,11 @@ public class WaterRenderer {
 	public void cleanUp() {
 		shader.cleanUp();
 	}
-	
-	private RawModel generateWater(Loader loader) {
-		int VERTEX_COUNT = WaterTile.VERTEX_COUNT;
-		int SIZE = WaterTile.SIZE;
 
-		int count = VERTEX_COUNT * VERTEX_COUNT;
-		float[] vertices = new float[count * 3];
-		float[] textureCoords = new float[count * 2];
-		int[] indices = new int[6 * (VERTEX_COUNT - 1) * (VERTEX_COUNT - 1)];
-		int vertexPointer = 0;
-		for (int i = 0; i < VERTEX_COUNT; i++) {
-			for (int j = 0; j < VERTEX_COUNT; j++) {
-				vertices[vertexPointer * 3] = (float) j / ((float) VERTEX_COUNT - 1) * SIZE;
-				vertices[vertexPointer * 3 + 1] = 1;
-				vertices[vertexPointer * 3 + 2] = (float) i / ((float) VERTEX_COUNT - 1) * SIZE;
-				textureCoords[vertexPointer * 2] = (float) j / ((float) VERTEX_COUNT);
-				textureCoords[vertexPointer * 2 + 1] = (float) i / ((float) VERTEX_COUNT + 1);
-				vertexPointer++;
-			}
-		}
-		int pointer = 0;
-		for (int gz = 0; gz < VERTEX_COUNT - 1; gz++) {
-			for (int gx = 0; gx < VERTEX_COUNT - 1; gx++) {
-				int topLeft = (gz * VERTEX_COUNT) + gx;
-				int topRight = topLeft + 1;
-				int bottomLeft = ((gz + 1) * VERTEX_COUNT) + gx;
-				int bottomRight = bottomLeft + 1;
-				indices[pointer++] = topLeft;
-				indices[pointer++] = bottomLeft;
-				indices[pointer++] = topRight;
-				indices[pointer++] = topRight;
-				indices[pointer++] = bottomLeft;
-				indices[pointer++] = bottomRight;
-			}
-		}
-		return loader.loadToVAO(vertices, textureCoords, indices);
+	private RawModel setUpVAO(Loader loader) {
+		// Just x and z vertex positions here, y is set to 0 in vshader
+		float[] vertices = { -1, -1, -1, 1, 1, -1, 1, -1, -1, 1, 1, 1 };
+		return loader.loadToVAO(vertices, 2);
 	}
 
 }

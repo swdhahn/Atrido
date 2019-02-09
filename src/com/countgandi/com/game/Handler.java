@@ -60,15 +60,27 @@ public class Handler {
 		inventoryGui = new InventoryGui(this);
 	}
 
+	private static int sunRADIUS = 1000;
+	private double sunangle = 0;
+
 	public void tick() {
 		camera.move();
-		lights.get(0).setPosition(new Vector3f(camera.getPosition().x, camera.getPosition().y + 200, camera.getPosition().z - 100));
+		world.updateTerrain();
+
+		double x = sunRADIUS * Math.cos(sunangle);
+		double y = (sunangle / (float) sunRADIUS);
+		double z = sunRADIUS * Math.sin(sunangle);
+		//lights.get(0).move(new Vector3f((float) x, (float) y, (float) z));
+		sunangle += 0.005f;
+
 		for (int i = 0; i < entities.size(); i++) {
 			entities.get(i).tick();
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_B)) {
-			entities.add(new Entity(Assets.fernModel, new Vector3f(camera.getPosition().x, camera.getPosition().y - 5, camera.getPosition().z), new Vector3f(0, 0, 0), 10f, this) {
-			});
+			Light light = new Light(new Vector3f(camera.getPosition().x, camera.getPosition().y + 5, camera.getPosition().z), new Vector3f(0, 0.5f, 1), Light.LIGHT_LAMP);
+			light.setAttenuation(new Vector3f(0.5f, 0.2f, 0.05f));
+			lights.add(light);
+		
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_N)) {
 			entities.add(new StoneFlooring(new Vector3f(camera.getPosition().x, camera.getPosition().y - 5, camera.getPosition().z), this) {
@@ -83,6 +95,7 @@ public class Handler {
 				}
 			}
 		}
+		
 	}
 
 	public void render(boolean isEngine) {
@@ -97,7 +110,7 @@ public class Handler {
 		float distance = 2 * (camera.getPosition().y - waters.get(0).getHeight());
 		camera.getPosition().y -= distance;
 		camera.invertPitch();
-		renderScene(new Vector4f(0, 1, 0, -waters.get(0).getHeight() + 1));
+		renderScene(new Vector4f(0, 1, 0, -waters.get(0).getHeight()));
 		camera.getPosition().y += distance;
 		camera.invertPitch();
 

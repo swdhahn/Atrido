@@ -4,9 +4,9 @@ import org.lwjgl.util.vector.Vector3f;
 
 public class Light {
 	
-	public static final int LIGHT_SUN = 1;
-	public static final int LIGHT_LAMP = 2;
-	public static final int LIGHT_OTHER = 3;
+	public static final int LIGHT_DIRECTIONAL = 0;
+	public static final int LIGHT_LAMP = 1;
+	public static final int LIGHT_OTHER = 2;
 	
 	private Vector3f position;
 	private Vector3f color;
@@ -45,16 +45,30 @@ public class Light {
 	public void setColor(Vector3f color) {
 		this.color = color;
 	}
+	
+	public void setAttenuation(Vector3f attenuation) {
+		this.attenuation = attenuation;
+	}
+	
+	public int getLightType() {
+		return lightType;
+	}
 
-	public String getLightType() {
-		if(lightType == LIGHT_SUN) {
-			return "Sun";
+	public String toString() {
+		if(lightType == LIGHT_DIRECTIONAL) {
+			return "Directional Light";
 		} else if(lightType == LIGHT_LAMP) {
 			return "Lamp";
 		} else if(lightType == LIGHT_OTHER) {
 			return "none";
 		}
 		return "none";
+	}
+
+	public void move(Vector3f pos) {
+		position.x += pos.x;
+		position.y += pos.y;
+		position.z += pos.z;
 	}
 	
 	

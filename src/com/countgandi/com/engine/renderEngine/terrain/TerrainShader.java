@@ -11,7 +11,7 @@ import com.countgandi.com.game.entities.Light;
 
 public class TerrainShader extends ShaderProgram {
 
-	private static final int MaxLights = 4;
+	private static final int MaxLights = 10;
 
 	private static final String VERTEX_FILE = "src/com/countgandi/com/engine/renderEngine/terrain/terrainVertexShader.txt";
 	private static final String FRAGMENT_FILE = "src/com/countgandi/com/engine/renderEngine/terrain/terrainFragmentShader.txt";
@@ -22,6 +22,7 @@ public class TerrainShader extends ShaderProgram {
 	private int location_lightPosition[];
 	private int location_lightColor[];
 	private int location_attenuation[];
+	private int location_lightType[];
 	private int location_shineDamper;
 	private int location_reflectivity;
 	private int location_skyColor;
@@ -68,10 +69,12 @@ public class TerrainShader extends ShaderProgram {
 		location_lightPosition = new int[MaxLights];
 		location_lightColor = new int[MaxLights];
 		location_attenuation = new int[MaxLights];
+		location_lightType = new int[MaxLights];
 		for(int i = 0; i < MaxLights; i++) {
 			location_lightPosition[i] = super.getUniformLocation("lightPosition[" + i + "]");
 			location_lightColor[i] = super.getUniformLocation("lightColor[" + i + "]");
 			location_attenuation[i] = super.getUniformLocation("attenuation[" + i + "]");
+			location_lightType[i] = super.getUniformLocation("lightType[" + i + "]");
 		}
 	}
 
@@ -112,10 +115,13 @@ public class TerrainShader extends ShaderProgram {
 				super.loadVector(location_lightPosition[i], lights.get(i).getPosition());
 				super.loadVector(location_lightColor[i], lights.get(i).getColor());
 				super.loadVector(location_attenuation[i], lights.get(i).getAttenuation());
+				super.loadInt(location_lightType[i], lights.get(i).getLightType());
 			} else {
 				super.loadVector(location_lightPosition[i], new Vector3f(0, 0, 0));
 				super.loadVector(location_lightColor[i], new Vector3f(0, 0, 0));
 				super.loadVector(location_attenuation[i], new Vector3f(1, 0, 0));
+				super.loadVector(location_lightType[i], new Vector3f(1, 0, 0));
+				super.loadInt(location_lightType[i], 0);
 			}
 		}
 	}

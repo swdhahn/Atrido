@@ -44,7 +44,7 @@ public class Game {
 
 		GameRegistry.register();
 
-		handler.lights.add(new Light(new Vector3f(0, 1000, 0), new Vector3f(1.0f, 1.0f, 1.0f), Light.LIGHT_SUN));
+		handler.lights.add(new Light(new Vector3f(0, 100000, 0), new Vector3f(1.0f, 1.0f, 1.0f), Light.LIGHT_DIRECTIONAL));
 
 		// END OF INIT
 		handler.gameStart();

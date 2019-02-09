@@ -18,7 +18,7 @@ public class Camera {
 
 	private static final float FOV = 70;
 	private static final float NEAR_PLANE = 0.2f;
-	private static final float FAR_PLANE = 1000;
+	private static final float FAR_PLANE = 10000;
 	protected static final float runSpeed = 20, sprintSpeed = 100, JumpPower = 30;
 
 	protected Matrix4f projectionMatrix;
@@ -109,7 +109,7 @@ public class Camera {
 				preX = Mouse.getX();
 			}
 
-			pitch = ((Display.getHeight() / 2) - Mouse.getY()) / 5;
+			//pitch = ((Display.getHeight() / 2) - Mouse.getY()) / 5;
 			yaw -= (float) (Math.toRadians(preX - Mouse.getX()) * 2) * ((float) Game.WIDTH / 180.0F);
 			preX = Mouse.getX();
 		}
