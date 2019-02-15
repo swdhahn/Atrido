@@ -20,7 +20,6 @@ public class DisplayManager {
 	public static ContextAttribs attribs;
 
 	public static void createDisplay(int width, int height, String title) {
-
 		attribs = new ContextAttribs(3, 3).withForwardCompatible(true).withProfileCore(true);
 
 		try {
@@ -33,7 +32,7 @@ public class DisplayManager {
 				}
 			}
 			Display.setDisplayMode(new DisplayMode(width, height));
-			// Display.setFullscreen(true);
+			Display.setFullscreen(true);
 			Display.create(new PixelFormat().withDepthBits(24), attribs);
 			Display.setTitle(title);
 			//Display.setLocation(1920, 0);

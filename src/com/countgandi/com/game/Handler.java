@@ -80,10 +80,13 @@ public class Handler {
 			Light light = new Light(new Vector3f(camera.getPosition().x, camera.getPosition().y + 5, camera.getPosition().z), new Vector3f(0, 0.5f, 1), Light.LIGHT_LAMP);
 			light.setAttenuation(new Vector3f(0.5f, 0.2f, 0.05f));
 			lights.add(light);
-		
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_N)) {
 			entities.add(new StoneFlooring(new Vector3f(camera.getPosition().x, camera.getPosition().y - 5, camera.getPosition().z), this) {
+			});
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_C)) {
+			entities.add(new Entity(Assets.shipModel, new Vector3f(camera.getPosition().x, camera.getPosition().y - 5, camera.getPosition().z), new Vector3f(0, 0, 0), 10, this) {
 			});
 		}
 		if (Keyboard.getEventKey() == Keyboard.KEY_E) {

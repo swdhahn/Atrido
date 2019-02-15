@@ -33,7 +33,7 @@ public class World {
 	public World(Handler handler) {
 		this.handler = handler;
 	}
-	
+
 	private boolean proceduralTerrainGenerating = false;
 
 	public void generateWorld() {
@@ -49,7 +49,7 @@ public class World {
 		proceduralTerrainGenerating = true;
 		proceduralTerrainGen();
 	}
-	
+
 	public void stopTerrain() {
 		proceduralTerrainGenerating = false;
 	}
@@ -60,23 +60,29 @@ public class World {
 			public void run() {
 				int terrainId = 0;
 				while (proceduralTerrainGenerating) {
-					for(int x = -1; x < 2; x++) {
-						for(int z = -1; z < 2; z++) {
-							Vector3f pos = new Vector3f(handler.getCamera().getPosition().x + x * Terrain.SIZE, 0, handler.getCamera().getPosition().z + z * Terrain.SIZE);
-							if (getTerrainStandingOn(pos) == null && terrainNotAdded(pos)) {
-								TTerrain t = new TTerrain((int) (pos.x / Terrain.SIZE), (int) (pos.z / Terrain.SIZE), terrainId);
-								tempTerrains.add(t);
+					try {
+						for (int x = -1; x < 2; x++) {
+							for (int z = -1; z < 2; z++) {
+								Vector3f pos = new Vector3f(handler.getCamera().getPosition().x + x * Terrain.SIZE, 0, handler.getCamera().getPosition().z + z * Terrain.SIZE);
+								if (getTerrainStandingOn(pos) == null && terrainNotAdded(pos)) {
+									TTerrain t = new TTerrain((int) (pos.x / Terrain.SIZE), (int) (pos.z / Terrain.SIZE), terrainId);
+									tempTerrains.add(t);
+								}
 							}
 						}
+					} catch (Exception e) {
+						e.printStackTrace();
+						System.exit(-1);
 					}
 				}
 			}
 		};
 		thread.start();
 	}
+
 	private boolean terrainNotAdded(Vector3f pos) {
-		for(int i = 0; i < terrains.size(); i++) {
-			if(terrains.get(i).getX()  / Terrain.SIZE == (int)(pos.x / Terrain.SIZE) && terrains.get(i).getZ() / Terrain.SIZE == (int) (pos.z / Terrain.SIZE)) {
+		for (int i = 0; i < terrains.size(); i++) {
+			if (terrains.get(i).getX() / Terrain.SIZE == (int) (pos.x / Terrain.SIZE) && terrains.get(i).getZ() / Terrain.SIZE == (int) (pos.z / Terrain.SIZE)) {
 				return false;
 			}
 		}
@@ -89,6 +95,10 @@ public class World {
 			System.out.println("x: " + t.pos.x + "   z: " + t.pos.z);
 			terrains.add(t.createTerrain(handler, Assets.loader));
 			iterator.remove();
+		}
+		for(Iterator<Terrain> iterator = terrains.iterator(); iterator.hasNext();) {
+			Terrain t = iterator.next();
+			//t.update(handler);
 		}
 	}
 
@@ -126,9 +136,11 @@ public class World {
 	public Terrain getTerrainStandingOn(Vector3f position) {
 		for (int i = 0; i < terrains.size(); i++) {
 			Terrain t = terrains.get(i);
-			if(t == null || position == null)
+			if (t == null || position == null)
 				terrains.remove(t);
-			if (position.x > t.getX() && position.x <= t.getX() + Terrain.SIZE && position.z > t.getZ() && position.z <= t.getZ() + Terrain.SIZE) {
+			if (
+					position.x
+					> t.getX() && position.x <= t.getX() + Terrain.SIZE && position.z > t.getZ() && position.z <= t.getZ() + Terrain.SIZE) {
 				return t;
 			}
 		}

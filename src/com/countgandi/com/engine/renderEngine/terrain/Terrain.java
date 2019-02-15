@@ -64,8 +64,8 @@ public class Terrain {
 
 	private void decorateTerrain(Handler handler) {
 		Random ran = new Random();
-		
-		for (int i = 0; i < ran.nextInt(10) + 20; i++) {
+
+		for (int i = 0; i < ran.nextInt(1000) + 500; i++) {
 			Vector3f pos = new Vector3f(ran.nextInt(Terrain.SIZE) + x, 0, ran.nextInt(Terrain.SIZE) + z);
 			Vector3f rot = new Vector3f(ran.nextFloat(), 0, 0);
 			pos.y = this.getHeightOfTerrain(pos.x, pos.z) - 1;
@@ -73,11 +73,15 @@ public class Terrain {
 			if (pos.y < 12)
 				continue;
 			if (pos.y > 100) {
-				handler.addEntity(new Entity(Assets.pineTreeLeavesSnowModel, pos, rot, scale, handler) {});
-				handler.addEntity(new Entity(Assets.pineTreeModel, pos, rot, scale, handler) {});
-			} else if (pos.y < 98){
-				handler.addEntity(new Entity(Assets.pineTreeLeavesModel, pos, rot, scale, handler) {});
-				handler.addEntity(new Entity(Assets.pineTreeModel, pos, rot, scale, handler) {});
+				handler.addEntity(new Entity(Assets.pineTreeLeavesSnowModel, pos, rot, scale, handler) {
+				});
+				handler.addEntity(new Entity(Assets.pineTreeModel, pos, rot, scale, handler) {
+				});
+			} else if (pos.y < 98) {
+				handler.addEntity(new Entity(Assets.pineTreeLeavesModel, pos, rot, scale, handler) {
+				});
+				handler.addEntity(new Entity(Assets.pineTreeModel, pos, rot, scale, handler) {
+				});
 			}
 		}
 	}
@@ -270,6 +274,21 @@ public class Terrain {
 		height /= MAX_PIXEL_COLOR / 2f;
 		height *= MAX_HEIGHT;
 		return height;
+	}
+
+	public void update(Handler handler) {
+		boolean flag = true;
+		for (int x = -1; x < 2; x++) {
+			for (int z = -1; z < 2; z++) {
+				Vector3f pos = new Vector3f(handler.getCamera().getPosition().x + x * Terrain.SIZE, 0, handler.getCamera().getPosition().z + z * Terrain.SIZE);
+				if (pos.equals(new Vector3f(this.x, 0, this.z))) {
+					flag = false;
+				}
+			}
+		}
+		if(flag) {
+			handler.getWorld().terrains.remove(this);
+		}
 	}
 
 }
