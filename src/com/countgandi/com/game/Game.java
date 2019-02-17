@@ -21,7 +21,7 @@ import com.countgandi.com.game.menus.Menu;
  */
 public class Game {
 
-	public static final int WIDTH = 1920, HEIGHT = 1080;
+	public static final int WIDTH = 1600, HEIGHT = WIDTH / 16 * 9;
 	public static final String TITLE = "-- OpenGL --";
 	public static GUIText HEADER, HEADER2;
 
