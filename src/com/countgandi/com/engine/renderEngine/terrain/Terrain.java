@@ -25,7 +25,7 @@ public class Terrain {
 	// biomes with heights
 
 	public static final long ZERO = 9900000;
-	public static final int SIZE = 1000, VERTEX_COUNT = 100;
+	public static final int SIZE = 100, VERTEX_COUNT = 10;
 	private static final float MAX_HEIGHT = 30, MAX_PIXEL_COLOR = 256 * 256 * 256;
 
 	private int x, z;
@@ -65,7 +65,7 @@ public class Terrain {
 	private void decorateTerrain(Handler handler) {
 		Random ran = new Random();
 
-		for (int i = 0; i < ran.nextInt(1000) + 500; i++) {
+		for (int i = 0; i < ran.nextInt(2); i++) {
 			Vector3f pos = new Vector3f(ran.nextInt(Terrain.SIZE) + x, 0, ran.nextInt(Terrain.SIZE) + z);
 			Vector3f rot = new Vector3f(ran.nextFloat(), 0, 0);
 			pos.y = this.getHeightOfTerrain(pos.x, pos.z) - 1;

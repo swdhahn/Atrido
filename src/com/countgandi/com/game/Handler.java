@@ -23,6 +23,8 @@ import com.countgandi.com.game.entities.Player;
 import com.countgandi.com.game.entities.structures.StoneFlooring;
 import com.countgandi.com.game.guis.InventoryGui;
 import com.countgandi.com.game.worldGen.World;
+import com.countgandi.com.net.ProxySide;
+import com.countgandi.com.net.ProxySide.ProxyType;
 
 public class Handler {
 

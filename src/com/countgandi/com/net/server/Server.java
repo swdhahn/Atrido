@@ -1,4 +1,4 @@
-package com.countgandi.com.net;
+package com.countgandi.com.net.server;
 
 public class Server {
 	

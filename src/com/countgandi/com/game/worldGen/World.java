@@ -3,6 +3,7 @@ package com.countgandi.com.game.worldGen;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.lwjgl.util.vector.Vector3f;
 
@@ -25,8 +26,8 @@ public class World {
 	public static final int terrainSideAmount = 2 * Terrain.SIZE;
 	private Thread thread;
 
-	public ArrayList<Terrain> terrains = new ArrayList<Terrain>();
-	private ArrayList<TTerrain> tempTerrains = new ArrayList<TTerrain>();
+	public CopyOnWriteArrayList <Terrain> terrains = new CopyOnWriteArrayList <Terrain>();
+	private CopyOnWriteArrayList <TTerrain> tempTerrains = new CopyOnWriteArrayList <TTerrain>();
 
 	private Handler handler;
 
@@ -60,20 +61,15 @@ public class World {
 			public void run() {
 				int terrainId = 0;
 				while (proceduralTerrainGenerating) {
-					try {
-						for (int x = -1; x < 2; x++) {
-							for (int z = -1; z < 2; z++) {
-								Vector3f pos = new Vector3f(handler.getCamera().getPosition().x + x * Terrain.SIZE, 0, handler.getCamera().getPosition().z + z * Terrain.SIZE);
+						for (int x = -10; x < 20; x++) {
+							for (int z = -10; z < 20; z++) {
+								Vector3f pos = new Vector3f(handler.getCamera().getPosition().x / Terrain.SIZE + x, 0, handler.getCamera().getPosition().z / Terrain.SIZE + z);
 								if (getTerrainStandingOn(pos) == null && terrainNotAdded(pos)) {
-									TTerrain t = new TTerrain((int) (pos.x / Terrain.SIZE), (int) (pos.z / Terrain.SIZE), terrainId);
+									TTerrain t = new TTerrain((int) (pos.x), (int) (pos.z), terrainId);
 									tempTerrains.add(t);
 								}
 							}
 						}
-					} catch (Exception e) {
-						e.printStackTrace();
-						System.exit(-1);
-					}
 				}
 			}
 		};
@@ -90,15 +86,14 @@ public class World {
 	}
 
 	public void updateTerrain() {
-		for (Iterator<TTerrain> iterator = tempTerrains.iterator(); iterator.hasNext();) {
-			TTerrain t = iterator.next();
+		for (TTerrain t: tempTerrains) {
 			System.out.println("x: " + t.pos.x + "   z: " + t.pos.z);
 			terrains.add(t.createTerrain(handler, Assets.loader));
-			iterator.remove();
+			
 		}
 		for(Iterator<Terrain> iterator = terrains.iterator(); iterator.hasNext();) {
 			Terrain t = iterator.next();
-			//t.update(handler);
+			t.update(handler);
 		}
 	}
 
@@ -138,10 +133,10 @@ public class World {
 			Terrain t = terrains.get(i);
 			if (t == null || position == null)
 				terrains.remove(t);
-			if (
-					position.x
-					> t.getX() && position.x <= t.getX() + Terrain.SIZE && position.z > t.getZ() && position.z <= t.getZ() + Terrain.SIZE) {
-				return t;
+			if (position.x > t.getX() && position.x <= t.getX() + Terrain.SIZE) {
+				if(position.z > t.getZ() && position.z <= t.getZ() + Terrain.SIZE) {
+					return t;
+				}
 			}
 		}
 		return null;
