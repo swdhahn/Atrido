@@ -10,7 +10,6 @@ import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
 import com.countgandi.com.engine.OpenGlUtils;
-import com.countgandi.com.engine.renderEngine.foilage.FoilageRenderer;
 import com.countgandi.com.engine.renderEngine.models.TexturedModel;
 import com.countgandi.com.engine.renderEngine.shaders.InstancedStaticShader;
 import com.countgandi.com.engine.renderEngine.shaders.StaticShader;
@@ -32,7 +31,6 @@ public class MasterRenderer {
 
 	private EntityRenderer renderer;
 	private TerrainRenderer terrainRenderer;
-	private FoilageRenderer foilageRenderer;
 
 	private Map<TexturedModel, List<Entity>> entities = new HashMap<TexturedModel, List<Entity>>();
 	public Map<TexturedModel, List<Entity>> grass = new HashMap<TexturedModel, List<Entity>>();
@@ -44,7 +42,6 @@ public class MasterRenderer {
 		this.loader = loader;
 		OpenGlUtils.cullBackFaces(true);
 		renderer = new EntityRenderer(camera.getProjectionMatrix(), shader);
-		foilageRenderer = new FoilageRenderer(camera.getProjectionMatrix(), instancedShader);
 		terrainRenderer = new TerrainRenderer(camera.getProjectionMatrix(), terrainShader);
 		skyboxRenderer = new SkyboxRenderer(camera.getProjectionMatrix(), loader);
 	}

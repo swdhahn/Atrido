@@ -23,8 +23,6 @@ import com.countgandi.com.game.entities.Player;
 import com.countgandi.com.game.entities.structures.StoneFlooring;
 import com.countgandi.com.game.guis.InventoryGui;
 import com.countgandi.com.game.worldGen.World;
-import com.countgandi.com.net.ProxySide;
-import com.countgandi.com.net.ProxySide.ProxyType;
 
 public class Handler {
 
@@ -62,18 +60,9 @@ public class Handler {
 		inventoryGui = new InventoryGui(this);
 	}
 
-	private static int sunRADIUS = 1000;
-	private double sunangle = 0;
-
 	public void tick() {
 		camera.move();
 		world.updateTerrain();
-
-		double x = sunRADIUS * Math.cos(sunangle);
-		double y = (sunangle / (float) sunRADIUS);
-		double z = sunRADIUS * Math.sin(sunangle);
-		//lights.get(0).move(new Vector3f((float) x, (float) y, (float) z));
-		sunangle += 0.005f;
 
 		for (int i = 0; i < entities.size(); i++) {
 			entities.get(i).tick();

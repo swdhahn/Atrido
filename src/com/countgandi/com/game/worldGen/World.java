@@ -1,7 +1,5 @@
 package com.countgandi.com.game.worldGen;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -43,7 +41,6 @@ public class World {
 		Game.HEADER2.setText("Seed: " + SEED);
 		try {
 			handler.waters.add(new WaterTile(0, 0, 0));
-			// terrains.add(new Terrain(0, 0, Assets.TERRAIN, Assets.loader));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -59,40 +56,50 @@ public class World {
 		thread = new Thread() {
 			@Override
 			public void run() {
-				int terrainId = 0;
+				long lastTime = System.nanoTime();
+				double amountOfTicks = 20.0;
+				double ns = 1000000000 / amountOfTicks;
+				double delta = 0;
 				while (proceduralTerrainGenerating) {
-						for (int x = -10; x < 20; x++) {
-							for (int z = -10; z < 20; z++) {
-								Vector3f pos = new Vector3f(handler.getCamera().getPosition().x / Terrain.SIZE + x, 0, handler.getCamera().getPosition().z / Terrain.SIZE + z);
-								if (getTerrainStandingOn(pos) == null && terrainNotAdded(pos)) {
-									TTerrain t = new TTerrain((int) (pos.x), (int) (pos.z), terrainId);
+					long now = System.nanoTime();
+					delta += (now - lastTime) / ns;
+					lastTime = now;
+					while (delta >= 1) {
+						for (int x = -2; x < 2; x++) {
+							for (int z = -2; z < 2; z++) {
+								Vector3f pos = new Vector3f((int)((handler.getCamera().getPosition().x / Terrain.SIZE) - 1) * Terrain.SIZE + x * Terrain.SIZE, 0, (int)((handler.getCamera().getPosition().z / Terrain.SIZE) - 1) * Terrain.SIZE + z * Terrain.SIZE);
+								if (getTerrainStandingOn(pos) == null && !terrainExists(pos)) {
+									TTerrain t = new TTerrain((int) (pos.x / Terrain.SIZE), (int) (pos.z / Terrain.SIZE));
 									tempTerrains.add(t);
 								}
 							}
 						}
+						delta--;	
+					}
 				}
 			}
 		};
 		thread.start();
 	}
 
-	private boolean terrainNotAdded(Vector3f pos) {
-		for (int i = 0; i < terrains.size(); i++) {
-			if (terrains.get(i).getX() / Terrain.SIZE == (int) (pos.x / Terrain.SIZE) && terrains.get(i).getZ() / Terrain.SIZE == (int) (pos.z / Terrain.SIZE)) {
-				return false;
+	private boolean terrainExists(Vector3f pos) {
+		for(Terrain t:terrains) {
+			if(t.getX() == pos.x && t.getZ() == pos.z) {
+				return true;
 			}
 		}
-		return true;
+		return false;
 	}
 
 	public void updateTerrain() {
 		for (TTerrain t: tempTerrains) {
 			System.out.println("x: " + t.pos.x + "   z: " + t.pos.z);
 			terrains.add(t.createTerrain(handler, Assets.loader));
-			
 		}
-		for(Iterator<Terrain> iterator = terrains.iterator(); iterator.hasNext();) {
-			Terrain t = iterator.next();
+		
+		
+
+		for(Terrain t:terrains) {
 			t.update(handler);
 		}
 	}
@@ -159,13 +166,11 @@ class TTerrain {
 	private int[] indices;
 	private float[][] heights;
 	private int gridX, gridZ;
-	int terrainId = 0;
 
-	public TTerrain(int gridX, int gridZ, int terrainId) {
+	public TTerrain(int gridX, int gridZ) {
 		this.gridX = gridX * Terrain.SIZE;
 		this.gridZ = gridZ * Terrain.SIZE;
 		pos = new Vector3f(gridX, 0, gridZ);
-		this.terrainId = terrainId;
 		generator = new PerlinNoise(gridX, gridZ, Terrain.VERTEX_COUNT, 75, 6, 0.34f, World.SEED);
 		generateTerrain();
 	}
