@@ -1,5 +1,7 @@
 package com.countgandi.com.game.commands;
 
+import com.countgandi.com.net.server.Server;
+
 public class CommandSay extends Command {
 
 	public CommandSay() {
@@ -7,10 +9,13 @@ public class CommandSay extends Command {
 	}
 
 	@Override
-	public boolean performCommand(String[] arguments) {
+	public boolean performCommand(String[] arguments, Server server) {
 		String ss = "";
 		for (int i = 0; i < arguments.length; i++) {
 			ss += arguments[i] + " ";
+		}
+		if(server != null) {
+			server.sendDataTcp("Command:" + command + " " + ss);
 		}
 		System.out.println(ss);
 		return true;

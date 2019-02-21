@@ -16,7 +16,7 @@ public class Player extends Entity {
 		super(new TexturedModel(OBJLoader.loadObjModel("cube", Assets.loader), new ModelTexture(Texture.newTexture("SmallTransparentBlock").create(), true)), handler.getCamera().getPosition(), new Vector3f(handler.getCamera().getPitch(), handler.getCamera().getRoll(), handler.getCamera().getYaw()), handler);
 		handler.getCamera().setPosition(position);
 	}
-	
+
 	public void tick() { 
 		this.setPosition(handler.getCamera().getPosition());
 	}

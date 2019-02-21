@@ -1,5 +1,7 @@
 package com.countgandi.com.game.commands;
 
+import com.countgandi.com.net.server.Server;
+
 public class CommandHelp extends Command {
 
 	public CommandHelp() {
@@ -7,7 +9,7 @@ public class CommandHelp extends Command {
 	}
 
 	@Override
-	public boolean performCommand(String[] arguments) {
+	public boolean performCommand(String[] arguments, Server server) {
 		System.out.println("Help has been given: \n");
 		for(int i = 0; i < CommandHandler.commands.size(); i++) {
 			System.out.println("Command " + i + ": ");

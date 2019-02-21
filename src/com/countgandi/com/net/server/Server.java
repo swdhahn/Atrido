@@ -25,7 +25,7 @@ public class Server extends JPanel implements Proxy {
 
 	public Server() {
 		running = true;
-		CommandHandler.init();
+		CommandHandler.init(this);
 		load();
 		waitForClients();
 		acceptCommands();
@@ -69,14 +69,13 @@ public class Server extends JPanel implements Proxy {
 	}
 
 	public void waitForClients() {
-		Server server = this;
 		new Thread() {
 			@Override
 			public void run() {
 				try {
 					while (Server.running) {
 						while (clients.size() <= maxClients) {
-							clients.add(new ClientConnection(tcpSocket.accept(), server));
+							clients.add(new ClientConnection(tcpSocket.accept()));
 						}
 					}
 				} catch (Exception e) {
@@ -92,7 +91,8 @@ public class Server extends JPanel implements Proxy {
 			public void run() {
 				Scanner s = new Scanner(System.in);
 				while (s.hasNextLine()) {
-					CommandHandler.doCommand(s.nextLine().trim());
+					String cmd = s.nextLine().trim();
+					CommandHandler.doCommand(cmd);
 				}
 				s.close();
 			}
