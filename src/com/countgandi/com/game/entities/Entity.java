@@ -74,6 +74,12 @@ public abstract class Entity {
 	public void setPosition(Vector3f position) {
 		this.position = position;
 	}
+	
+	public void setPosition(float x, float y, float z) {
+		this.position.x = x;
+		this.position.y = y;
+		this.position.z = z;
+	}
 
 	public float getRotX() {
 		return rotX;

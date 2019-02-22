@@ -169,7 +169,7 @@ public class Camera {
 	}
 
 	public Vector3f getRot() {
-		return new Vector3f(pitch, roll, yaw);
+		return new Vector3f(pitch, yaw, roll);
 	}
 
 	protected void updateViewMatrix() {

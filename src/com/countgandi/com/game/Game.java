@@ -10,6 +10,7 @@ import com.countgandi.com.engine.audio.AudioMaster;
 import com.countgandi.com.engine.renderEngine.DisplayManager;
 import com.countgandi.com.engine.renderEngine.font.TextMaster;
 import com.countgandi.com.engine.renderEngine.font.fontMeshCreator.GUIText;
+import com.countgandi.com.game.commands.CommandHandler;
 import com.countgandi.com.game.entities.GameRegistry;
 import com.countgandi.com.game.entities.Light;
 import com.countgandi.com.game.menus.GameMenu;
@@ -42,6 +43,7 @@ public class Game {
 		HEADER2 = new GUIText("Seed: ", 1, Assets.Fonts.arial, new Vector2f(0, 0.08f), 1);
 		menu = new GameMenu(handler);
 
+		CommandHandler.init();
 		GameRegistry.register();
 
 		handler.lights.add(new Light(new Vector3f(0, 100000, 0), new Vector3f(1.0f, 1.0f, 1.0f), Light.LIGHT_DIRECTIONAL));

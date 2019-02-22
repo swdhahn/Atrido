@@ -57,13 +57,13 @@ public class MasterRenderer {
 		renderer.render(entities);
 		shader.stop();
 		
-		instancedShader.start();
+		/*instancedShader.start();
 		instancedShader.loadClipPlane(clipPlane);
 		instancedShader.loadSkyColor(skyColor);
 		instancedShader.loadLights(lights);
 		instancedShader.loadViewMatrix(camera.getViewMatrix());
 		//foilageRenderer.render();
-		instancedShader.stop();
+		instancedShader.stop();*/
 		
 		terrainShader.start();
 		terrainShader.loadClipPlane(clipPlane);

@@ -21,7 +21,6 @@ public class World {
 
 	public static int SEED = 0;
 	public static Random random = new Random();
-	public static final int terrainSideAmount = 2 * Terrain.SIZE;
 	private Thread thread;
 
 	public CopyOnWriteArrayList <Terrain> terrains = new CopyOnWriteArrayList <Terrain>();
@@ -31,12 +30,12 @@ public class World {
 
 	public World(Handler handler) {
 		this.handler = handler;
+		SEED = new Random().nextInt(1000000000);
 	}
 
-	private boolean proceduralTerrainGenerating = false;
+	public boolean proceduralTerrainGenerating = false;
 
 	public void generateWorld() {
-		SEED = new Random().nextInt(1000000000);
 		random.setSeed(SEED);
 		Game.HEADER2.setText("Seed: " + SEED);
 		try {
@@ -57,7 +56,7 @@ public class World {
 			@Override
 			public void run() {
 				long lastTime = System.nanoTime();
-				double amountOfTicks = 20.0;
+				double amountOfTicks = 5.0;
 				double ns = 1000000000 / amountOfTicks;
 				double delta = 0;
 				while (proceduralTerrainGenerating) {
@@ -65,10 +64,13 @@ public class World {
 					delta += (now - lastTime) / ns;
 					lastTime = now;
 					while (delta >= 1) {
-						for (int x = -2; x < 2; x++) {
-							for (int z = -2; z < 2; z++) {
-								Vector3f pos = new Vector3f((int)((handler.getCamera().getPosition().x / Terrain.SIZE) - 1) * Terrain.SIZE + x * Terrain.SIZE, 0, (int)((handler.getCamera().getPosition().z / Terrain.SIZE) - 1) * Terrain.SIZE + z * Terrain.SIZE);
-								if (getTerrainStandingOn(pos) == null && !terrainExists(pos)) {
+						if(!proceduralTerrainGenerating) {
+							return;
+						}
+						for (int x = -15; x < 15; x++) {
+							for (int z = -15; z < 15; z++) {
+								Vector3f pos = new Vector3f(Math.round((handler.getCamera().getPosition().x / Terrain.SIZE) - 1) * Terrain.SIZE + x * Terrain.SIZE, 0, Math.round((handler.getCamera().getPosition().z / Terrain.SIZE) - 1) * Terrain.SIZE + z * Terrain.SIZE);
+								if (getTerrainStandingOn(pos) == null || !terrainExists(pos)) {
 									TTerrain t = new TTerrain((int) (pos.x / Terrain.SIZE), (int) (pos.z / Terrain.SIZE));
 									tempTerrains.add(t);
 								}
@@ -88,13 +90,18 @@ public class World {
 				return true;
 			}
 		}
+		for(TTerrain t:tempTerrains) {
+			if(t.pos.x == pos.x && t.pos.z == pos.z) {
+				return true;
+			}
+		}
 		return false;
 	}
 
 	public void updateTerrain() {
 		for (TTerrain t: tempTerrains) {
-			System.out.println("x: " + t.pos.x + "   z: " + t.pos.z);
 			terrains.add(t.createTerrain(handler, Assets.loader));
+			tempTerrains.remove(t);
 		}
 		
 		

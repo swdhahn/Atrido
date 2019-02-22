@@ -1,9 +1,11 @@
 package com.countgandi.com.net.server;
 
 import java.io.IOException;
+import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
 import javax.swing.JPanel;
@@ -13,6 +15,8 @@ import com.countgandi.com.net.Proxy;
 
 public class Server extends JPanel implements Proxy {
 	private static final long serialVersionUID = 1L;
+
+	public static final int SEED = new Random().nextInt(1000000000);
 
 	public static int Port = 37767;
 	public static int maxClients = 10;
@@ -27,7 +31,6 @@ public class Server extends JPanel implements Proxy {
 		running = true;
 		CommandHandler.init(this);
 		load();
-		waitForClients();
 		acceptCommands();
 	}
 
@@ -40,6 +43,18 @@ public class Server extends JPanel implements Proxy {
 			e.printStackTrace();
 		}
 		waitForClients();
+		new Thread() {
+			@Override
+			public void run() {
+				while(running) {
+					try {
+						recieveUdpPackets();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}.start();
 	}
 
 	@Override
@@ -97,6 +112,20 @@ public class Server extends JPanel implements Proxy {
 				s.close();
 			}
 		}.start();
+	}
+	
+	public void recieveUdpPackets() throws IOException {
+		DatagramPacket recievePacket = new DatagramPacket(new byte[128], 128);
+		Server.udpSocket.receive(recievePacket);
+		String s = new String(recievePacket.getData());
+		for(int i = 0; i < clients.size(); i++) {
+			ClientConnection client = clients.get(i);
+			if(s.split("@")[0].equals(client.getUsername())) {
+				client.port = recievePacket.getPort();
+				client.recieveUdp(s.substring(client.getUsername().length() + 1));
+				break;
+			}
+		}
 	}
 
 	public static void main(String[] args) {

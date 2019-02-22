@@ -23,6 +23,7 @@ import com.countgandi.com.game.entities.Player;
 import com.countgandi.com.game.entities.structures.StoneFlooring;
 import com.countgandi.com.game.guis.InventoryGui;
 import com.countgandi.com.game.worldGen.World;
+import com.countgandi.com.net.client.Client;
 
 public class Handler {
 
@@ -67,6 +68,11 @@ public class Handler {
 		for (int i = 0; i < entities.size(); i++) {
 			entities.get(i).tick();
 		}
+		if (Client.players != null) {
+			for (int i = 0; i < Client.players.size(); i++) {
+				Client.players.get(i).tick();
+			}
+		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_B)) {
 			Light light = new Light(new Vector3f(camera.getPosition().x, camera.getPosition().y + 5, camera.getPosition().z), new Vector3f(0, 0.5f, 1), Light.LIGHT_LAMP);
 			light.setAttenuation(new Vector3f(0.5f, 0.2f, 0.05f));
@@ -89,7 +95,7 @@ public class Handler {
 				}
 			}
 		}
-		
+
 	}
 
 	public void render(boolean isEngine) {
@@ -127,6 +133,11 @@ public class Handler {
 		for (int i = 0; i < entities.size(); i++) {
 			renderer.processEntity(entities.get(i));
 		}
+		if (Client.players != null) {
+			for (int i = 0; i < Client.players.size(); i++) {
+				renderer.processEntity(Client.players.get(i));
+			}
+		}
 		world.renderWorld(renderer);
 		renderer.render(lights, camera, clipPlane);
 
@@ -136,7 +147,6 @@ public class Handler {
 		entities.clear();
 
 		world.generateWorld();
-		entities.add(new Player(new Vector3f(0, 0, 0), this));
 	}
 
 	public void addEntity(Entity entity) {

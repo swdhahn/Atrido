@@ -9,8 +9,9 @@ public class MPlayer extends Entity {
 	
 	public String username;
 
-	public MPlayer(Vector3f position, Handler handler) {
-		super(Assets.shipModel, position, new Vector3f(0, 0, 0), handler);
+	public MPlayer(String username, Vector3f position, Handler handler) {
+		super(Assets.shipModel, position, new Vector3f(0, 0, 0), 10, handler);
+		this.username = username;
 	}
 
 }

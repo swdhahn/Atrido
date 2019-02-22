@@ -2,6 +2,7 @@ package com.countgandi.com.engine.renderEngine.terrain;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 
@@ -12,7 +13,9 @@ import com.countgandi.com.engine.Maths;
 import com.countgandi.com.engine.renderEngine.Loader;
 import com.countgandi.com.engine.renderEngine.models.RawModel;
 import com.countgandi.com.engine.renderEngine.textures.TerrainTexturePack;
+import com.countgandi.com.game.Assets;
 import com.countgandi.com.game.Handler;
+import com.countgandi.com.game.entities.Entity;
 import com.countgandi.com.game.worldGen.World;
 
 public class Terrain {
@@ -60,9 +63,9 @@ public class Terrain {
 	}
 
 	private void decorateTerrain(Handler handler) {
-		/*Random ran = new Random();
+		Random ran = new Random();
 
-		for (int i = 0; i < ran.nextInt(2); i++) {
+		for (int i = 0; i < ran.nextInt(10); i++) {
 			Vector3f pos = new Vector3f(ran.nextInt(Terrain.SIZE) + x, 0, ran.nextInt(Terrain.SIZE) + z);
 			Vector3f rot = new Vector3f(ran.nextFloat(), 0, 0);
 			pos.y = this.getHeightOfTerrain(pos.x, pos.z) - 1;
@@ -80,7 +83,7 @@ public class Terrain {
 				handler.addEntity(new Entity(Assets.pineTreeModel, pos, rot, scale, handler) {
 				});
 			}
-		}*/
+		}
 	}
 
 	public float getX() {
@@ -275,9 +278,9 @@ public class Terrain {
 
 	public void update(Handler handler) {
 		boolean flag = true;
-		for (int x = -2; x < 2; x++) {
-			for (int z = -2; z < 2; z++) {
-				Vector3f pos = new Vector3f(handler.getCamera().getPosition().x + x * Terrain.SIZE, 0, handler.getCamera().getPosition().z + z * Terrain.SIZE);
+		for (int x = -15; x < 15; x++) {
+			for (int z = -15; z < 15; z++) {
+				Vector3f pos = new Vector3f((handler.getCamera().getPosition().x / Terrain.SIZE) * Terrain.SIZE + x * Terrain.SIZE, 0, (handler.getCamera().getPosition().z / Terrain.SIZE) * Terrain.SIZE + z * Terrain.SIZE);
 				if (pos.equals(new Vector3f(this.x, 0, this.z))) {
 					flag = false;
 				}
