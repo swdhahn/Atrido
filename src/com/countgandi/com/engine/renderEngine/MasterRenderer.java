@@ -26,6 +26,7 @@ public class MasterRenderer {
 	private static final Vector3f skyColor = new Vector3f(0.5444F, 0.62F, 0.69F);// (0.5F, 0.5F, 0.5F);
 
 	private StaticShader shader = new StaticShader();
+	@SuppressWarnings("unused")
 	private InstancedStaticShader instancedShader = new InstancedStaticShader();
 	private TerrainShader terrainShader = new TerrainShader();
 

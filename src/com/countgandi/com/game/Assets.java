@@ -30,7 +30,7 @@ public class Assets {
 	// Textures
 	public static final Texture Underwater = Texture.newTexture("underwater").create();
 	
-	public static final Texture pineTreeTex = Texture.newTexture("pineTree").normalMipMap().create();
+	public static final Texture pineTreeTex = Texture.newTexture("pineTree").anisotropic().create();
 	public static final Texture pineTreeSnowTex = Texture.newTexture("pineTreeSnow").normalMipMap().create();
 	public static final Texture stoneTexture = Texture.newTexture("stoneTexture").normalMipMap().create();
 	
@@ -54,7 +54,7 @@ public class Assets {
 	public static final int BounceSound = AudioMaster.loadSound("bounce");
 
 	public static TerrainTexture loadTerrainTexture(String res) {
-		return new TerrainTexture(Texture.newTexture("terrain/" + res).normalMipMap().create());
+		return new TerrainTexture(Texture.newTexture("terrain/" + res).anisotropic().create());
 	}
 
 	public static TexturedModel loadTexturedModel(String modelName, String textureName, boolean culling) {

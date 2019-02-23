@@ -104,7 +104,7 @@ public class World {
 			tempTerrains.remove(t);
 		}
 		
-		
+		tempTerrains.clear();
 
 		for(Terrain t:terrains) {
 			t.update(handler);

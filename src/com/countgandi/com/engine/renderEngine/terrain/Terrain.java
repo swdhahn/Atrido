@@ -24,7 +24,6 @@ public class Terrain {
 	// determine
 	// biomes with heights
 
-	public static final long ZERO = 9900000;
 	public static final int SIZE = 100, VERTEX_COUNT = 10;
 	private static final float MAX_HEIGHT = 30, MAX_PIXEL_COLOR = 256 * 256 * 256;
 

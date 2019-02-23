@@ -4,6 +4,7 @@ import java.util.Random;
 
 public class PerlinNoise {
 
+	private static long mid = 2147483646 / 2;
 	private float AMPLITUDE;
 	private int OCTAVES;
 	private float ROUGHNESS;
@@ -18,52 +19,52 @@ public class PerlinNoise {
 		this.AMPLITUDE = amplitude;
 		this.OCTAVES = octaves;
 		this.ROUGHNESS = roughness;
-		xOffset = Terrain.ZERO + gridX * (vertexCount - 1);
-		zOffset = Terrain.ZERO + gridZ * (vertexCount - 1);
+		xOffset =  mid + gridX * (vertexCount - 1);
+		zOffset =  mid + gridZ * (vertexCount - 1);
 	}
 
-	public float generateHeight(float x, float z) {
-		float total = 0;
-		float d = (float) Math.pow(2, OCTAVES - 1);
+	public float generateHeight(double x, double z) {
+		double total = 0;
+		double d = (double) Math.pow(2, OCTAVES - 1);
 		for (int i = 0; i < OCTAVES; i++) {
-			float freq = (float) (Math.pow(2, i) / d);
-			float amp = (float) Math.pow(ROUGHNESS, i) * AMPLITUDE;
+			double freq = (double) (Math.pow(2, i) / d);
+			double amp = (double) Math.pow(ROUGHNESS, i) * AMPLITUDE;
 			total += getInterpolatedNoise((x + xOffset) * freq, (z + zOffset) * freq) * amp;
 		}
-		return total;
+		return (float) total;
 	}
 
-	private float getInterpolatedNoise(float x, float z) {
+	private double getInterpolatedNoise(double x, double z) {
 		int intX = (int) x;
 		int intZ = (int) z;
-		float fracX = x - intX;
-		float fracZ = z - intZ;
+		double fracX = x - intX;
+		double fracZ = z - intZ;
 
-		float v1 = getSmoothNoise(intX, intZ);
-		float v2 = getSmoothNoise(intX + 1, intZ);
-		float v3 = getSmoothNoise(intX, intZ + 1);
-		float v4 = getSmoothNoise(intX + 1, intZ + 1);
-		float i1 = interpolate(v1, v2, fracX);
-		float i2 = interpolate(v3, v4, fracX);
+		double v1 = getSmoothNoise(intX, intZ);
+		double v2 = getSmoothNoise(intX + 1, intZ);
+		double v3 = getSmoothNoise(intX, intZ + 1);
+		double v4 = getSmoothNoise(intX + 1, intZ + 1);
+		double i1 = interpolate(v1, v2, fracX);
+		double i2 = interpolate(v3, v4, fracX);
 		return interpolate(i1, i2, fracZ);
 	}
 
-	private float interpolate(float a, float b, float blend) {
+	private double interpolate(double a, double b, double blend) {
 		double theta = blend * Math.PI;
-		float f = (float) ((1f - Math.cos(theta)) * 0.5F);
+		double f = (double) ((1f - Math.cos(theta)) * 0.5F);
 		return a * (1f - f) + b * f;
 	}
 
-	private float getSmoothNoise(int x, int z) {
-		float corners = (getNoise(x - 1, z - 1) + getNoise(x + 1, z - 1) + getNoise(x - 1, z + 1) + getNoise(x + 1, z + 1)) / 16f;
-		float sides = (getNoise(x - 1, z) + getNoise(x, z - 1) + getNoise(x + 1, z) + getNoise(x, z + 1)) / 8f;
-		float center = getNoise(x, z) / 4f;
+	private double getSmoothNoise(int x, int z) {
+		double corners = (getNoise(x - 1, z - 1) + getNoise(x + 1, z - 1) + getNoise(x - 1, z + 1) + getNoise(x + 1, z + 1)) / 16;
+		double sides = (getNoise(x - 1, z) + getNoise(x, z - 1) + getNoise(x + 1, z) + getNoise(x, z + 1)) / 8;
+		double center = getNoise(x, z) / 4;
 		return corners + sides + center;
 	}
 
-	private float getNoise(int x, int z) {
-		random.setSeed(x * 9322653 + z * 563442 + seed);
-		return random.nextFloat() * 8 - 4;
+	private double getNoise(int x, int z) {
+		random.setSeed(x * 2345122457686785l + z * 34567867868315136l + seed);
+		return random.nextDouble() * 8 - 4;
 	}
 
 }
