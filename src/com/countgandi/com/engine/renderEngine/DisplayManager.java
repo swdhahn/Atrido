@@ -10,6 +10,7 @@ import org.lwjgl.opengl.ContextAttribs;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.PixelFormat;
 
 public class DisplayManager {
@@ -33,9 +34,10 @@ public class DisplayManager {
 			}
 			Display.setDisplayMode(new DisplayMode(width, height));
 			Display.setFullscreen(true);
-			Display.create(new PixelFormat().withDepthBits(24), attribs);
+			Display.create(new PixelFormat().withDepthBits(24).withSamples(8), attribs);
 			Display.setTitle(title);
 			//Display.setLocation(1920, 0);
+			GL11.glEnable(GL13.GL_MULTISAMPLE);
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}

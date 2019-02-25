@@ -1,6 +1,7 @@
 package com.countgandi.com.game;
 
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
@@ -27,7 +28,7 @@ import com.countgandi.com.net.client.Client;
 
 public class Handler {
 
-	public ArrayList<Entity> entities = new ArrayList<Entity>();
+	public CopyOnWriteArrayList<Entity> entities = new CopyOnWriteArrayList<Entity>();
 	public ArrayList<GuiTexture> guis = new ArrayList<GuiTexture>();
 	public ArrayList<Light> lights = new ArrayList<Light>();
 	public ArrayList<WaterTile> waters = new ArrayList<WaterTile>();
@@ -130,8 +131,8 @@ public class Handler {
 	}
 
 	private void renderScene(Vector4f clipPlane) {
-		for (int i = 0; i < entities.size(); i++) {
-			renderer.processEntity(entities.get(i));
+		for (int i = 0; i < world.visibleEntities.size(); i++) {
+			renderer.processEntity(world.visibleEntities.get(i));
 		}
 		if (Client.players != null) {
 			for (int i = 0; i < Client.players.size(); i++) {

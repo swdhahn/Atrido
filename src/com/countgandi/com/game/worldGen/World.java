@@ -15,7 +15,17 @@ import com.countgandi.com.engine.renderEngine.water.WaterTile;
 import com.countgandi.com.game.Assets;
 import com.countgandi.com.game.Game;
 import com.countgandi.com.game.Handler;
+import com.countgandi.com.game.entities.Entity;
 import com.countgandi.com.game.entities.Light;
+
+/**
+ * Issues with procedural generation?
+ *  -memory leak
+ *  -looping through too much and causing cpu usage overload
+ * 
+ * @author Count
+ *
+ */
 
 public class World {
 
@@ -23,8 +33,9 @@ public class World {
 	public static Random random = new Random();
 	private Thread thread;
 
-	public CopyOnWriteArrayList <Terrain> terrains = new CopyOnWriteArrayList <Terrain>();
-	private CopyOnWriteArrayList <TTerrain> tempTerrains = new CopyOnWriteArrayList <TTerrain>();
+	public CopyOnWriteArrayList<Entity> visibleEntities = new CopyOnWriteArrayList<Entity>();
+	public CopyOnWriteArrayList<Terrain> terrains = new CopyOnWriteArrayList<Terrain>();
+	private CopyOnWriteArrayList<TTerrain> tempTerrains = new CopyOnWriteArrayList<TTerrain>();
 
 	private Handler handler;
 
@@ -64,7 +75,7 @@ public class World {
 					delta += (now - lastTime) / ns;
 					lastTime = now;
 					while (delta >= 1) {
-						if(!proceduralTerrainGenerating) {
+						if (!proceduralTerrainGenerating) {
 							return;
 						}
 						for (int x = -15; x < 15; x++) {
@@ -76,7 +87,21 @@ public class World {
 								}
 							}
 						}
-						delta--;	
+						boolean flag = true;
+						for (Entity e : handler.entities) {
+							for (Entity e2 : visibleEntities) {
+								if (e.equals(e2)) {
+									flag = false;
+									if(!isVisibleTerrain(e2.getPosition())) {
+										visibleEntities.remove(e2);
+									}
+								}
+							}
+							if (flag && isVisibleTerrain(e.getPosition())) {
+								visibleEntities.add(e);
+							}
+						}
+						delta--;
 					}
 				}
 			}
@@ -84,14 +109,23 @@ public class World {
 		thread.start();
 	}
 
-	private boolean terrainExists(Vector3f pos) {
-		for(Terrain t:terrains) {
-			if(t.getX() == pos.x && t.getZ() == pos.z) {
+	private boolean isVisibleTerrain(Vector3f pos) {
+		if(pos.x > handler.getCamera().getPosition().getX() - 15 * Terrain.SIZE && pos.x < handler.getCamera().getPosition().getX() + 15 * Terrain.SIZE) {
+			if(pos.z > handler.getCamera().getPosition().getZ() - 15 * Terrain.SIZE && pos.z < handler.getCamera().getPosition().getZ() + 15 * Terrain.SIZE) {
 				return true;
 			}
 		}
-		for(TTerrain t:tempTerrains) {
-			if(t.pos.x == pos.x && t.pos.z == pos.z) {
+		return false;
+	}
+
+	private boolean terrainExists(Vector3f pos) {
+		for (Terrain t : terrains) {
+			if (t.getX() == pos.x && t.getZ() == pos.z) {
+				return true;
+			}
+		}
+		for (TTerrain t : tempTerrains) {
+			if (t.pos.x == pos.x && t.pos.z == pos.z) {
 				return true;
 			}
 		}
@@ -99,14 +133,14 @@ public class World {
 	}
 
 	public void updateTerrain() {
-		for (TTerrain t: tempTerrains) {
+		for (TTerrain t : tempTerrains) {
 			terrains.add(t.createTerrain(handler, Assets.loader));
 			tempTerrains.remove(t);
 		}
-		
+
 		tempTerrains.clear();
 
-		for(Terrain t:terrains) {
+		for (Terrain t : terrains) {
 			t.update(handler);
 		}
 	}
@@ -148,7 +182,7 @@ public class World {
 			if (t == null || position == null)
 				terrains.remove(t);
 			if (position.x > t.getX() && position.x <= t.getX() + Terrain.SIZE) {
-				if(position.z > t.getZ() && position.z <= t.getZ() + Terrain.SIZE) {
+				if (position.z > t.getZ() && position.z <= t.getZ() + Terrain.SIZE) {
 					return t;
 				}
 			}

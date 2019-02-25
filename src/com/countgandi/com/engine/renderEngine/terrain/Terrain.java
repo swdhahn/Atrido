@@ -64,7 +64,7 @@ public class Terrain {
 	private void decorateTerrain(Handler handler) {
 		Random ran = new Random();
 
-		for (int i = 0; i < ran.nextInt(10); i++) {
+		for (int i = 0; i < ran.nextInt(2); i++) {
 			Vector3f pos = new Vector3f(ran.nextInt(Terrain.SIZE) + x, 0, ran.nextInt(Terrain.SIZE) + z);
 			Vector3f rot = new Vector3f(ran.nextFloat(), 0, 0);
 			pos.y = this.getHeightOfTerrain(pos.x, pos.z) - 1;
