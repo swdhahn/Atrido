@@ -58,16 +58,15 @@ public class Terrain {
 		this.heights = heights;
 		generator = new PerlinNoise(x, z, VERTEX_COUNT, 75, 6, 0.34f, World.SEED);
 		this.model = model;
-		decorateTerrain(handler);
 	}
 
-	private void decorateTerrain(Handler handler) {
+	public void decorateTerrain(Handler handler) {
 		Random ran = new Random();
-
-		for (int i = 0; i < ran.nextInt(2); i++) {
-			Vector3f pos = new Vector3f(ran.nextInt(Terrain.SIZE) + x, 0, ran.nextInt(Terrain.SIZE) + z);
+		
+		for (int i = 0; i < ran.nextInt(10); i++) {
+			Vector3f pos = new Vector3f(ran.nextFloat() * Terrain.SIZE + x, 0, ran.nextFloat() * Terrain.SIZE + z);
 			Vector3f rot = new Vector3f(ran.nextFloat(), 0, 0);
-			pos.y = this.getHeightOfTerrain(pos.x, pos.z) - 1;
+			pos.y = handler.getWorld().getHeight(pos) - 1;
 			int scale = ran.nextInt(10) + 5;
 			if (pos.y < 12)
 				continue;
@@ -82,6 +81,7 @@ public class Terrain {
 				handler.addEntity(new Entity(Assets.pineTreeModel, pos, rot, scale, handler) {
 				});
 			}
+			
 		}
 	}
 
@@ -273,21 +273,6 @@ public class Terrain {
 		height /= MAX_PIXEL_COLOR / 2f;
 		height *= MAX_HEIGHT;
 		return height;
-	}
-
-	public void update(Handler handler) {
-		boolean flag = true;
-		for (int x = -15; x < 15; x++) {
-			for (int z = -15; z < 15; z++) {
-				Vector3f pos = new Vector3f((handler.getCamera().getPosition().x / Terrain.SIZE) * Terrain.SIZE + x * Terrain.SIZE, 0, (handler.getCamera().getPosition().z / Terrain.SIZE) * Terrain.SIZE + z * Terrain.SIZE);
-				if (pos.equals(new Vector3f(this.x, 0, this.z))) {
-					flag = false;
-				}
-			}
-		}
-		if(!flag) {
-			handler.getWorld().terrains.remove(this);
-		}
 	}
 
 }

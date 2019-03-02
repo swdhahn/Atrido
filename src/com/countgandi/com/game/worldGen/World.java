@@ -32,19 +32,21 @@ public class World {
 	public static int SEED = 0;
 	public static Random random = new Random();
 	private Thread thread;
+	
+	public static final int Visibility = 20;
 
 	public CopyOnWriteArrayList<Entity> visibleEntities = new CopyOnWriteArrayList<Entity>();
+	public CopyOnWriteArrayList<Terrain> renderterrains = new CopyOnWriteArrayList<Terrain>();
 	public CopyOnWriteArrayList<Terrain> terrains = new CopyOnWriteArrayList<Terrain>();
 	private CopyOnWriteArrayList<TTerrain> tempTerrains = new CopyOnWriteArrayList<TTerrain>();
+	public boolean proceduralTerrainGenerating = false;
 
 	private Handler handler;
 
 	public World(Handler handler) {
 		this.handler = handler;
-		SEED = new Random().nextInt(1000000000);
+		SEED = 2000000000;// = new Random().nextInt(2000000000);
 	}
-
-	public boolean proceduralTerrainGenerating = false;
 
 	public void generateWorld() {
 		random.setSeed(SEED);
@@ -65,7 +67,7 @@ public class World {
 	private void proceduralTerrainGen() {
 		thread = new Thread() {
 			@Override
-			public void run() {
+			synchronized public void run() {
 				long lastTime = System.nanoTime();
 				double amountOfTicks = 5.0;
 				double ns = 1000000000 / amountOfTicks;
@@ -78,27 +80,44 @@ public class World {
 						if (!proceduralTerrainGenerating) {
 							return;
 						}
-						for (int x = -15; x < 15; x++) {
-							for (int z = -15; z < 15; z++) {
-								Vector3f pos = new Vector3f(Math.round((handler.getCamera().getPosition().x / Terrain.SIZE) - 1) * Terrain.SIZE + x * Terrain.SIZE, 0, Math.round((handler.getCamera().getPosition().z / Terrain.SIZE) - 1) * Terrain.SIZE + z * Terrain.SIZE);
-								if (getTerrainStandingOn(pos) == null || !terrainExists(pos)) {
+						for (int x = -Visibility; x < Visibility + 1; x++) {
+							for (int z = -Visibility; z < Visibility + 1; z++) {
+								Vector3f pos = new Vector3f(Math.round((handler.getCamera().getPosition().x / Terrain.SIZE)) * Terrain.SIZE + x * Terrain.SIZE, 0, Math.round((handler.getCamera().getPosition().z / Terrain.SIZE)) * Terrain.SIZE + z * Terrain.SIZE);
+								boolean exists = terrainExists(pos);
+								if (getTerrainStandingOn(pos) == null || !exists) {
 									TTerrain t = new TTerrain((int) (pos.x / Terrain.SIZE), (int) (pos.z / Terrain.SIZE));
 									tempTerrains.add(t);
 								}
 							}
 						}
-						boolean flag = true;
+
 						for (Entity e : handler.entities) {
+							boolean flag = true;
 							for (Entity e2 : visibleEntities) {
 								if (e.equals(e2)) {
 									flag = false;
-									if(!isVisibleTerrain(e2.getPosition())) {
+									if(!isVisible(e2.getPosition())) {
 										visibleEntities.remove(e2);
 									}
 								}
 							}
-							if (flag && isVisibleTerrain(e.getPosition())) {
+							if (flag && isVisible(e.getPosition())) {
 								visibleEntities.add(e);
+							}
+						}
+						
+						for (Terrain t : terrains) {
+							boolean flag = true;
+							for (Terrain t2 : renderterrains) {
+								if (t.equals(t2)) {
+									flag = false;
+									if(!isVisible(new Vector3f(t2.getX(), 0, t2.getZ()))) {
+										renderterrains.remove(t2);
+									}
+								}
+							}
+							if (flag && isVisible(new Vector3f(t.getX(), 0, t.getZ()))) {
+								renderterrains.add(t);
 							}
 						}
 						delta--;
@@ -109,9 +128,9 @@ public class World {
 		thread.start();
 	}
 
-	private boolean isVisibleTerrain(Vector3f pos) {
-		if(pos.x > handler.getCamera().getPosition().getX() - 15 * Terrain.SIZE && pos.x < handler.getCamera().getPosition().getX() + 15 * Terrain.SIZE) {
-			if(pos.z > handler.getCamera().getPosition().getZ() - 15 * Terrain.SIZE && pos.z < handler.getCamera().getPosition().getZ() + 15 * Terrain.SIZE) {
+	private boolean isVisible(Vector3f pos) {
+		if(pos.x > handler.getCamera().getPosition().getX() - Visibility * Terrain.SIZE && pos.x < handler.getCamera().getPosition().getX() + (Visibility + 1) * Terrain.SIZE) {
+			if(pos.z > handler.getCamera().getPosition().getZ() - Visibility * Terrain.SIZE && pos.z < handler.getCamera().getPosition().getZ() + (Visibility + 1) * Terrain.SIZE) {
 				return true;
 			}
 		}
@@ -134,14 +153,17 @@ public class World {
 
 	public void updateTerrain() {
 		for (TTerrain t : tempTerrains) {
-			terrains.add(t.createTerrain(handler, Assets.loader));
-			tempTerrains.remove(t);
+			Terrain tt = t.createTerrain(handler, Assets.loader);
+			terrains.add(tt);
+			tt.decorateTerrain(handler);
 		}
 
 		tempTerrains.clear();
 
-		for (Terrain t : terrains) {
-			t.update(handler);
+		for (Terrain t : renderterrains) {
+			if(!isVisible(new Vector3f(t.getX(), 0, t.getZ()))) {
+				renderterrains.remove(t);
+			}
 		}
 	}
 
@@ -160,7 +182,7 @@ public class World {
 	}
 
 	public void renderWorld(MasterRenderer renderer) {
-		for (Terrain t : terrains) {
+		for (Terrain t : renderterrains) {
 			renderer.processTerrain(t);
 		}
 	}
@@ -181,8 +203,8 @@ public class World {
 			Terrain t = terrains.get(i);
 			if (t == null || position == null)
 				terrains.remove(t);
-			if (position.x > t.getX() && position.x <= t.getX() + Terrain.SIZE) {
-				if (position.z > t.getZ() && position.z <= t.getZ() + Terrain.SIZE) {
+			if (position.x >= t.getX() && position.x <= t.getX() + Terrain.SIZE) {
+				if (position.z >= t.getZ() && position.z <= t.getZ() + Terrain.SIZE) {
 					return t;
 				}
 			}
@@ -223,6 +245,7 @@ class TTerrain {
 	private void generateTerrain() {
 		int VERTEX_COUNT = Terrain.VERTEX_COUNT;
 
+		
 		heights = new float[VERTEX_COUNT][VERTEX_COUNT];
 
 		int count = VERTEX_COUNT * VERTEX_COUNT;

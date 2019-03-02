@@ -19,7 +19,11 @@ import com.countgandi.com.game.entities.Light;
 
 public class WaterRenderer {
 
-	public static Vector3f waterColor = new Vector3f(0.0f, 0.3f, 0.5f);
+	public static final Vector3f normalWater = new Vector3f(0.0f, 0.3f, 0.5f);
+	public static final Vector3f darkWater = new Vector3f(-1, -0.8f, -1);
+	public static final Vector3f dirtyWater = new Vector3f(0.5f, 0.1f, -0.2f);
+	
+	public static Vector3f waterColor = normalWater;
 
 	private static final String DUDVMAP = "waterDUDV";
 	private static final String NORMALMAP = "normalMap";
@@ -37,8 +41,8 @@ public class WaterRenderer {
 	public WaterRenderer(Camera camera, WaterFrameBuffers fbos, Loader loader) {
 		this.shader = new WaterShader();
 		this.fbos = fbos;
-		dudvTexture = Texture.newTexture(DUDVMAP).create().textureId;
-		normalMap = Texture.newTexture(NORMALMAP).create().textureId;
+		dudvTexture = Texture.newTexture(DUDVMAP).anisotropic().create().textureId;
+		normalMap = Texture.newTexture(NORMALMAP).anisotropic().create().textureId;
 		shader.start();
 		shader.connectTextureUnits();
 		shader.loadProjectionMatrix(camera.getProjectionMatrix());
