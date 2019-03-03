@@ -109,8 +109,7 @@ public class Camera {
 				preX = Mouse.getX();
 			}
 
-			//pitch = ((Display.getHeight() / 2) - Mouse.getY()) / 5;
-			
+			pitch = ((Display.getHeight() / 2) - Mouse.getY()) / 5;
 			
 			yaw -= (float) (Math.toRadians(preX - Mouse.getX()) * 2) * ((float) Game.WIDTH / 180.0F);
 			preX = Mouse.getX();
@@ -174,7 +173,7 @@ public class Camera {
 		return new Vector3f(pitch, yaw, roll);
 	}
 
-	protected void updateViewMatrix() {
+	public void updateViewMatrix() {
 		viewMatrix.setIdentity();
 		Matrix4f.rotate((float) Math.toRadians(pitch), new Vector3f(1, 0, 0), viewMatrix, viewMatrix);
 		Matrix4f.rotate((float) Math.toRadians(yaw), new Vector3f(0, 1, 0), viewMatrix, viewMatrix);

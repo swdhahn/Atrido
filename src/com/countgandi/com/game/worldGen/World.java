@@ -45,7 +45,7 @@ public class World {
 
 	public World(Handler handler) {
 		this.handler = handler;
-		SEED = 2000000000;// = new Random().nextInt(2000000000);
+		SEED = new Random().nextInt(2000000000);
 	}
 
 	public void generateWorld() {

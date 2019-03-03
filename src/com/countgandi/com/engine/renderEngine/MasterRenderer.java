@@ -23,7 +23,9 @@ import com.countgandi.com.game.entities.Light;
 
 public class MasterRenderer {
 
-	private static final Vector3f skyColor = new Vector3f(0.5444F, 0.62F, 0.69F);// (0.5F, 0.5F, 0.5F);
+	public static final Vector3f normalSky = new Vector3f(0.5444F, 0.62F, 0.69F);
+	public static final Vector3f darkSky = new Vector3f(0F, 0F, 0F);
+	public static Vector3f skyColor = new Vector3f(0.5444F, 0.62F, 0.69F);// (0.5F, 0.5F, 0.5F);
 
 	private StaticShader shader = new StaticShader();
 	@SuppressWarnings("unused")

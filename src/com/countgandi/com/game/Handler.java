@@ -111,9 +111,11 @@ public class Handler {
 		float distance = 2 * (camera.getPosition().y - waters.get(0).getHeight());
 		camera.getPosition().y -= distance;
 		camera.invertPitch();
+		camera.updateViewMatrix();
 		renderScene(new Vector4f(0, 1, 0, -waters.get(0).getHeight()));
 		camera.getPosition().y += distance;
 		camera.invertPitch();
+		camera.updateViewMatrix();
 
 		fbos.bindRefractionFrameBuffer();
 		renderScene(new Vector4f(0, -1, 0, waters.get(0).getHeight() + 1));

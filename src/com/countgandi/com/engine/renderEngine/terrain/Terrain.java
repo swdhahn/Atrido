@@ -62,7 +62,7 @@ public class Terrain {
 
 	public void decorateTerrain(Handler handler) {
 		Random ran = new Random();
-		
+
 		for (int i = 0; i < ran.nextInt(10); i++) {
 			Vector3f pos = new Vector3f(ran.nextFloat() * Terrain.SIZE + x, 0, ran.nextFloat() * Terrain.SIZE + z);
 			Vector3f rot = new Vector3f(ran.nextFloat(), 0, 0);
@@ -76,12 +76,19 @@ public class Terrain {
 				handler.addEntity(new Entity(Assets.pineTreeModel, pos, rot, scale, handler) {
 				});
 			} else if (pos.y < 98) {
-				handler.addEntity(new Entity(Assets.pineTreeLeavesModel, pos, rot, scale, handler) {
-				});
-				handler.addEntity(new Entity(Assets.pineTreeModel, pos, rot, scale, handler) {
-				});
+				if (ran.nextBoolean()) {
+					handler.addEntity(new Entity(Assets.oakTreeLeavesModel, pos, rot, scale, handler) {
+					});
+					handler.addEntity(new Entity(Assets.oakTreeModel, pos, rot, scale, handler) {
+					});
+				} else {
+					handler.addEntity(new Entity(Assets.pineTreeLeavesModel, pos, rot, scale, handler) {
+					});
+					handler.addEntity(new Entity(Assets.pineTreeModel, pos, rot, scale, handler) {
+					});
+				}
 			}
-			
+
 		}
 	}
 

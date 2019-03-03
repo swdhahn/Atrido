@@ -30,7 +30,7 @@ public class SessionObject extends JLabel {
 			title = "Water - x: " + ((WaterTile) object).getX() + "; z:  " + ((WaterTile) object).getZ() + ";";
 			waterTilePanel();
 		} else if (this.object instanceof Light) {
-			title = "Light - " + ((Light) object).getLightType();
+			title = "Light - " + ((Light) object).toString();
 			lightPanel();
 		}
 	}

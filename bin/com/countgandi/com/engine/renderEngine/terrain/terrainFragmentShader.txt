@@ -20,7 +20,6 @@ uniform sampler2D texture4;
 
 uniform vec3 lightColor[MaxLightsForEachEntity];
 uniform vec3 attenuation[MaxLightsForEachEntity];
-uniform int lightType[MaxLightsForEachEntity];
 uniform float shineDamper;
 uniform float reflectivity;
 uniform vec3 skyColor;
@@ -58,18 +57,9 @@ void main(void){
 		specularFactor = max(specularFactor,0.0);
 		float dampedFactor = pow(specularFactor,shineDamper);
 		
-		switch(lightType[i]) {
-		case 0:
-			
-			totalDiffuse = totalDiffuse + (brightness * lightColor[i]);
-			totalSpecular = totalSpecular + (dampedFactor * reflectivity * lightColor[i]);
-		break;
-		case 1:
-			
-			totalDiffuse = totalDiffuse + (brightness * lightColor[i]) / attFactor;
-			totalSpecular = totalSpecular + (dampedFactor * reflectivity * lightColor[i]) / attFactor;
-		break;
-		}
+		totalDiffuse = totalDiffuse + (brightness * lightColor[i]) / attFactor;
+		totalSpecular = totalSpecular + (dampedFactor * reflectivity * lightColor[i]) / attFactor;
+		
 	}
 	totalDiffuse = max(totalDiffuse, 0.2);
 	

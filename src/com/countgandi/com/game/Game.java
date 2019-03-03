@@ -38,7 +38,7 @@ public class Game {
 		AL10.alDistanceModel(AL10.AL_INVERSE_DISTANCE);
 
 		handler = new Handler(false);
-		//handler.changeToIndependantCamera();
+		// handler.changeToIndependantCamera();
 		HEADER = new GUIText("Pos", 1, Assets.Fonts.arial, new Vector2f(0, 0), 1);
 		HEADER2 = new GUIText("Seed: ", 1, Assets.Fonts.arial, new Vector2f(0, 0.08f), 1);
 		menu = new GameMenu(handler);
@@ -46,7 +46,7 @@ public class Game {
 		CommandHandler.init();
 		GameRegistry.register();
 
-		handler.lights.add(new Light(new Vector3f(0, 100000, 0), new Vector3f(1.0f, 1.0f, 1.0f), Light.LIGHT_DIRECTIONAL));
+		handler.lights.add(new Light(new Vector3f(0, 100000, 0), new Vector3f(1f, 1f, 0.95f), Light.LIGHT_DIRECTIONAL));
 
 		// END OF INIT
 		handler.gameStart();
@@ -56,7 +56,7 @@ public class Game {
 	public void tick() {
 		menu.tick();
 	}
-	
+
 	private void render() {
 		menu.render();
 	}
@@ -94,20 +94,16 @@ public class Game {
 
 /*
  * private float[] vertices = { -0.5f, 0.5f, -0.5f, -0.5f, -0.5f, -0.5f, 0.5f,
- * -0.5f, -0.5f, 0.5f, 0.5f, -0.5f,
- * -0.5f, 0.5f, 0.5f, -0.5f, -0.5f, 0.5f, 0.5f, -0.5f, 0.5f, 0.5f, 0.5f, 0.5f,
- * 0.5f, 0.5f, -0.5f, 0.5f, -0.5f, -0.5f, 0.5f, -0.5f, 0.5f, 0.5f, 0.5f, 0.5f,
- * -0.5f, 0.5f, -0.5f, -0.5f, -0.5f, -0.5f, -0.5f, -0.5f, 0.5f, -0.5f, 0.5f,
- * 0.5f,
- * -0.5f, 0.5f, 0.5f, -0.5f, 0.5f, -0.5f, 0.5f, 0.5f, -0.5f, 0.5f, 0.5f, 0.5f,
- * -0.5f, -0.5f, 0.5f, -0.5f, -0.5f, -0.5f, 0.5f, -0.5f, -0.5f, 0.5f, -0.5f,
- * 0.5f
- * };
+ * -0.5f, -0.5f, 0.5f, 0.5f, -0.5f, -0.5f, 0.5f, 0.5f, -0.5f, -0.5f, 0.5f, 0.5f,
+ * -0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, -0.5f, 0.5f, -0.5f, -0.5f, 0.5f,
+ * -0.5f, 0.5f, 0.5f, 0.5f, 0.5f, -0.5f, 0.5f, -0.5f, -0.5f, -0.5f, -0.5f,
+ * -0.5f, -0.5f, 0.5f, -0.5f, 0.5f, 0.5f, -0.5f, 0.5f, 0.5f, -0.5f, 0.5f, -0.5f,
+ * 0.5f, 0.5f, -0.5f, 0.5f, 0.5f, 0.5f, -0.5f, -0.5f, 0.5f, -0.5f, -0.5f, -0.5f,
+ * 0.5f, -0.5f, -0.5f, 0.5f, -0.5f, 0.5f };
  * 
- * private float[] textureCoords = {
- * 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0,
- * 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0
- * };
+ * private float[] textureCoords = { 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1,
+ * 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0,
+ * 0, 0, 0, 1, 1, 1, 1, 0 };
  * 
  * private int[] indicies = { 0, 1, 3, 3, 1, 2, 4, 5, 7, 7, 5, 6, 8, 9, 11, 11,
  * 9, 10, 12, 13, 15, 15, 13, 14, 16, 17, 19, 19, 17, 18, 20, 21, 23, 23, 21, 22

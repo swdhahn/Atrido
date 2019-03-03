@@ -5,7 +5,7 @@ import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 public class Maths {
-	
+
 	public static Matrix4f createTransformationMatrix(Vector2f translation, float rx, float ry, Vector2f scale) {
 		Matrix4f matrix = new Matrix4f();
 		matrix.setIdentity();
@@ -33,6 +33,10 @@ public class Maths {
 		Matrix4f.rotate((float) Math.toRadians(rz), new Vector3f(0, 0, 1), matrix, matrix);
 		Matrix4f.scale(new Vector3f(scale, scale, scale), matrix, matrix);
 		return matrix;
+	}
+
+	public static float map(float value, float min1, float max1, float min2, float max2) {
+		return min2 + (value - min1) * (max2 - min2) / (max1 - min1);
 	}
 
 }
