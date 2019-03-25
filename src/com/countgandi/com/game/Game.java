@@ -24,7 +24,7 @@ public class Game {
 
 	public static final int WIDTH = 1600, HEIGHT = WIDTH / 16 * 9;
 	public static final String TITLE = "-- OpenGL --";
-	public static GUIText HEADER, HEADER2;
+	public static GUIText HEADER, HEADER2, HEADER3;
 
 	public static Menu menu;
 
@@ -41,12 +41,13 @@ public class Game {
 		// handler.changeToIndependantCamera();
 		HEADER = new GUIText("Pos", 1, Assets.Fonts.arial, new Vector2f(0, 0), 1);
 		HEADER2 = new GUIText("Seed: ", 1, Assets.Fonts.arial, new Vector2f(0, 0.08f), 1);
+		HEADER3 = new GUIText("Time: ", 1, Assets.Fonts.arial, new Vector2f(0, 0.04f), 1);
 		menu = new GameMenu(handler);
 
 		CommandHandler.init();
 		GameRegistry.register();
 
-		handler.lights.add(new Light(new Vector3f(0, 100000, 0), new Vector3f(1f, 1f, 0.95f), Light.LIGHT_DIRECTIONAL));
+		handler.lights.add(new Light(new Vector3f(0, 100000, 0), new Vector3f(1f, 1f, 1f), Light.LIGHT_DIRECTIONAL));
 
 		// END OF INIT
 		handler.gameStart();

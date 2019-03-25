@@ -9,8 +9,8 @@ import com.countgandi.com.game.entities.Camera;
 
 public class SkyboxShader extends ShaderProgram {
 
-	private static final String VERTEX_FILE = "src/com/countgandi/com/engine/renderEngine/skybox/skyboxVertexShader.txt";
-	private static final String FRAGMENT_FILE = "src/com/countgandi/com/engine/renderEngine/skybox/skyboxFragmentShader.txt";
+	private static final String VERTEX_FILE = "src/com/countgandi/com/engine/renderEngine/skybox/skyboxVertexShader.glsl";
+	private static final String FRAGMENT_FILE = "src/com/countgandi/com/engine/renderEngine/skybox/skyboxFragmentShader.glsl";
 	
 	private static final float RotateSpeed = 1f;
 
@@ -33,11 +33,11 @@ public class SkyboxShader extends ShaderProgram {
 
 	public void loadViewMatrix(Camera camera) {
 		Matrix4f matrix = new Matrix4f(camera.getViewMatrix());
-		matrix.m30 = 0;
-		matrix.m31 = 0;
-		matrix.m32 = 0;
-		rotation += RotateSpeed * DisplayManager.getFrameTimeSeconds();
-		Matrix4f.rotate((float) Math.toRadians(rotation), new Vector3f(0, 1, 0), matrix, matrix);
+		//matrix.m30 = 0;
+		//matrix.m31 = 0;
+		//matrix.m32 = 0;
+		//rotation += RotateSpeed * DisplayManager.getFrameTimeSeconds();
+		//Matrix4f.rotate((float) Math.toRadians(rotation), new Vector3f(0, 1, 0), matrix, matrix);
 		super.loadMatrix(location_viewMatrix, matrix);
 	}
 	

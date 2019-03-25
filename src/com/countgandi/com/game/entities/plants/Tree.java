@@ -13,7 +13,7 @@ public class Tree extends Plant {
 	
 	@Override
 	public void tick() {
-		position.y = handler.getWorld().getHeight(position);
+		//position.y = handler.getWorld().getHeight(position);
 	}
 
 }

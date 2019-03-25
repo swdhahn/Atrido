@@ -17,6 +17,7 @@ import com.countgandi.com.engine.renderEngine.skybox.SkyboxRenderer;
 import com.countgandi.com.engine.renderEngine.terrain.Terrain;
 import com.countgandi.com.engine.renderEngine.terrain.TerrainRenderer;
 import com.countgandi.com.engine.renderEngine.terrain.TerrainShader;
+import com.countgandi.com.game.Handler;
 import com.countgandi.com.game.entities.Camera;
 import com.countgandi.com.game.entities.Entity;
 import com.countgandi.com.game.entities.Light;
@@ -41,12 +42,12 @@ public class MasterRenderer {
 	private SkyboxRenderer skyboxRenderer;
 	private Loader loader;
 
-	public MasterRenderer(Camera camera, Loader loader) {
+	public MasterRenderer(Camera camera, Handler handler, Loader loader) {
 		this.loader = loader;
 		OpenGlUtils.cullBackFaces(true);
 		renderer = new EntityRenderer(camera.getProjectionMatrix(), shader);
 		terrainRenderer = new TerrainRenderer(camera.getProjectionMatrix(), terrainShader);
-		skyboxRenderer = new SkyboxRenderer(camera.getProjectionMatrix(), loader);
+		skyboxRenderer = new SkyboxRenderer(camera.getProjectionMatrix(), handler, loader);
 	}
 
 	public void render(List<Light> lights, Camera camera, Vector4f clipPlane) {

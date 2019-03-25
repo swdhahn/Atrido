@@ -3,7 +3,6 @@ package com.countgandi.com.engine.renderEngine;
 import java.awt.Canvas;
 
 import org.lwjgl.LWJGLException;
-import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.ContextAttribs;
@@ -15,6 +14,7 @@ import org.lwjgl.opengl.PixelFormat;
 
 public class DisplayManager {
 	private static final int FPSCAP = 120;
+	private static final long startTimeNano = System.nanoTime();
 
 	private static long lastFrameTime;
 	private static float delta;
@@ -98,7 +98,7 @@ public class DisplayManager {
 	}
 
 	private static long getCurrentTime() {
-		return Sys.getTime() * 1000 / Sys.getTimerResolution();
+		return -(startTimeNano - System.nanoTime()) / 1000000;
 	}
 
 }

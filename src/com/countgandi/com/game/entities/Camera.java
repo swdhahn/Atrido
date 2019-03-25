@@ -18,7 +18,7 @@ public class Camera {
 
 	private static final float FOV = 70;
 	private static final float NEAR_PLANE = 0.2f;
-	private static final float FAR_PLANE = 10000;
+	private static final float FAR_PLANE = 2000;
 	protected static final float runSpeed = 20, sprintSpeed = 100, JumpPower = 30;
 
 	protected Matrix4f projectionMatrix;

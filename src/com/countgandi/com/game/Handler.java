@@ -51,7 +51,7 @@ public class Handler {
 		} else {
 			this.camera = new Camera(this);
 		}
-		renderer = new MasterRenderer(camera, Assets.loader);
+		renderer = new MasterRenderer(camera, this, Assets.loader);
 		guiRenderer = new GuiRenderer(Assets.loader);
 		this.isEngine = isEngine;
 

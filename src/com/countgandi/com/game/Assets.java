@@ -29,18 +29,18 @@ public class Assets {
 
 	// Textures
 	public static final Texture Underwater = Texture.newTexture("underwater").create();
-	
+
 	public static final Texture pineTreeTex = Texture.newTexture("pineTree").anisotropic().create();
 	public static final Texture oakTreeTex = Texture.newTexture("OakTree").anisotropic().create();
-	public static final Texture pineTreeSnowTex = Texture.newTexture("pineTreeSnow").anisotropic().create();
+	public static final Texture pineTreeSnowTex = Texture.newTexture("pineTree").anisotropic().create();
 	public static final Texture stoneTexture = Texture.newTexture("stoneTexture").anisotropic().create();
-	
+
 	public static final Texture fernTexture = Texture.newTexture("fern").anisotropic().create();
 
 	// Textured Models
-	public static final TexturedModel oakTreeModel = loadTexturedModel("OakTree1Branches", oakTreeTex, true);
+	public static final TexturedModel oakTreeModel = loadTexturedModel("OakTree1Branches", oakTreeTex, false);
+	public static final TexturedModel pineTreeModel = loadTexturedModel("PineTreeBranches", pineTreeTex, false);
 	public static final TexturedModel oakTreeLeavesModel = loadTexturedModel("OakTree1Leaves", oakTreeTex, false);
-	public static final TexturedModel pineTreeModel = loadTexturedModel("PineTreeBranches", pineTreeTex, true);
 	public static final TexturedModel pineTreeLeavesModel = loadTexturedModel("PineTreeLeaves", pineTreeTex, false);
 	public static final TexturedModel pineTreeLeavesSnowModel = loadTexturedModel("PineTreeLeaves", pineTreeSnowTex, false);
 	public static final TexturedModel tree1Model = loadTexturedModel("tree2", "mapleTree", true);
