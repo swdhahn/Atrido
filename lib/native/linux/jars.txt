@@ -1,0 +1,7 @@
+jars.txt
+libjinput-linux64.so
+libjinput-linux.so
+liblwjgl64.so
+liblwjgl.so
+libopenal64.so
+libopenal.so
